@@ -1,6 +1,7 @@
 (function atlasGame() {
   "use strict";
   const D = window.ATLAS_DEMO;
+  const B = window.ATLAS_BLOCK1;
   const byId = (id) => document.getElementById(id);
   const root = byId("main-content");
   if (!root || !D || D.status !== "DEMO_ONLY_UNVERIFIED") {
@@ -8,10 +9,26 @@
     return;
   }
   const KEY = "atlas-first-case-demo-v03";
-  const routes = {office:"MI OFICINA",intro:"BIENVENIDA",learn:"APRENDER",investigation:"INVESTIGACIÓN",memory:"ENTRENAMIENTO",deck:"FICHAS",practice:"PRÁCTICA ESCRITA",progress:"PROGRESO"};
+  const routes = {office:"MI OFICINA",story:"BLOQUE 1",intro:"BIENVENIDA",learn:"APRENDER",investigation:"INVESTIGACIÓN",memory:"ENTRENAMIENTO",deck:"FICHAS",practice:"PRÁCTICA ESCRITA",progress:"PROGRESO"};
   const LANG = {fr:{name:"Francés",label:"FR",voice:"fr-FR"},de:{name:"Alemán",label:"DE",voice:"de-DE"},ru:{name:"Ruso",label:"RU",voice:"ru-RU"},ja:{name:"Japonés",label:"JA",voice:"ja-JP"}};
   const necessaryClues = D.clues.filter((c) => c.require).map((c) => c.id);
-  function initial(){return {visited:[],matched:[],turns:0,attempts:0,solved:false,sound:false,introSeen:false,lessonCompleted:false,lessonViewed:[],practiceAttempts:[]};}
+  function newBlock(){return {stage:0,inspected:[],observed:"",asked:[],method:"",alias:"",answer:"",complete:false};}
+  function safeBlock(raw){
+    const def=newBlock();
+    if(!raw||typeof raw!=="object")return def;
+    const stages=Array.isArray(B?.scenes)?B.scenes.length:6;
+    return {
+      stage:Number.isInteger(raw.stage)?Math.max(0,Math.min(stages-1,raw.stage)):0,
+      inspected:Array.isArray(raw.inspected)?raw.inspected.filter(x=>["fecha","matasellos","placa","plano"].includes(x)):[],
+      observed:["fecha","firma","origen"].includes(raw.observed)?raw.observed:"",
+      asked:Array.isArray(raw.asked)?raw.asked.filter(x=>["quien","porqué","donde"].includes(x)):[],
+      method:["observador","entrevistador","descifrador"].includes(raw.method)?raw.method:"",
+      alias:typeof raw.alias==="string"?raw.alias.slice(0,40):"",
+      answer:["libro","llave","sobre"].includes(raw.answer)?raw.answer:"",
+      complete:raw.complete===true
+    };
+  }
+  function initial(){return {visited:[],matched:[],turns:0,attempts:0,solved:false,sound:false,introSeen:false,lessonCompleted:false,lessonViewed:[],practiceAttempts:[],block1:newBlock()};}
   function load(){
     try{
       const parsed = JSON.parse(localStorage.getItem(KEY)||"null");
@@ -26,7 +43,8 @@
         introSeen:parsed.introSeen===true,
         lessonCompleted:parsed.lessonCompleted===true,
         lessonViewed:Array.isArray(parsed.lessonViewed)?parsed.lessonViewed.filter((id)=>D.concepts.some((c)=>c.id===id)):[],
-        practiceAttempts:Array.isArray(parsed.practiceAttempts)?parsed.practiceAttempts.filter(e=>e&&typeof e==="object"&&["fr","de","ru","ja"].includes(e.language)).slice(-500):[]
+        practiceAttempts:Array.isArray(parsed.practiceAttempts)?parsed.practiceAttempts.filter(e=>e&&typeof e==="object"&&["fr","de","ru","ja"].includes(e.language)).slice(-500):[],
+        block1:safeBlock(parsed.block1)
       };
     }catch(e){return initial();}
   }
@@ -112,19 +130,144 @@
       '<button class="button outline small" data-route="deck">Consultar fichas de estudio</button></aside></div>'+footnote();
   }
   function office(){
-    root.innerHTML=`
-    <div class="hero"><div class="hero-copy"><span class="eyebrow">Sede central · Archivo Internacional · 22:40</span><h1>Hay una carta<br>esperando.</h1>
-    <div class="goldline"></div><p>Acabas de llegar al Archivo, una agencia que investiga mensajes y documentos alterados. Nora Vale, la archivista, quiere hablar contigo antes de tu primer caso.</p>
-    <div class="actions"><button class="button" data-route="${state.introSeen?(state.lessonCompleted?"investigation":"learn"):"intro"}">${state.introSeen?(state.lessonCompleted?"Abrir caso 001":"Aprender las cuatro palabras"):"Conocer a Nora"} <span aria-hidden="true">→</span></button>
-    <button class="button outline" style="color:#fff;border-color:#75818a" data-route="learn">Preparación / repaso</button></div></div>
-    <div class="hero-art"><img src="./assets/office.svg" alt="Ilustración vectorial de la oficina central del Archivo"></div></div>
-    <div class="dashboard-grid">
-    <section class="card case-card"><div class="case-icon" aria-hidden="true">◇</div><div><span class="eyebrow">EXPEDIENTE DISPONIBLE</span><h2>${esc(D.storyline.title)}</h2><p class="muted">${esc(D.storyline.opening)}</p>
-    ${progressBar()}<small class="muted">Progreso de misión: ${pct()} % · ${state.visited.filter((x)=>necessaryClues.includes(x)).length}/3 pistas indispensables</small><div><button class="button small" data-route="investigation">${state.solved?"Revisar caso cerrado":"Continuar investigación"}</button></div></div></section>
-    <section class="card brief-block"><span class="eyebrow">MENSAJE DE NORA VALE</span><h2>«Primero nos presentamos»</h2><p>Me llamo Nora. Te enseñaré las palabras del expediente y después iremos juntos a observar la escena. Puedes equivocarte sin penalizaciones.</p>
-    <p class="muted">Enseñanza: español · Idioma común: English · Idiomas: FR / DE / RU / JA</p></section></div>
-    <div class="actions"><button class="button outline" data-route="memory">Practicar memoria</button><button class="button outline" data-route="progress">Mi progreso y descargas</button><button class="button outline" data-route="practice">Practicar escritura</button></div>${footnote()}`;
+  const P=window.ATLAS_PRACTICE;
+  const summaries=P?P.summary(state.practiceAttempts):{};
+  const stats=Object.entries(LANG).map(([id,x])=>({id,label:x.name,count:summaries[id]?.correct_independent||0,attempts:summaries[id]?.attempts||0}));
+  const activeCase=!state.solved;
+  const alias=state.block1.alias||"Investigador";
+  const storyStep=state.block1.complete?"Bloque completado":`Escena ${state.block1.stage+1} de ${B?.scenes.length||6}`;
+  const heroAction=state.block1.complete?"Volver al expediente":"Continuar el Bloque 1";
+  const caseAction=state.introSeen?(state.lessonCompleted?"investigation":"learn"):"intro";
+  const nextLearning=!state.lessonCompleted?
+     {label:"Primero, conoce las cuatro palabras",route:"learn",description:"Pronunciación y comparaciones FR / DE / RU / JA"}:
+     state.matched.length<4?
+     {label:"Pon a prueba tu memoria",route:"memory",description:"Recuerda las cuatro parejas sin consultar las fichas"}:
+     {label:"Practica sin ver la respuesta",route:"practice",description:"Escribe vocabulario y artículos; tus errores guían el repaso"};
+  const lastText=state.block1.complete?"La primera puerta se abrió. Ahora el expediente de la llave te espera.":
+   state.block1.stage===0?"La invitación tiene una fecha imposible. Elige qué investigar.":"Nora aguarda tu próximo movimiento.";
+  root.innerHTML=`<div class="hub-wrapper">
+    <div class="hub-overline"><span class="hub-live-dot"></span> ARCHIVO CENTRAL · PUERTO UMBRAL <span class="hub-datetime">ESTACIÓN DE INVESTIGACIÓN</span></div>
+    <section class="hero hub-hero" aria-label="Portada del Archivo">
+      <div class="hero-copy">
+        <span class="eyebrow">BIENVENIDO, ${esc(alias.toUpperCase())}</span>
+        <h1>Hay una carta<br><em>esperando.</em></h1>
+        <div class="goldline"></div>
+        <p>Algunos misterios empiezan con una ausencia. El tuyo empezó con una carta fechada mañana.</p>
+        <div class="actions">
+          <button class="button hub-main-cta" data-route="story">${esc(heroAction)} <span aria-hidden="true">↗</span></button>
+          <button class="button outline hub-secondary-cta" data-route="${caseAction}">${state.introSeen?"Ir al caso 001":"Conocer a Nora (guía)"}</button>
+        </div>
+      </div>
+      <div class="hero-art"><img src="./assets/office.svg" alt="Oficina vectorial del Archivo con librería y documentos"><div class="hub-art-stamp">ARCHIVO / Nº 001</div></div>
+    </section>
+    <div class="hub-section-head"><div><span class="eyebrow">TU MESA DE TRABAJO</span><h2>Todo está listo para continuar</h2></div><span class="hub-caption">${esc(storyStep)}</span></div>
+    <div class="hub-grid">
+      <section class="card hub-mission hub-large">
+        <div class="hub-card-heading"><span class="hub-icon-circle">✦</span><div><span class="eyebrow">HISTORIA EN CURSO</span><h3>${esc(B?.title||"La firma del día siguiente")}</h3></div></div>
+        <p>${esc(lastText)}</p>
+        <div class="hub-timeline"><span class="hub-meter-label">${esc(storyStep)}</span><div class="progressbar"><div style="width:${state.block1.complete?100:Math.round((state.block1.stage+1)/(B?.scenes.length||6)*100)}%"></div></div></div>
+        <button class="button small" data-route="story">${state.block1.complete?"Releer historia":"Abrir expediente narrativo"} →</button>
+      </section>
+      <section class="card hub-mission">
+        <div class="hub-card-heading"><span class="hub-icon-circle">◇</span><div><span class="eyebrow">CASO PRINCIPAL</span><h3>${esc(D.storyline.title)}</h3></div></div>
+        <p>Detecta una contradicción y explica qué puedes demostrar con las pruebas disponibles.</p>
+        ${progressBar()}<small class="muted">Caso: ${pct()} % · ${state.visited.filter(x=>necessaryClues.includes(x)).length}/3 pistas obligatorias</small>
+        <div class="actions"><button class="button outline small" data-route="${caseAction}">${activeCase?"Abrir investigación":"Revisar caso resuelto"} →</button></div>
+      </section>
+      <section class="card hub-mission">
+        <div class="hub-card-heading"><span class="hub-icon-circle">✎</span><div><span class="eyebrow">SIGUIENTE ENTRENAMIENTO</span><h3>${esc(nextLearning.label)}</h3></div></div>
+        <p>${esc(nextLearning.description)}</p>
+        <div class="actions"><button class="button small" data-route="${nextLearning.route}">Continuar aprendiendo →</button></div>
+      </section>
+    </div>
+    <div class="hub-section-head"><div><span class="eyebrow">TU APRENDIZAJE</span><h2>Cuatro lenguas, una investigación</h2></div><button class="button outline small" data-route="progress">Ver progreso →</button></div>
+    <div class="hub-languages">
+      ${stats.map(item=>`<button type="button" class="hub-lang-card" data-hub-language="${item.id}" aria-label="Practicar ${esc(item.label)}">
+        <span class="hub-lang-code">${item.id.toUpperCase()}</span>
+        <span class="hub-lang-name">${esc(item.label)}</span>
+        <strong>${item.count}</strong><small>aciertos sin ayuda</small>
+        <span class="hub-lang-arrow">↗</span>
+      </button>`).join("")}
+    </div>
+    <div class="hub-lower">
+      <section class="card hub-nora"><div class="hub-nora-avatar"><img src="./assets/nora-vale.svg" alt="Nora Vale, archivista del Archivo"></div><div>
+        <span class="eyebrow">MENSAJE DE NORA VALE</span><h2>«Una respuesta correcta no es lo mismo que entender».</h2>
+        <p>Vamos a revisar lo que sabes, volver sobre los errores y utilizar cada palabra en una investigación de verdad.</p>
+        <button class="button outline small" data-route="practice">Practicar recuperación →</button></div></section>
+      <section class="card hub-tools"><span class="eyebrow">ACCESO RÁPIDO</span><h3>Herramientas del investigador</h3>
+        <button data-route="deck">▤ <span>Fichas y pronunciación</span> <span>→</span></button>
+        <button data-route="memory">▦ <span>Juego de memoria</span> <span>→</span></button>
+        <button data-route="progress">◷ <span>Progreso y respaldos</span> <span>→</span></button>
+        <button data-action="install-pwa">↗ <span>Instalar como aplicación</span> <span>→</span></button>
+      </section>
+    </div>
+    <p class="hub-ethics">Edición de demostración · El contenido narrativo y lingüístico aún está pendiente de revisión. Los aciertos no representan niveles certificados.</p>
+  </div>`;
+}
+  function story(){
+  if(!B||!Array.isArray(B.scenes)){root.textContent="El bloque narrativo no está disponible.";return;}
+  const st=state.block1,scene=B.scenes[st.stage];
+  if(!scene){root.textContent="No existe esta escena.";return;}
+  const objIds=Array.isArray(scene.objects)?scene.objects.map(x=>x.id):[];
+  const checked=objIds.every(id=>st.inspected.includes(id));
+  let interactions="";
+  if(scene.id==="sobre"){
+    interactions=`<div class="story-investigate"><h3>Examina el sobre</h3><p class="muted">Toca ambas partes de la carta antes de formular tu hipótesis.</p>
+      <div class="story-object-grid">${scene.objects.map(x=>`<button class="story-object" data-story-inspect="${x.id}"><span class="story-object-icon">⌕</span><strong>${esc(x.name)}</strong><small>${st.inspected.includes(x.id)?"✓ Examinado":"Inspeccionar →"}</small></button>`).join("")}</div>
+      ${scene.objects.filter(x=>st.inspected.includes(x.id)).map(x=>`<div class="story-evidence"><span>${esc(x.name)}</span><strong>${esc(x.headline)}</strong><p>${esc(x.detail)}</p></div>`).join("")}
+      ${checked?`<h3>¿Qué anotarías en el cuaderno?</h3><div class="story-choices">${scene.questions.map(q=>`<button class="story-choice ${st.observed===q.id?"selected":""}" data-story-observation="${q.id}">${esc(q.text)}</button>`).join("")}</div>
+      ${st.observed?`<div class="story-consequence"><b>${esc(scene.questions.find(x=>x.id===st.observed)?.tag||"")}</b><p>${esc(scene.questions.find(x=>x.id===st.observed)?.reply||"")}</p></div>`:""}`:""}</div>`;
+  }else if(scene.id==="puerto"){
+    interactions=`<div class="story-investigate"><h3>Explora la entrada del Archivo</h3>
+      <div class="story-object-grid">${scene.objects.map(x=>`<button class="story-object" data-story-inspect="${x.id}"><span class="story-object-icon">▣</span><strong>${esc(x.name)}</strong><small>${st.inspected.includes(x.id)?"✓ Examinado":"Examinar →"}</small></button>`).join("")}</div>
+      ${scene.objects.filter(x=>st.inspected.includes(x.id)).map(x=>`<div class="story-evidence"><span>${esc(x.name)}</span><strong>${esc(x.headline)}</strong><p>${esc(x.detail)}</p></div>`).join("")}</div>`;
+  }else if(scene.id==="nora"){
+    interactions=`<div class="story-investigate"><h3>Habla con Nora</h3><p class="muted">Puedes preguntarle varias cosas. Necesitas saber quién es y por qué estás aquí.</p>
+      <div class="story-choices">${scene.questions.map(q=>`<button class="story-choice ${st.asked.includes(q.id)?"selected":""}" data-story-question="${q.id}">${esc(q.text)}</button>`).join("")}</div>
+      ${scene.questions.filter(q=>st.asked.includes(q.id)).map(q=>`<div class="story-consequence"><b>${esc(q.tag)}</b><p>${esc(q.reply)}</p></div>`).join("")}</div>`;
+  }else if(scene.id==="identidad"){
+    interactions=`<div class="story-investigate"><h3>Tu ficha de ingreso</h3><label for="story-alias">Nombre o alias (opcional)</label>
+      <input id="story-alias" maxlength="40" placeholder="Investigador/a" value="${esc(st.alias)}" autocomplete="off">
+      <p class="muted">¿Con qué método prefieres empezar? No restringe ninguna clase o idioma.</p>
+      <div class="story-methods">${scene.methods.map(m=>`<button class="story-method ${st.method===m.id?"selected":""}" data-story-method="${m.id}"><strong>${esc(m.name)}</strong><small>${esc(m.desc)}</small></button>`).join("")}</div>
+      ${st.method?`<div class="story-consequence">${esc(scene.responses[st.method])}</div>`:""}</div>`;
+  }else if(scene.id==="registro"){
+    interactions=`<div class="story-investigate"><div class="story-evidence story-register"><span>ARCHIVO CENTRAL · REGISTRO Nº 417</span><strong>INVITACIÓN A INVESTIGADOR AUXILIAR</strong><p>Remitente: [sin consignar] · Entrada: registrada antes de su asignación.</p></div>
+      ${!state.lessonCompleted?`<div class="story-learning-gate"><h3>Primero las palabras</h3><p>Antes de usar este registro, Nora quiere que aprendas los cuatro objetos. Las fichas y el audio siguen disponibles.</p><button class="button" data-route="${state.introSeen?"learn":"intro"}">${state.introSeen?"Estudiar las cuatro palabras":"Conocer a Nora y estudiar"} →</button></div>`:
+      `<h3>${esc(scene.prompt.question)}</h3><div class="story-choices">${scene.prompt.options.map(o=>`<button class="story-choice ${st.answer===o.id?"selected":""}" data-story-answer="${o.id}">${esc(o.text)}</button>`).join("")}</div>
+       ${st.answer?`<div class="story-consequence"><p>${st.answer==="libro"?"Sí. Has identificado el objeto en inglés. Todavía queda interpretar el registro.":"Aún no. «Book» significa «libro». Puedes revisar tus fichas si necesitas ayuda."}</p></div>`:""}`}</div>`;
+  }else{
+    interactions=`<div class="story-conclusion"><span class="eyebrow">EL EXPEDIENTE CONTINÚA</span><h3>Una puerta se abre. Ninguna respuesta es definitiva.</h3>
+      <p>${esc(scene.hook||"")}</p><div class="actions"><button class="button" data-route="investigation">Investigar la llave equivocada →</button>
+      <button class="button outline" data-action="story-restart">Releer el Bloque 1</button></div></div>`;
   }
+  const allowed=scene.id==="sobre"?checked&&!!st.observed:
+    scene.id==="puerto"?checked:
+    scene.id==="nora"?st.asked.includes("quien")&&st.asked.includes("porqué"):
+    scene.id==="identidad"?!!st.method:
+    scene.id==="registro"?state.lessonCompleted&&st.answer==="libro":false;
+  root.innerHTML=`<div class="story-page">
+    <div class="story-heading"><span class="eyebrow">EL ARCHIVO DE LAS CUATRO VOCES / BLOQUE 1</span><span class="story-count">${st.stage+1} / ${B.scenes.length}</span></div>
+    <div class="story-meter"><div style="width:${Math.round((st.stage+1)/B.scenes.length*100)}%"></div></div>
+    <div class="story-layout"><article class="story-article"><span class="eyebrow">${esc(scene.eyebrow)}</span>
+      <h1>${esc(scene.title)}</h1><span class="story-scenetag">${esc(scene.label)}</span>
+      ${scene.paragraphs.map(p=>`<p>${esc(p)}</p>`).join("")}
+      ${interactions}
+      <div class="story-footer"><button class="button outline" data-route="office">← Volver al HUB</button>
+      ${st.stage>0?`<button class="button outline" data-action="story-back">Escena anterior</button>`:""}
+      ${scene.id!=="cierre"?`<button class="button" data-action="story-next" ${allowed?"":"disabled"}>Continuar relato →</button>`:""}</div>
+      ${!allowed&&scene.id!=="cierre"?'<p class="muted small">Completa la interacción de esta escena para continuar.</p>':""}
+      <div class="notes">Narrativa de demostración en revisión. Las decisiones se guardan en tu dispositivo; ningún avance equivale a una certificación lingüística.</div>
+    </article><aside class="story-aside"><div class="story-aside-panel">
+      <img src="./assets/${scene.id==="nora"?"nora-vale.svg":"office.svg"}" alt="${scene.id==="nora"?"Ilustración vectorial de Nora Vale":"Oficina vectorial del Archivo"}">
+      <span class="eyebrow">CUADERNO DEL INVESTIGADOR</span><h3>${esc(st.alias||"Investigador auxiliar")}</h3>
+      <p>Puerto Umbral · Archivo Central</p><div class="divider"></div>
+      <small class="muted">HECHOS REUNIDOS</small>
+      <ul class="story-fieldnotes"><li>Sobre con emisión posterior al matasellos</li>${st.observed?`<li>Primera interpretación: ${esc(st.observed)}</li>`:""}
+      ${st.asked.includes("quien")?'<li>Nora Vale, archivista responsable de la inducción</li>':""}
+      ${st.method?`<li>Método inicial: ${esc(st.method)}</li>`:""}</ul>
+    </div></aside></div></div>`;
+}
   function exhibit(clue){
     const e=clue.exhibit;
     if(!e)return "";
@@ -264,7 +407,7 @@
       b.classList.toggle("active",active); if(active)b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current");
     });
     const sound=byId("sound-toggle");if(sound)sound.checked=state.sound;
-    if(route==="office")office(); else if(route==="intro")introduction(); else if(route==="learn")preparation();
+    if(route==="office")office(); else if(route==="story")story(); else if(route==="intro")introduction(); else if(route==="learn")preparation();
     else if(route==="investigation")investigation();else if(route==="memory")memory();else if(route==="deck")deckView();else if(route==="practice")practice();else progress();
   }
   function navigate(to){if(!routes[to])return;
@@ -324,6 +467,19 @@
   document.addEventListener("click",(event)=>{
     const b=event.target.closest("button");if(!b)return;
     if(b.dataset.route){navigate(b.dataset.route);return;}
+    if(b.dataset.hubLanguage){selectedLang=b.dataset.hubLanguage;navigate("practice");return;}
+    if(b.dataset.storyInspect){
+      if(!state.block1.inspected.includes(b.dataset.storyInspect))state.block1.inspected.push(b.dataset.storyInspect);
+      persist();render();return;
+    }
+    if(b.dataset.storyObservation){state.block1.observed=b.dataset.storyObservation;persist();render();return;}
+    if(b.dataset.storyQuestion){
+      if(!state.block1.asked.includes(b.dataset.storyQuestion))state.block1.asked.push(b.dataset.storyQuestion);
+      persist();render();return;
+    }
+    if(b.dataset.storyMethod){state.block1.method=b.dataset.storyMethod;persist();render();return;}
+    if(b.dataset.storyAnswer){state.block1.answer=b.dataset.storyAnswer;persist();render();return;}
+
     if(b.dataset.speakWord){speak(b.dataset.speakWord,b.dataset.speakLang);return;}
     if(b.dataset.clue){
       const id=b.dataset.clue;activeClue=id;
@@ -341,6 +497,35 @@
       if(choice?.correct){state.solved=true;chirp();}persist();deduction();return;
     }
     const action=b.dataset.action;
+    if(action==="story-next"){
+      const st=state.block1;
+      const current=B.scenes[st.stage];
+      const required=current.id==="sobre"?["fecha","matasellos"].every(x=>st.inspected.includes(x))&&!!st.observed:
+       current.id==="puerto"?["placa","plano"].every(x=>st.inspected.includes(x)):
+       current.id==="nora"?st.asked.includes("quien")&&st.asked.includes("porqué"):
+       current.id==="identidad"?!!st.method:
+       current.id==="registro"?state.lessonCompleted&&st.answer==="libro":false;
+      if(!required){notify("Examina la escena antes de avanzar.");return;}
+      if(current.id==="identidad"){
+        const input=byId("story-alias");if(input)st.alias=input.value.slice(0,40);
+      }
+      st.stage=Math.min(st.stage+1,B.scenes.length-1);
+      if(B.scenes[st.stage].id==="cierre")st.complete=true;
+      persist();navigate("story");return;
+    }
+    if(action==="story-back"){state.block1.stage=Math.max(0,state.block1.stage-1);persist();navigate("story");return;}
+    if(action==="story-restart"){
+      state.block1.stage=0;persist();navigate("story");return;
+    }
+    if(action==="install-pwa"){
+      const install=window.ATLAS_INSTALL;
+      if(!install){notify("Usa el menú de Chrome para añadir ATLAS a tu pantalla de inicio.");return;}
+      install.request().then(result=>{
+        if(result.status==="manual")notify("Chrome: menú ⋮ → Instalar aplicación o Añadir a pantalla principal. Después ábrela desde el icono.");
+        if(result.status==="accepted")notify("Instalación aceptada. Abre ATLAS desde el nuevo icono.");
+        if(result.status==="already-installed")notify("ATLAS ya está abierto como aplicación.");
+      });return;
+    }
     if(action==="intro-next"){
       if(introStep<D.introduction.length-1){introStep++;render();}
       else{state.introSeen=true;persist();lessonStep=0;navigate("learn");}
@@ -375,6 +560,9 @@
         state=initial();deck=shuffled(pairs);selection=[];locked=false;activeClue=null;answerId=null;flashIndex=0;flipped=false;introStep=0;lessonStep=0;practiceIndex=0;practiceFeedback=null;practiceHintUsed=false;persist();navigate("office");notify("Progreso de demostración reiniciado.");
       }
     }
+  });
+  document.addEventListener("input",(event)=>{
+    if(event.target?.id==="story-alias"){state.block1.alias=event.target.value.slice(0,40);persist();}
   });
   document.addEventListener("change",async(event)=>{
     if(event.target?.id!=="import-progress-file")return;
