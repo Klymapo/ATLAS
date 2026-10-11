@@ -3,7 +3,7 @@
 **Regla principal: AUSENTE = PENDIENTE = BLOQUEADO para publicación.**
 
 ## Filtros
-- Director visual: estilo chibi, 2–2.5 cabezas como principio artístico, proporciones y comparativa contra máster inmutable.
+- Director visual: estilo vectorial minimalista NO anime y NO chibi, personajes de 6–8 cabezas como principio artístico, proporciones y comparativa contra máster inmutable.
 - Anatomía/escenario: siluetas, expresiones, perspectiva, composición, luz, escala.
 - Árbitro multilingüe + 4 lingüistas (FR, DE, RU, JA): sentido, grafía, naturalidad y fuentes fiables por idioma. El algoritmo solo comprueba integridad y presencia de evidencia, no verdad semántica.
 - Pedagogo: prerrequisitos, recuperación activa, espaciado, feedback, transferencia y evaluación.
@@ -20,3 +20,6 @@ Cada elemento publicado tiene `sha256`, `creator`, `approvals` y enlaces a archi
 
 ## Costos
 Validadores: Python estándar, Pillow, runners GitHub Actions gratuitos en repos públicos, sujetos a las condiciones actuales de GitHub. No se ejecutan modelos de IA por defecto; su disponibilidad gratuita no está garantizada.
+
+## Dirección visual irrevocable para este lote
+No usar rasgos manga/anime, ojos desproporcionados, cabezas chibi ni ilustraciones 3D. Conservar fondos noir cálidos, azul marino, papel crema y objetos detectivescos. La validación automatizada de metadatos y SVG NO puede certificar por sí sola la ausencia de anime: requiere inspección visual humana independiente.

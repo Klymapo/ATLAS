@@ -23,6 +23,10 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: Audit publication manifest
         run: python -m atlas.gate --root .
+      - name: Validate and render candidate art
+        run: python -m atlas.candidate_visuals --root .
+      - name: Audit multilingual curriculum candidates
+        run: python -m atlas.candidate_lexicon --root .
       - name: Attach evidence
         if: always()
         uses: actions/upload-artifact@v4

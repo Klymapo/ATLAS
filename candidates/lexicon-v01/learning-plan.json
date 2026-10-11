@@ -1,0 +1,107 @@
+{
+  "version": "0.2.1",
+  "status": "PENDING_PEDAGOGICAL_REVIEW",
+  "objective_es": "Recordar veinte objetos frecuentes utilizados en expedientes detectivescos mediante reconocimiento, recuperación libre, comprensión auditiva y transferencia a oraciones.",
+  "language_level": "pre-A1",
+  "sessions": [
+    {
+      "id": "S01",
+      "concepts": [
+        "concept-001",
+        "concept-002",
+        "concept-003",
+        "concept-004",
+        "concept-005"
+      ],
+      "mode": [
+        "visual_matching",
+        "cross_language_cards"
+      ],
+      "feedback": "corrección explicativa",
+      "retrieval": "sin pistas después de reconocimiento"
+    },
+    {
+      "id": "S02",
+      "concepts": [
+        "concept-006",
+        "concept-007",
+        "concept-008",
+        "concept-009",
+        "concept-010"
+      ],
+      "mode": [
+        "memory_pairs",
+        "typed_translation"
+      ],
+      "feedback": "respuesta completa con artículo donde aplica",
+      "retrieval": "sin dibujo"
+    },
+    {
+      "id": "S03",
+      "concepts": [
+        "concept-011",
+        "concept-012",
+        "concept-013",
+        "concept-014",
+        "concept-015"
+      ],
+      "mode": [
+        "scene_search",
+        "sentence_order"
+      ],
+      "feedback": "comparación de cuatro estructuras",
+      "retrieval": "identificar sin palabra inglesa"
+    },
+    {
+      "id": "S04",
+      "concepts": [
+        "concept-016",
+        "concept-017",
+        "concept-018",
+        "concept-019",
+        "concept-020"
+      ],
+      "mode": [
+        "document_case",
+        "free_recall"
+      ],
+      "feedback": "alternativas naturales y errores comunes",
+      "retrieval": "traducir a cuatro idiomas"
+    },
+    {
+      "id": "S05",
+      "concepts": [
+        "concept-001",
+        "concept-002",
+        "concept-003",
+        "concept-004",
+        "concept-005",
+        "concept-006",
+        "concept-007",
+        "concept-008",
+        "concept-009",
+        "concept-010",
+        "concept-011",
+        "concept-012",
+        "concept-013",
+        "concept-014",
+        "concept-015",
+        "concept-016",
+        "concept-017",
+        "concept-018",
+        "concept-019",
+        "concept-020"
+      ],
+      "mode": [
+        "mixed_review",
+        "audio_dictation_when_licensed_audio_available"
+      ],
+      "feedback": "errores diferenciados por idioma",
+      "retrieval": "recuperación espaciada"
+    }
+  ],
+  "spacing_policy": "Repetir según desempeño por concepto e idioma, sin fecha fija obligatoria ni castigo por rachas.",
+  "fairness": "No usar pruebas auditivas hasta contar con audio identificado y correctamente licenciado.",
+  "mastery_policy": "La repetición con dibujo no certifica producción escrita ni auditiva.",
+  "narrative": "La biblioteca del Archivo central: las palabras se usan para identificar pistas; completar una misión no termina el juego."
+}

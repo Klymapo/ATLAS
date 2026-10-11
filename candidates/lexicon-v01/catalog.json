@@ -1,0 +1,1256 @@
+{
+  "version": "0.2.1",
+  "status": "CANDIDATE_UNVERIFIED",
+  "ui_language": "es",
+  "pivot_language": "en",
+  "study_languages": [
+    "fr",
+    "de",
+    "ru",
+    "ja"
+  ],
+  "unit": "Objects and Evidence",
+  "items": [
+    {
+      "id": "concept-001",
+      "semantic_id": "key",
+      "english": {
+        "headword": "key",
+        "sense_es": "llave (cerradura)",
+        "source_language": "en"
+      },
+      "meaning_es": "llave (cerradura)",
+      "type": "concrete_noun",
+      "pedagogical_group": "objects_and_clues",
+      "languages": {
+        "fr": {
+          "word": "clé",
+          "article": "la",
+          "grammatical_gender": "f",
+          "reading": "clé",
+          "example": "C'est une clé.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/cl%C3%A9"
+          ]
+        },
+        "de": {
+          "word": "Schlüssel",
+          "article": "der",
+          "grammatical_gender": "m",
+          "reading": "Schlüssel",
+          "example": "Das ist ein Schlüssel.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/Schl%C3%BCssel"
+          ]
+        },
+        "ru": {
+          "word": "ключ",
+          "reading": "ключ",
+          "example": "Это ключ.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D0%BA%D0%BB%D1%8E%D1%87"
+          ]
+        },
+        "ja": {
+          "word": "鍵",
+          "reading": "かぎ",
+          "example": "これは鍵です。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E9%8D%B5"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    },
+    {
+      "id": "concept-002",
+      "semantic_id": "book",
+      "english": {
+        "headword": "book",
+        "sense_es": "libro",
+        "source_language": "en"
+      },
+      "meaning_es": "libro",
+      "type": "concrete_noun",
+      "pedagogical_group": "objects_and_clues",
+      "languages": {
+        "fr": {
+          "word": "livre",
+          "article": "le",
+          "grammatical_gender": "m",
+          "reading": "livre",
+          "example": "C'est un livre.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/livre"
+          ]
+        },
+        "de": {
+          "word": "Buch",
+          "article": "das",
+          "grammatical_gender": "n",
+          "reading": "Buch",
+          "example": "Das ist ein Buch.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/Buch"
+          ]
+        },
+        "ru": {
+          "word": "книга",
+          "reading": "книга",
+          "example": "Это книга.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D0%BA%D0%BD%D0%B8%D0%B3%D0%B0"
+          ]
+        },
+        "ja": {
+          "word": "本",
+          "reading": "ほん",
+          "example": "これは本です。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E6%9C%AC"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    },
+    {
+      "id": "concept-003",
+      "semantic_id": "door",
+      "english": {
+        "headword": "door",
+        "sense_es": "puerta",
+        "source_language": "en"
+      },
+      "meaning_es": "puerta",
+      "type": "concrete_noun",
+      "pedagogical_group": "objects_and_clues",
+      "languages": {
+        "fr": {
+          "word": "porte",
+          "article": "la",
+          "grammatical_gender": "f",
+          "reading": "porte",
+          "example": "C'est une porte.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/porte"
+          ]
+        },
+        "de": {
+          "word": "Tür",
+          "article": "die",
+          "grammatical_gender": "f",
+          "reading": "Tür",
+          "example": "Das ist eine Tür.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/T%C3%BCr"
+          ]
+        },
+        "ru": {
+          "word": "дверь",
+          "reading": "дверь",
+          "example": "Это дверь.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D0%B4%D0%B2%D0%B5%D1%80%D1%8C"
+          ]
+        },
+        "ja": {
+          "word": "ドア",
+          "reading": "ドア",
+          "example": "これはドアです。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E3%83%89%E3%82%A2"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    },
+    {
+      "id": "concept-004",
+      "semantic_id": "letter",
+      "english": {
+        "headword": "letter",
+        "sense_es": "carta (correspondencia)",
+        "source_language": "en"
+      },
+      "meaning_es": "carta (correspondencia)",
+      "type": "concrete_noun",
+      "pedagogical_group": "objects_and_clues",
+      "languages": {
+        "fr": {
+          "word": "lettre",
+          "article": "la",
+          "grammatical_gender": "f",
+          "reading": "lettre",
+          "example": "C'est une lettre.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/lettre"
+          ]
+        },
+        "de": {
+          "word": "Brief",
+          "article": "der",
+          "grammatical_gender": "m",
+          "reading": "Brief",
+          "example": "Das ist ein Brief.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/Brief"
+          ]
+        },
+        "ru": {
+          "word": "письмо",
+          "reading": "письмо",
+          "example": "Это письмо.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D0%BF%D0%B8%D1%81%D1%8C%D0%BC%D0%BE"
+          ]
+        },
+        "ja": {
+          "word": "手紙",
+          "reading": "てがみ",
+          "example": "これは手紙です。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E6%89%8B%E7%B4%99"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    },
+    {
+      "id": "concept-005",
+      "semantic_id": "map",
+      "english": {
+        "headword": "map",
+        "sense_es": "mapa geográfico",
+        "source_language": "en"
+      },
+      "meaning_es": "mapa geográfico",
+      "type": "concrete_noun",
+      "pedagogical_group": "objects_and_clues",
+      "languages": {
+        "fr": {
+          "word": "carte",
+          "article": "la",
+          "grammatical_gender": "f",
+          "reading": "carte",
+          "example": "C'est une carte.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/carte"
+          ]
+        },
+        "de": {
+          "word": "Karte",
+          "article": "die",
+          "grammatical_gender": "f",
+          "reading": "Karte",
+          "example": "Das ist eine Karte.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/Karte"
+          ]
+        },
+        "ru": {
+          "word": "карта",
+          "reading": "карта",
+          "example": "Это карта.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D0%BA%D0%B0%D1%80%D1%82%D0%B0"
+          ]
+        },
+        "ja": {
+          "word": "地図",
+          "reading": "ちず",
+          "example": "これは地図です。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E5%9C%B0%E5%9B%B3"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    },
+    {
+      "id": "concept-006",
+      "semantic_id": "bag",
+      "english": {
+        "headword": "bag",
+        "sense_es": "bolso",
+        "source_language": "en"
+      },
+      "meaning_es": "bolso",
+      "type": "concrete_noun",
+      "pedagogical_group": "objects_and_clues",
+      "languages": {
+        "fr": {
+          "word": "sac",
+          "article": "le",
+          "grammatical_gender": "m",
+          "reading": "sac",
+          "example": "C'est un sac.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/sac"
+          ]
+        },
+        "de": {
+          "word": "Tasche",
+          "article": "die",
+          "grammatical_gender": "f",
+          "reading": "Tasche",
+          "example": "Das ist eine Tasche.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/Tasche"
+          ]
+        },
+        "ru": {
+          "word": "сумка",
+          "reading": "сумка",
+          "example": "Это сумка.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D1%81%D1%83%D0%BC%D0%BA%D0%B0"
+          ]
+        },
+        "ja": {
+          "word": "かばん",
+          "reading": "かばん",
+          "example": "これはかばんです。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E3%81%8B%E3%81%B0%E3%82%93"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    },
+    {
+      "id": "concept-007",
+      "semantic_id": "window",
+      "english": {
+        "headword": "window",
+        "sense_es": "ventana",
+        "source_language": "en"
+      },
+      "meaning_es": "ventana",
+      "type": "concrete_noun",
+      "pedagogical_group": "objects_and_clues",
+      "languages": {
+        "fr": {
+          "word": "fenêtre",
+          "article": "la",
+          "grammatical_gender": "f",
+          "reading": "fenêtre",
+          "example": "C'est une fenêtre.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/fen%C3%AAtre"
+          ]
+        },
+        "de": {
+          "word": "Fenster",
+          "article": "das",
+          "grammatical_gender": "n",
+          "reading": "Fenster",
+          "example": "Das ist ein Fenster.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/Fenster"
+          ]
+        },
+        "ru": {
+          "word": "окно",
+          "reading": "окно",
+          "example": "Это окно.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D0%BE%D0%BA%D0%BD%D0%BE"
+          ]
+        },
+        "ja": {
+          "word": "窓",
+          "reading": "まど",
+          "example": "これは窓です。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E7%AA%93"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    },
+    {
+      "id": "concept-008",
+      "semantic_id": "table",
+      "english": {
+        "headword": "table",
+        "sense_es": "mesa",
+        "source_language": "en"
+      },
+      "meaning_es": "mesa",
+      "type": "concrete_noun",
+      "pedagogical_group": "objects_and_clues",
+      "languages": {
+        "fr": {
+          "word": "table",
+          "article": "la",
+          "grammatical_gender": "f",
+          "reading": "table",
+          "example": "C'est une table.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/table"
+          ]
+        },
+        "de": {
+          "word": "Tisch",
+          "article": "der",
+          "grammatical_gender": "m",
+          "reading": "Tisch",
+          "example": "Das ist ein Tisch.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/Tisch"
+          ]
+        },
+        "ru": {
+          "word": "стол",
+          "reading": "стол",
+          "example": "Это стол.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D1%81%D1%82%D0%BE%D0%BB"
+          ]
+        },
+        "ja": {
+          "word": "テーブル",
+          "reading": "テーブル",
+          "example": "これはテーブルです。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E3%83%86%E3%83%BC%E3%83%96%E3%83%AB"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    },
+    {
+      "id": "concept-009",
+      "semantic_id": "chair",
+      "english": {
+        "headword": "chair",
+        "sense_es": "silla",
+        "source_language": "en"
+      },
+      "meaning_es": "silla",
+      "type": "concrete_noun",
+      "pedagogical_group": "objects_and_clues",
+      "languages": {
+        "fr": {
+          "word": "chaise",
+          "article": "la",
+          "grammatical_gender": "f",
+          "reading": "chaise",
+          "example": "C'est une chaise.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/chaise"
+          ]
+        },
+        "de": {
+          "word": "Stuhl",
+          "article": "der",
+          "grammatical_gender": "m",
+          "reading": "Stuhl",
+          "example": "Das ist ein Stuhl.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/Stuhl"
+          ]
+        },
+        "ru": {
+          "word": "стул",
+          "reading": "стул",
+          "example": "Это стул.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D1%81%D1%82%D1%83%D0%BB"
+          ]
+        },
+        "ja": {
+          "word": "椅子",
+          "reading": "いす",
+          "example": "これは椅子です。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E6%A4%85%E5%AD%90"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    },
+    {
+      "id": "concept-010",
+      "semantic_id": "street",
+      "english": {
+        "headword": "street",
+        "sense_es": "calle",
+        "source_language": "en"
+      },
+      "meaning_es": "calle",
+      "type": "concrete_noun",
+      "pedagogical_group": "objects_and_clues",
+      "languages": {
+        "fr": {
+          "word": "rue",
+          "article": "la",
+          "grammatical_gender": "f",
+          "reading": "rue",
+          "example": "C'est une rue.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/rue"
+          ]
+        },
+        "de": {
+          "word": "Straße",
+          "article": "die",
+          "grammatical_gender": "f",
+          "reading": "Straße",
+          "example": "Das ist eine Straße.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/Stra%C3%9Fe"
+          ]
+        },
+        "ru": {
+          "word": "улица",
+          "reading": "улица",
+          "example": "Это улица.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D1%83%D0%BB%D0%B8%D1%86%D0%B0"
+          ]
+        },
+        "ja": {
+          "word": "通り",
+          "reading": "とおり",
+          "example": "これは通りです。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E9%80%9A%E3%82%8A"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    },
+    {
+      "id": "concept-011",
+      "semantic_id": "city",
+      "english": {
+        "headword": "city",
+        "sense_es": "ciudad",
+        "source_language": "en"
+      },
+      "meaning_es": "ciudad",
+      "type": "concrete_noun",
+      "pedagogical_group": "locations_and_tools",
+      "languages": {
+        "fr": {
+          "word": "ville",
+          "article": "la",
+          "grammatical_gender": "f",
+          "reading": "ville",
+          "example": "C'est une ville.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/ville"
+          ]
+        },
+        "de": {
+          "word": "Stadt",
+          "article": "die",
+          "grammatical_gender": "f",
+          "reading": "Stadt",
+          "example": "Das ist eine Stadt.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/Stadt"
+          ]
+        },
+        "ru": {
+          "word": "город",
+          "reading": "город",
+          "example": "Это город.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D0%B3%D0%BE%D1%80%D0%BE%D0%B4"
+          ]
+        },
+        "ja": {
+          "word": "都市",
+          "reading": "とし",
+          "example": "これは都市です。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E9%83%BD%E5%B8%82"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    },
+    {
+      "id": "concept-012",
+      "semantic_id": "house",
+      "english": {
+        "headword": "house",
+        "sense_es": "casa",
+        "source_language": "en"
+      },
+      "meaning_es": "casa",
+      "type": "concrete_noun",
+      "pedagogical_group": "locations_and_tools",
+      "languages": {
+        "fr": {
+          "word": "maison",
+          "article": "la",
+          "grammatical_gender": "f",
+          "reading": "maison",
+          "example": "C'est une maison.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/maison"
+          ]
+        },
+        "de": {
+          "word": "Haus",
+          "article": "das",
+          "grammatical_gender": "n",
+          "reading": "Haus",
+          "example": "Das ist ein Haus.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/Haus"
+          ]
+        },
+        "ru": {
+          "word": "дом",
+          "reading": "дом",
+          "example": "Это дом.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D0%B4%D0%BE%D0%BC"
+          ]
+        },
+        "ja": {
+          "word": "家",
+          "reading": "いえ",
+          "example": "これは家です。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E5%AE%B6"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    },
+    {
+      "id": "concept-013",
+      "semantic_id": "room",
+      "english": {
+        "headword": "room",
+        "sense_es": "habitación / estancia",
+        "source_language": "en"
+      },
+      "meaning_es": "habitación / estancia",
+      "type": "concrete_noun",
+      "pedagogical_group": "locations_and_tools",
+      "languages": {
+        "fr": {
+          "word": "pièce",
+          "article": "la",
+          "grammatical_gender": "f",
+          "reading": "pièce",
+          "example": "C'est une pièce.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/pi%C3%A8ce"
+          ]
+        },
+        "de": {
+          "word": "Zimmer",
+          "article": "das",
+          "grammatical_gender": "n",
+          "reading": "Zimmer",
+          "example": "Das ist ein Zimmer.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/Zimmer"
+          ]
+        },
+        "ru": {
+          "word": "комната",
+          "reading": "комната",
+          "example": "Это комната.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D0%BA%D0%BE%D0%BC%D0%BD%D0%B0%D1%82%D0%B0"
+          ]
+        },
+        "ja": {
+          "word": "部屋",
+          "reading": "へや",
+          "example": "これは部屋です。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E9%83%A8%E5%B1%8B"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    },
+    {
+      "id": "concept-014",
+      "semantic_id": "clock",
+      "english": {
+        "headword": "clock",
+        "sense_es": "reloj (de pared o mesa)",
+        "source_language": "en"
+      },
+      "meaning_es": "reloj (de pared o mesa)",
+      "type": "concrete_noun",
+      "pedagogical_group": "locations_and_tools",
+      "languages": {
+        "fr": {
+          "word": "horloge",
+          "article": "la",
+          "grammatical_gender": "f",
+          "reading": "horloge",
+          "example": "C'est une horloge.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/horloge"
+          ]
+        },
+        "de": {
+          "word": "Uhr",
+          "article": "die",
+          "grammatical_gender": "f",
+          "reading": "Uhr",
+          "example": "Das ist eine Uhr.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/Uhr"
+          ]
+        },
+        "ru": {
+          "word": "часы",
+          "reading": "часы",
+          "example": "Это часы.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D1%87%D0%B0%D1%81%D1%8B"
+          ]
+        },
+        "ja": {
+          "word": "時計",
+          "reading": "とけい",
+          "example": "これは時計です。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E6%99%82%E8%A8%88"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    },
+    {
+      "id": "concept-015",
+      "semantic_id": "lamp",
+      "english": {
+        "headword": "lamp",
+        "sense_es": "lámpara",
+        "source_language": "en"
+      },
+      "meaning_es": "lámpara",
+      "type": "concrete_noun",
+      "pedagogical_group": "locations_and_tools",
+      "languages": {
+        "fr": {
+          "word": "lampe",
+          "article": "la",
+          "grammatical_gender": "f",
+          "reading": "lampe",
+          "example": "C'est une lampe.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/lampe"
+          ]
+        },
+        "de": {
+          "word": "Lampe",
+          "article": "die",
+          "grammatical_gender": "f",
+          "reading": "Lampe",
+          "example": "Das ist eine Lampe.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/Lampe"
+          ]
+        },
+        "ru": {
+          "word": "лампа",
+          "reading": "лампа",
+          "example": "Это лампа.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D0%BB%D0%B0%D0%BC%D0%BF%D0%B0"
+          ]
+        },
+        "ja": {
+          "word": "ランプ",
+          "reading": "ランプ",
+          "example": "これはランプです。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E3%83%A9%E3%83%B3%E3%83%97"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    },
+    {
+      "id": "concept-016",
+      "semantic_id": "paper",
+      "english": {
+        "headword": "paper",
+        "sense_es": "papel (material)",
+        "source_language": "en"
+      },
+      "meaning_es": "papel (material)",
+      "type": "concrete_noun",
+      "pedagogical_group": "locations_and_tools",
+      "languages": {
+        "fr": {
+          "word": "papier",
+          "article": "le",
+          "grammatical_gender": "m",
+          "reading": "papier",
+          "example": "C'est un papier.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/papier"
+          ]
+        },
+        "de": {
+          "word": "Papier",
+          "article": "das",
+          "grammatical_gender": "n",
+          "reading": "Papier",
+          "example": "Das ist ein Papier.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/Papier"
+          ]
+        },
+        "ru": {
+          "word": "бумага",
+          "reading": "бумага",
+          "example": "Это бумага.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D0%B1%D1%83%D0%BC%D0%B0%D0%B3%D0%B0"
+          ]
+        },
+        "ja": {
+          "word": "紙",
+          "reading": "かみ",
+          "example": "これは紙です。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E7%B4%99"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    },
+    {
+      "id": "concept-017",
+      "semantic_id": "pencil",
+      "english": {
+        "headword": "pencil",
+        "sense_es": "lápiz",
+        "source_language": "en"
+      },
+      "meaning_es": "lápiz",
+      "type": "concrete_noun",
+      "pedagogical_group": "locations_and_tools",
+      "languages": {
+        "fr": {
+          "word": "crayon",
+          "article": "le",
+          "grammatical_gender": "m",
+          "reading": "crayon",
+          "example": "C'est un crayon.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/crayon"
+          ]
+        },
+        "de": {
+          "word": "Bleistift",
+          "article": "der",
+          "grammatical_gender": "m",
+          "reading": "Bleistift",
+          "example": "Das ist ein Bleistift.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/Bleistift"
+          ]
+        },
+        "ru": {
+          "word": "карандаш",
+          "reading": "карандаш",
+          "example": "Это карандаш.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D0%BA%D0%B0%D1%80%D0%B0%D0%BD%D0%B4%D0%B0%D1%88"
+          ]
+        },
+        "ja": {
+          "word": "鉛筆",
+          "reading": "えんぴつ",
+          "example": "これは鉛筆です。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E9%89%9B%E7%AD%86"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    },
+    {
+      "id": "concept-018",
+      "semantic_id": "notebook",
+      "english": {
+        "headword": "notebook",
+        "sense_es": "cuaderno",
+        "source_language": "en"
+      },
+      "meaning_es": "cuaderno",
+      "type": "concrete_noun",
+      "pedagogical_group": "locations_and_tools",
+      "languages": {
+        "fr": {
+          "word": "cahier",
+          "article": "le",
+          "grammatical_gender": "m",
+          "reading": "cahier",
+          "example": "C'est un cahier.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/cahier"
+          ]
+        },
+        "de": {
+          "word": "Heft",
+          "article": "das",
+          "grammatical_gender": "n",
+          "reading": "Heft",
+          "example": "Das ist ein Heft.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/Heft"
+          ]
+        },
+        "ru": {
+          "word": "тетрадь",
+          "reading": "тетрадь",
+          "example": "Это тетрадь.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D1%82%D0%B5%D1%82%D1%80%D0%B0%D0%B4%D1%8C"
+          ]
+        },
+        "ja": {
+          "word": "ノート",
+          "reading": "ノート",
+          "example": "これはノートです。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E3%83%8E%E3%83%BC%E3%83%88"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    },
+    {
+      "id": "concept-019",
+      "semantic_id": "cup",
+      "english": {
+        "headword": "cup",
+        "sense_es": "taza",
+        "source_language": "en"
+      },
+      "meaning_es": "taza",
+      "type": "concrete_noun",
+      "pedagogical_group": "locations_and_tools",
+      "languages": {
+        "fr": {
+          "word": "tasse",
+          "article": "la",
+          "grammatical_gender": "f",
+          "reading": "tasse",
+          "example": "C'est une tasse.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/tasse"
+          ]
+        },
+        "de": {
+          "word": "Tasse",
+          "article": "die",
+          "grammatical_gender": "f",
+          "reading": "Tasse",
+          "example": "Das ist eine Tasse.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/Tasse"
+          ]
+        },
+        "ru": {
+          "word": "чашка",
+          "reading": "чашка",
+          "example": "Это чашка.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D1%87%D0%B0%D1%88%D0%BA%D0%B0"
+          ]
+        },
+        "ja": {
+          "word": "カップ",
+          "reading": "カップ",
+          "example": "これはカップです。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E3%82%AB%E3%83%83%E3%83%97"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    },
+    {
+      "id": "concept-020",
+      "semantic_id": "photograph",
+      "english": {
+        "headword": "photograph",
+        "sense_es": "fotografía",
+        "source_language": "en"
+      },
+      "meaning_es": "fotografía",
+      "type": "concrete_noun",
+      "pedagogical_group": "locations_and_tools",
+      "languages": {
+        "fr": {
+          "word": "photo",
+          "article": "la",
+          "grammatical_gender": "f",
+          "reading": "photo",
+          "example": "C'est une photo.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://fr.wiktionary.org/wiki/photo"
+          ]
+        },
+        "de": {
+          "word": "Foto",
+          "article": "das",
+          "grammatical_gender": "n",
+          "reading": "Foto",
+          "example": "Das ist ein Foto.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://de.wiktionary.org/wiki/Foto"
+          ]
+        },
+        "ru": {
+          "word": "фотография",
+          "reading": "фотография",
+          "example": "Это фотография.",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://ru.wiktionary.org/wiki/%D1%84%D0%BE%D1%82%D0%BE%D0%B3%D1%80%D0%B0%D1%84%D0%B8%D1%8F"
+          ]
+        },
+        "ja": {
+          "word": "写真",
+          "reading": "しゃしん",
+          "example": "これは写真です。",
+          "review_status": "PENDING",
+          "sources_for_reviewer": [
+            "https://jisho.org/search/%E5%86%99%E7%9C%9F"
+          ]
+        }
+      },
+      "audio": {
+        "fr": "MISSING",
+        "de": "MISSING",
+        "ru": "MISSING",
+        "ja": "MISSING"
+      },
+      "publication_status": "PENDING",
+      "pedagogical_notes": "Practicar en reconocimiento, escucha y recuperación libre; no dar por dominado al acertar solo la imagen."
+    }
+  ],
+  "disclaimer": "BORRADOR: las traducciones, géneros, lectura, ejemplos y enlaces son propuestas para revisión. La presencia de URL no equivale a consulta ni verificación. No se publicarán como aprobados sin auditoría independiente."
+}

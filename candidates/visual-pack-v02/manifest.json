@@ -1,0 +1,71 @@
+{
+  "version": "0.2.1",
+  "state": "awaiting-art-director-approval",
+  "style_id": "minimal-vector-noir-v1",
+  "prohibited_styles": [
+    "anime",
+    "manga",
+    "chibi",
+    "kawaii",
+    "3d",
+    "photorealistic"
+  ],
+  "palette": {
+    "ink": "#182635",
+    "paper": "#F0E6D5",
+    "gold": "#B99558",
+    "wine": "#8F4952",
+    "jade": "#508B83",
+    "white": "#FFFFFF",
+    "black": "#000000"
+  },
+  "character_spec": {
+    "min_head_units": 6,
+    "max_head_units": 8,
+    "eye_design": "small simple dots or short strokes",
+    "shading": "flat fills, no gradients",
+    "line_treatment": "rounded and consistent"
+  },
+  "world_spec": {
+    "subject": "warm detective archive with dark blue city silhouettes",
+    "typography": "readable sans/serif reserved for UI",
+    "asset_format": "editable SVG"
+  },
+  "canonical_personages": [
+    "Investigador",
+    "Nora Vale"
+  ],
+  "gallery": [
+    {
+      "path": "candidates/visual-pack-v02/investigator.svg",
+      "kind": "character",
+      "decision": "pending",
+      "master": false
+    },
+    {
+      "path": "candidates/visual-pack-v02/nora-vale.svg",
+      "kind": "character",
+      "decision": "pending",
+      "master": false
+    },
+    {
+      "path": "candidates/visual-pack-v02/office.svg",
+      "kind": "scene",
+      "decision": "pending",
+      "master": false
+    },
+    {
+      "path": "candidates/visual-pack-v02/props.svg",
+      "kind": "props",
+      "decision": "pending",
+      "master": false
+    },
+    {
+      "path": "candidates/visual-pack-v02/expressions.svg",
+      "kind": "expressions",
+      "decision": "pending",
+      "master": false
+    }
+  ],
+  "notes": "SVG vectorial minimalista sin anime ni chibi. Bocetos en revisión; no referencias maestras aprobadas."
+}

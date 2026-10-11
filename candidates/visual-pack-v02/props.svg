@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="290" viewBox="0 0 960 290" role="img" aria-label="Set vectorial minimalista: llave, lupa, libro, carta y farol"><title>Set vectorial minimalista: llave, lupa, libro, carta y farol</title>
+<rect width="960" height="290" fill="#F0E6D5"/>
+<g fill="none" stroke="#B99558" stroke-width="2"><path d="M192 14v262M385 14v262M578 14v262M771 14v262"/></g>
+<g stroke="#182635" stroke-width="7" stroke-linejoin="round" stroke-linecap="round">
+<circle cx="100" cy="111" r="47" fill="#F0E6D5"/><circle cx="100" cy="111" r="34" fill="#508B83"/><path d="M134 148l46 56" fill="none" stroke-width="19"/>
+<circle cx="290" cy="106" r="33" fill="#B99558"/><circle cx="290" cy="106" r="12" fill="#F0E6D5"/><path d="M312 132l60 63v-20h-19v-19h-19" fill="none"/>
+<path d="M414 78l127-9v134l-127 9Z" fill="#8F4952"/><path d="M427 88l90-7v106l-90 7Z" fill="#F0E6D5"/><path d="M447 120l51-4M447 147l51-4M447 172l43-3" fill="none" stroke-width="4"/>
+<rect x="608" y="89" width="131" height="101" rx="6" fill="#B99558"/><path d="M608 91l64 55l67-55" fill="#F0E6D5"/><path d="M613 185l55-42l66 42" fill="none" stroke-width="4"/>
+<path d="M831 78h59v106h-59z" fill="#B99558"/><rect x="844" y="94" width="33" height="73" rx="8" fill="#F0E6D5"/><path d="M849 76q7-52 24 0M830 187h62" fill="none"/>
+</g></svg>
