@@ -216,6 +216,13 @@ class Atlas:
 def report(findings, root):
     counts = {s:sum(f.status==s for f in findings) for s in ("PASS","FAIL","PENDING")}
     status = "APPROVED" if counts["FAIL"]==0 and counts["PENDING"]==0 and findings else "BLOCKED"
+    manifest = Path(root)/"published/manifest.json"
+    try:
+        published_items = json.loads(manifest.read_text(encoding="utf-8")).get("items", [])
+    except (ValueError, OSError, AttributeError):
+        published_items = None
+    if status == "APPROVED" and published_items == []:
+        status = "INFRASTRUCTURE_READY"
     obj = {"result":status,"scope":"infrastructure+published-items", "counts":counts,"checks":[asdict(f) for f in findings], "utc":datetime.now(timezone.utc).isoformat()}
     directory=Path(root)/"reports"
     directory.mkdir(parents=True,exist_ok=True)
@@ -234,5 +241,5 @@ def main():
     print(json.dumps({"result":result["result"],"counts":result["counts"]},ensure_ascii=False))
     if os.environ.get("GITHUB_STEP_SUMMARY"):
         Path(os.environ["GITHUB_STEP_SUMMARY"]).write_text((Path(args.root)/"reports/atlas.md").read_text(encoding="utf-8"),encoding="utf-8")
-    return 0 if result["result"]=="APPROVED" else 1
+    return 0 if result["result"] in ("APPROVED","INFRASTRUCTURE_READY") else 1
 if __name__=="__main__": sys.exit(main())
