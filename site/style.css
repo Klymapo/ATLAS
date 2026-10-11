@@ -11,3 +11,15 @@
 @media(max-width:1150px){.shell{grid-template-columns:208px 1fr}.rail{padding:19px 12px}.topbar{padding-left:20px;padding-right:20px}#main-content{padding:24px}.scene-layout{grid-template-columns:1fr}.scene-board{max-width:100%}.story-panel .story-face{max-width:190px;height:120px;float:right;margin:0 0 12px 15px}.dashboard-grid{grid-template-columns:1fr}}
 @media(max-width:740px){.shell{display:block;min-height:100vh}.rail{display:none}.workspace{min-height:100vh}.topbar{min-height:60px;padding:10px 15px}.user-token{display:none}.build-note{font-size:.55rem}.breadcrumb{font-size:.65rem}#main-content{padding:20px 15px 112px}.site-footer{padding:18px 15px 84px;font-size:.65rem}.mobile-nav{position:fixed;bottom:0;left:0;right:0;z-index:15;display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid #586472;background:var(--ink);padding:9px 3px max(10px,env(safe-area-inset-bottom));box-shadow:0 -6px 18px #111d2822}.mobile-nav button{border:0;background:none;color:#d8d4c9;display:grid;gap:3px;justify-items:center;font-size:1.35rem;min-height:43px}.mobile-nav button span{font-size:.63rem}.mobile-nav button.active{color:#f3d39a}.page-heading{display:block}.page-heading .status-pill{display:inline-block;margin-top:14px}.hero{grid-template-columns:1fr}.hero-copy{padding:25px;min-height:270px}.hero-art{min-height:205px;height:205px}.hero-art:after{background:linear-gradient(180deg,#182635 0%,transparent 35%)}.grid-2,.grid-3{grid-template-columns:1fr}.scene-board{border-width:3px}.hotspot{min-height:36px;min-width:36px;font-size:.67rem;padding:7px}.hotspot .hotspot-name{display:none}.story-panel .story-face{width:120px;height:90px}.memory-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:7px}.memory-card{min-height:86px;border-width:2px;border-radius:8px;padding:4px}.memory-card .face-lang{font-size:.55rem}.memory-card .face-word{font-size:.88rem}.memory-card .back-mark{font-size:1.55rem}.metrics{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.metric{padding:13px 9px}.metric strong{font-size:1.75rem}.metric span{font-size:.68rem}.toast{bottom:83px;left:12px;right:12px;max-width:none}.flashcard{padding:20px 12px}.flashcard .four-ways{gap:7px}.status-pill{white-space:normal}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;transition-duration:.01ms!important;scroll-behavior:auto!important}}
+
+.print-sheet{display:none}
+@media print{
+ @page{size:A4;margin:14mm}
+ html,body{background:white!important;color:black!important;font:12pt Georgia,serif}
+ .shell,.mobile-nav,.toast,.skip-link{display:none!important}
+ .print-sheet{display:block!important}
+ .print-sheet h1{font-size:23pt;margin:0 0 8mm}
+ .print-sheet p{margin:0 0 5mm;font-size:11pt}
+ .print-card{border:1px solid #888;padding:6mm;margin:0 0 6mm;break-inside:avoid;page-break-inside:avoid}
+ .print-card h2{font-size:16pt;margin-bottom:4mm}
+}
