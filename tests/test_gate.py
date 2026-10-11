@@ -36,6 +36,7 @@ class QualityTests(unittest.TestCase):
         return {(x.gate,x.status) for x in Atlas(self.root).audit()}
     def test_empty_manifest_does_not_certify_content(self):
         self.assertIn(("integrator","PASS"),{(x.gate,x.status) for x in Atlas(self.root).audit()})
+        self.assertEqual(report(Atlas(self.root).audit(),self.root)["result"],"INFRASTRUCTURE_READY")
     def test_visual_without_master_fails(self):
         self.icon("assets/a.png")
         self.assertIn(("visual","FAIL"),self.result(self.item("assets/a.png")))
