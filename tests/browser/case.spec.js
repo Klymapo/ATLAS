@@ -218,6 +218,13 @@ test("Block 1 is playable, branches persist and language lesson gates the final 
  for(let i=0;i<4;i++)await page.locator('[data-action="lesson-next"]').click();
  await nav(page,"story");
  await page.locator('[data-story-answer="libro"]').click();
+ await expect(page.locator('[data-action="story-next"]')).toBeDisabled();
+ await nav(page,"practice");
+ await page.locator("#practice-answer").fill("la clé");
+ await page.locator('#practice-form button[type="submit"]').click();
+ await expect(page.getByText("¡Correcto en este intento!")).toBeVisible();
+ await nav(page,"story");
+ await expect(page.getByText(/Has completado una práctica escrita correcta sin pistas/)).toBeVisible();
  await page.locator('[data-action="story-next"]').click();
  await expect(page.getByRole("heading",{name:"Los números que no encajan"})).toBeVisible();
  fs.mkdirSync("reports/screenshots",{recursive:true});

@@ -207,6 +207,7 @@
   function story(){
   if(!B||!Array.isArray(B.scenes)){root.textContent="El bloque narrativo no está disponible.";return;}
   const st=state.block1,scene=B.scenes[st.stage];
+  const hasWrittenRecall=state.practiceAttempts.some(e=>e.correct===true&&e.hint_used===false);
   if(!scene){root.textContent="No existe esta escena.";return;}
   const objIds=Array.isArray(scene.objects)?scene.objects.map(x=>x.id):[];
   const checked=objIds.every(id=>st.inspected.includes(id));
@@ -241,11 +242,14 @@
       <p>${esc(scene.hook||"")}</p><div class="actions"><button class="button" data-route="investigation">Investigar la llave equivocada →</button>
       <button class="button outline" data-action="story-restart">Releer el Bloque 1</button></div></div>`;
   }
+  if(scene.id==="registro"&&state.lessonCompleted){
+    interactions+=`<div class="story-learning-gate"><h3>Una recuperación sin mirar</h3><p>${hasWrittenRecall?"✓ Has completado una práctica escrita correcta sin pistas. Es un primer recuerdo, todavía no aprendizaje duradero.":"Antes de cerrar esta parte del expediente, recupera correctamente una palabra de cualquiera de los cuatro idiomas sin usar pistas. No basta con reconocer la tarjeta."}</p><button class="button outline" data-route="practice">${hasWrittenRecall?"Practicar otra vez":"Ir a práctica escrita"} →</button></div>`;
+  }
   const allowed=scene.id==="sobre"?checked&&!!st.observed:
     scene.id==="puerto"?checked:
     scene.id==="nora"?st.asked.includes("quien")&&st.asked.includes("porqué"):
     scene.id==="identidad"?!!st.method:
-    scene.id==="registro"?state.lessonCompleted&&st.answer==="libro":false;
+    scene.id==="registro"?state.lessonCompleted&&st.answer==="libro"&&hasWrittenRecall:false;
   root.innerHTML=`<div class="story-page">
     <div class="story-heading"><span class="eyebrow">EL ARCHIVO DE LAS CUATRO VOCES / BLOQUE 1</span><span class="story-count">${st.stage+1} / ${B.scenes.length}</span></div>
     <div class="story-meter"><div style="width:${Math.round((st.stage+1)/B.scenes.length*100)}%"></div></div>
@@ -504,7 +508,7 @@
        current.id==="puerto"?["placa","plano"].every(x=>st.inspected.includes(x)):
        current.id==="nora"?st.asked.includes("quien")&&st.asked.includes("porqué"):
        current.id==="identidad"?!!st.method:
-       current.id==="registro"?state.lessonCompleted&&st.answer==="libro":false;
+       current.id==="registro"?state.lessonCompleted&&st.answer==="libro"&&hasWrittenRecall:false;
       if(!required){notify("Examina la escena antes de avanzar.");return;}
       if(current.id==="identidad"){
         const input=byId("story-alias");if(input)st.alias=input.value.slice(0,40);

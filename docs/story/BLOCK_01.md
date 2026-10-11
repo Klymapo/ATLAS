@@ -21,7 +21,7 @@ La elección inmediata no pide un idioma que el jugador desconoce. Pide observar
 2. **Umbral:** biblioteca, rótulo, plano, una puerta abierta. El jugador aprende topografía.
 3. **Nora:** presentación y preguntas múltiples. No avanzar sin conocer quién es y por qué llegó el protagonista.
 4. **Identidad:** ficha con alias y método; elección significativa de tono, sin atajos indebidos.
-5. **Registro 417:** figura un documento todavía no asignado. Nora enseña los objetos. Solo tras exponer el vocabulario puede el jugador identificar qué objeto significa book.
+5. **Registro 417:** figura un documento todavía no asignado. Nora enseña los objetos. Solo tras exponer el vocabulario y recordar por escrito una palabra sin ayuda puede el jugador cerrar la escena: exposición, recuperación inicial y reconocimiento, sin afirmar dominio duradero.
 6. **La llave:** final local del prólogo; número de etiqueta 21 y nota 12. Enlaza al Caso 001, cuya resolución está disponible sin terminar el Archivo.
 
 ## Qué se conserva para el futuro

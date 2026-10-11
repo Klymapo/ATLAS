@@ -29,7 +29,7 @@
 | 02 · Puerto Umbral | inspeccionar puerta y plano | contexto espacial y autoridad de la organización | examinar ambas placas |
 | 03 · Nora Vale | preguntas no exclusivas | quién es, por qué recluta, qué es Archivo | preguntar quién es y por qué te llama |
 | 04 · Ficha de ingreso | alias opcional + método | identidad elegida y agencia | escoger método |
-| 05 · Registro 417 | documento visible + identificación de objeto en inglés | enlazar lenguaje y pista | estudio previo de cuatro palabras + reconocer book |
+| 05 · Registro 417 | documento visible + identificación de objeto en inglés | enlazar lenguaje y pista | estudio de cuatro palabras + recuperación escrita sin ayuda + reconocimiento de book |
 | 06 · La primera puerta | elección de continuación | cliffhanger + caso local | abrir Caso 001 o releer |
 
 **Guion:** las fechas son en-universo 11 y 12 de octubre, no cálculo con la hora real del teléfono. Nora no conoce la autoría, una firma sola no prueba falsificación y no se acusa a nadie sin evidencia. El sello del sobre puede tener continuidad futura en otro expediente. Se puede volver a escenas anteriores y conservar decisiones.
