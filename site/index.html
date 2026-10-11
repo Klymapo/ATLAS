@@ -4,11 +4,19 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#182635">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="application-name" content="ATLAS">
   <meta name="description" content="El Archivo de las Cuatro Voces: aventura detectivesca multilingüe con fichas y retos de memoria. Demo educativa.">
   <title>El Archivo de las Cuatro Voces · Caso de demostración</title>
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="manifest" href="./manifest.webmanifest">
   <link rel="stylesheet" href="./style.css">
   <script defer src="./data/demo-content.js"></script>
+  <script defer src="./data/block1.js"></script>
+  <script defer src="./pwa.js"></script>
   <script defer src="./practice.js"></script>
   <script defer src="./app.js"></script>
 </head>
@@ -19,7 +27,8 @@
       <div class="brand"><span class="brand-mark" aria-hidden="true">✦</span><div><strong>EL ARCHIVO</strong><small>de las Cuatro Voces</small></div></div>
       <div class="rail-tag">Unidad especial de investigación lingüística</div>
       <nav class="navigation" aria-label="Secciones del juego">
-        <button type="button" class="nav-link active" data-route="office"><span aria-hidden="true">⌂</span> Mi oficina</button>
+        <button type="button" class="nav-link active" data-route="office"><span aria-hidden="true">⌂</span> HUB del Archivo</button>
+        <button type="button" class="nav-link" data-route="story"><span aria-hidden="true">✧</span> Historia · Bloque 1</button>
         <button type="button" class="nav-link" data-route="investigation"><span aria-hidden="true">◇</span> Investigar</button>
         <button type="button" class="nav-link" data-route="memory"><span aria-hidden="true">▦</span> Memoria</button>
         <button type="button" class="nav-link" data-route="deck"><span aria-hidden="true">▤</span> Fichas</button>
@@ -29,7 +38,7 @@
       <div class="rail-bottom">
         <label class="sound-control"><input id="sound-toggle" type="checkbox"><span>Sonidos suaves</span></label>
         <p>Enseñanza en <strong>español</strong><br>Pivote: <strong>English</strong><br>FR · DE · RU · JA</p>
-        <span class="mini-version">PROTOTIPO v0.8 · 100 % WEB</span>
+        <span class="mini-version">PROTOTIPO v0.9 · PWA</span>
       </div>
     </aside>
     <div class="workspace">
@@ -39,7 +48,8 @@
     </div>
   </div>
   <nav class="mobile-nav" aria-label="Navegación móvil">
-    <button type="button" data-route="office">⌂ <span>Oficina</span></button>
+    <button type="button" data-route="office">⌂ <span>HUB</span></button>
+    <button type="button" data-route="story">✧ <span>Historia</span></button>
     <button type="button" data-route="investigation">◇ <span>Caso</span></button>
     <button type="button" data-route="memory">▦ <span>Memoria</span></button>
     <button type="button" data-route="deck">▤ <span>Fichas</span></button>

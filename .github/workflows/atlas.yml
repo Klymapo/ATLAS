@@ -34,7 +34,7 @@ jobs:
         with:
           node-version: '20'
       - name: Check JavaScript syntax
-        run: node --check site/app.js && node --check site/practice.js && node --check site/data/demo-content.js
+        run: node --check site/app.js && node --check site/practice.js && node --check site/pwa.js && node --check site/sw.js && node --check site/data/block1.js && node --check site/data/demo-content.js
       - name: Validate reusable learning engine
         run: node --test tests/continuous_learning.test.mjs
       - name: Validate reusable written-recall practice

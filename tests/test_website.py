@@ -26,6 +26,19 @@ class WebsiteTests(unittest.TestCase):
         self.assertIn('data-practice-lang',app)
         self.assertIn('P.record(',app)
         self.assertIn('"PENDING"',(ROOT/"site/practice.js").read_text())
+    def test_pwa_metadata_and_separate_story_data(self):
+        manifest=json.loads((ROOT/"site/manifest.webmanifest").read_text(encoding="utf8"))
+        self.assertEqual(manifest["display"],"standalone")
+        self.assertEqual(manifest["start_url"],"./")
+        self.assertEqual(manifest["scope"],"./")
+        self.assertTrue({"192x192","512x512"} <= {x["sizes"] for x in manifest["icons"]})
+        raw=(ROOT/"site/data/block1.js").read_text(encoding="utf8")
+        narrative=json.loads(raw.removeprefix("window.ATLAS_BLOCK1 = ").strip().removesuffix(";"))
+        self.assertEqual(narrative["status"],"NARRATIVE_CANDIDATE_NOT_CERTIFIED")
+        self.assertEqual(len(narrative["scenes"]),6)
+        self.assertEqual(narrative["scenes"][0]["id"],"sobre")
+        self.assertEqual(narrative["scenes"][-1]["id"],"cierre")
+        self.assertIn('data-route="story"',(ROOT/"site/index.html").read_text())
     def test_concepts_and_languages(self):
         raw=(ROOT/"site/data/demo-content.js").read_text(encoding="utf8")
         info=json.loads(raw.removeprefix("window.ATLAS_DEMO = ").strip().removesuffix(";"))
@@ -53,5 +66,12 @@ class WebsiteTests(unittest.TestCase):
             for name in ("office.svg","nora-vale.svg","investigator.svg"):
                 self.assertEqual((ROOT/"candidates/visual-pack-v02"/name).read_bytes(),(dest/"assets"/name).read_bytes())
             self.assertTrue((dest/"index.html").exists())
+            from PIL import Image
+            for px in (192,512):
+                icon=dest/f"icon-{px}.png"
+                self.assertTrue(icon.exists())
+                with Image.open(icon) as im:self.assertEqual(im.size,(px,px))
+            for file in ("sw.js","pwa.js","manifest.webmanifest","data/block1.js"):
+                self.assertTrue((dest/file).exists())
 
 if __name__=="__main__":unittest.main()
