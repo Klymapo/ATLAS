@@ -184,7 +184,7 @@ test("new HUB has story, daily learning actions and separate language progress w
  await expect(page.getByRole("heading",{name:/Hay una carta/})).toBeVisible();
  await expect(page.locator(".hub-mission")).toHaveCount(3);
  await expect(page.locator(".hub-lang-card")).toHaveCount(4);
- await expect(page.locator('[data-route="story"]').first()).toBeVisible();
+ await expect(page.locator('.hub-hero [data-route="story"]')).toBeVisible();
  const widths=await page.evaluate(()=>[innerWidth,document.documentElement.scrollWidth]);
  expect(widths[1]).toBeLessThanOrEqual(widths[0]+1);
  fs.mkdirSync("reports/screenshots",{recursive:true});
