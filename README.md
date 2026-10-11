@@ -39,3 +39,7 @@ Los cinco SVG están en [candidates/visual-pack-v02](candidates/visual-pack-v02/
 Antes de promover estos bocetos como maestros oficiales, el usuario debe aprobar el diseño de personaje y la dirección artística. No se alterará el registro de masters ni el manifiesto de producción hasta entonces.
 
 **Cambio de dirección aprobado:** se descarta la orientación chibi del primer lote. Las ilustraciones vectoriales actuales son candidatos no certificados; solo se promoverán con auditoría visual real.
+
+## Hito 0.2.1 — Primer banco de 20 conceptos
+
+Se creó un banco de **20 conceptos (80 expresiones entre cuatro lenguas)** en `candidates/lexicon-v01/catalog.json`, acompañado por cinco sesiones didácticas. Ninguna palabra, ejemplo o audio está marcado como certificado; ATLAS bloquea cualquier intento de falsa publicación. `python -m atlas.candidate_lexicon --root .` genera su reporte en GitHub Actions.
