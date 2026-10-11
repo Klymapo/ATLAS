@@ -1,1 +1,31 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="540" height="640" viewBox="0 0 540 640" role="img" aria-label="INVESTIGADOR - referencia chibi frontal"><title>INVESTIGADOR - referencia chibi frontal</title><g stroke="#182635" stroke-width="8" stroke-linejoin="round" stroke-linecap="round"><g transform="translate(270 0)"><path d="M-105 462q-25 40-28 99l59 8l25-94ZM49 475l23 95l61-11q-2-62-29-95Z" fill="#182635"/><rect x="-136" y="550" width="94" height="36" rx="17" fill="#B99558"/><rect x="44" y="550" width="96" height="36" rx="17" fill="#B99558"/><path d="M-77 349q-85-3-104 93l55 94l116-23l125 25l49-102q-25-88-96-88Z" fill="#B99558"/><path d="M-57 357q40 37 55 37q20-2 50-37l-9 134l-78 0Z" fill="#182635"/><path d="M-140 412q-30 18-47 83l44 19q28-52 36-79 M109 420q22 23 48 89l36-20q-11-57-45-79" fill="#B99558"/><circle cx="-177" cy="511" r="24" fill="#F0E6D5"/><circle cx="183" cy="508" r="24" fill="#F0E6D5"/><g transform="translate(0 245)"><ellipse cy="-17" rx="125" ry="119" fill="#F0E6D5"/><path d="M-121-57q-15-105 106-111q104-3 139 104q-29-17-47-42q-50 34-99 24q-59 37-99 25Z" fill="#182635"/><path d="M-121-55q-15 28 0 57l-15-10q-17-36 0-67M119-59q25 24 13 61l-19 12q10-42 6-73" fill="#182635"/><ellipse cx="-48" cy="0" rx="17" ry="24" fill="#182635"/><ellipse cx="48" cy="0" rx="17" ry="24" fill="#182635"/><circle cx="-42" cy="-10" r="6" fill="#FFFFFF" stroke="none"/><circle cx="54" cy="-10" r="6" fill="#FFFFFF" stroke="none"/><path d="M-78-43q24-13 45-1 M31-44q26-12 48 2" fill="none" stroke-width="6"/><ellipse cx="-88" cy="44" rx="20" ry="9" fill="#8F4952" stroke="none" opacity=".24"/><ellipse cx="88" cy="44" rx="20" ry="9" fill="#8F4952" stroke="none" opacity=".24"/><path d="M-17 56q17 15 34 0" fill="none"/></g><path d="M-139 135q3-58 73-82q64-23 122 9q52 20 76 81l-12 32q-40-36-116-40q-84-4-132 39Z" fill="#B99558"/><path d="M-151 164q151 29 300 0" fill="none" stroke-width="17"/><path d="M20 389h49l-12 123H28Z" fill="#8F4952"/><circle cx="57" cy="461" r="19" fill="#F0E6D5"/><path d="M70 476l36 37" stroke-width="10"/></g></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="660" viewBox="0 0 480 660" role="img" aria-label="Investigador - figura vectorial minimalista adulta"><title>Investigador - figura vectorial minimalista adulta</title><g stroke="#182635" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+<ellipse cx="240" cy="623" rx="110" ry="7" fill="#B99558" stroke="none" opacity=".32"/>
+<path d="M194 420 L186 575 L170 596 L213 600 L234 423 Z" fill="#182635"/>
+<path d="M244 422 L267 597 L312 597 L289 573 L284 420 Z" fill="#182635"/>
+<path d="M170 596 L215 596 L220 618 L165 618 Q156 610 170 596 Z" fill="#182635"/>
+<path d="M267 594 L310 593 L326 615 L264 618 Z" fill="#182635"/>
+<path d="M187 221 L157 249 L130 396 L148 414 L174 401 L187 321Z" fill="#B99558"/>
+<path d="M292 221 L318 250 L346 393 L333 416 L307 400 L291 321Z" fill="#B99558"/>
+<path d="M149 408 Q135 417 151 433 Q163 440 178 411Z" fill="#F0E6D5"/>
+<path d="M309 408 Q313 438 331 431 Q346 422 333 408Z" fill="#F0E6D5"/>
+<path d="M187 214 Q211 201 238 202 Q274 201 295 220 L310 455 Q239 474 171 455 Z" fill="#B99558"/>
+<path d="M229 202 L241 218 L254 203 L263 395 L216 395 Z" fill="#F0E6D5"/>
+<path d="M185 228 L212 218 L236 298 L214 337 Z" fill="#B99558"/>
+<path d="M297 228 L269 217 L246 298 L266 340 Z" fill="#B99558"/>
+<path d="M183 381 L302 381" fill="none" stroke-width="5"/>
+<circle cx="253" cy="343" r="5" fill="#182635" stroke="none"/>
+<circle cx="253" cy="397" r="5" fill="#182635" stroke="none"/>
+<path d="M219 179 L222 224 L260 224 L262 178 Z" fill="#F0E6D5"/>
+<ellipse cx="240" cy="130" rx="42" ry="55" fill="#F0E6D5"/>
+<path d="M198 116 Q194 60 238 67 Q286 62 283 118 Q264 101 251 94 Q228 119 198 116Z" fill="#182635"/>
+<path d="M201 114 L195 161 Q188 180 211 191 L205 152Z" fill="#182635"/>
+<path d="M280 115 L291 163 Q294 182 274 189 L274 155Z" fill="#182635"/>
+<circle cx="226" cy="138" r="3.2" fill="#182635" stroke="none"/>
+<circle cx="252" cy="138" r="3.2" fill="#182635" stroke="none"/>
+<path d="M239 143 L237 155 L242 155 M231 168 Q240 174 249 167" fill="none" stroke-width="2.5"/>
+<path d="M189 104 Q190 83 211 80 L267 80 Q288 88 288 105 L273 111 Q243 99 202 117Z" fill="#B99558"/>
+<path d="M176 120 Q237 110 301 114" stroke-width="10" fill="none"/>
+<path d="M303 275 L348 284 L350 394 L297 390Z" fill="#8F4952"/>
+<path d="M303 303 L348 310" fill="none" stroke-width="3"/>
+<path d="M303 326 L347 331" fill="none" stroke-width="3"/>
+<path d="M310 282 Q326 246 341 259" fill="none" stroke-width="7"/></g></svg>

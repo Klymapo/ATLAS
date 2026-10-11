@@ -1,7 +1,15 @@
 {
-  "version": "0.2.0",
+  "version": "0.2.1",
   "state": "awaiting-art-director-approval",
-  "style_id": "chibi-noir-fixed-palette-v02",
+  "style_id": "minimal-vector-noir-v1",
+  "prohibited_styles": [
+    "anime",
+    "manga",
+    "chibi",
+    "kawaii",
+    "3d",
+    "photorealistic"
+  ],
   "palette": {
     "ink": "#182635",
     "paper": "#F0E6D5",
@@ -10,6 +18,18 @@
     "jade": "#508B83",
     "white": "#FFFFFF",
     "black": "#000000"
+  },
+  "character_spec": {
+    "min_head_units": 6,
+    "max_head_units": 8,
+    "eye_design": "small simple dots or short strokes",
+    "shading": "flat fills, no gradients",
+    "line_treatment": "rounded and consistent"
+  },
+  "world_spec": {
+    "subject": "warm detective archive with dark blue city silhouettes",
+    "typography": "readable sans/serif reserved for UI",
+    "asset_format": "editable SVG"
   },
   "canonical_personages": [
     "Investigador",
@@ -47,5 +67,5 @@
       "master": false
     }
   ],
-  "notes": "Bocetos SVG editables, no referencias aprobadas. Prohibido publicarlos como arte definitivo sin inspección comparativa y aprobación."
+  "notes": "SVG vectorial minimalista sin anime ni chibi. Bocetos en revisión; no referencias maestras aprobadas."
 }
