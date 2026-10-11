@@ -8,10 +8,10 @@
     return;
   }
   const KEY = "atlas-first-case-demo-v03";
-  const routes = {office:"MI OFICINA",intro:"BIENVENIDA",learn:"APRENDER",investigation:"INVESTIGACIÓN",memory:"ENTRENAMIENTO",deck:"FICHAS",progress:"PROGRESO"};
+  const routes = {office:"MI OFICINA",intro:"BIENVENIDA",learn:"APRENDER",investigation:"INVESTIGACIÓN",memory:"ENTRENAMIENTO",deck:"FICHAS",practice:"PRÁCTICA ESCRITA",progress:"PROGRESO"};
   const LANG = {fr:{name:"Francés",label:"FR",voice:"fr-FR"},de:{name:"Alemán",label:"DE",voice:"de-DE"},ru:{name:"Ruso",label:"RU",voice:"ru-RU"},ja:{name:"Japonés",label:"JA",voice:"ja-JP"}};
   const necessaryClues = D.clues.filter((c) => c.require).map((c) => c.id);
-  function initial(){return {visited:[],matched:[],turns:0,attempts:0,solved:false,sound:false,introSeen:false,lessonCompleted:false,lessonViewed:[]};}
+  function initial(){return {visited:[],matched:[],turns:0,attempts:0,solved:false,sound:false,introSeen:false,lessonCompleted:false,lessonViewed:[],practiceAttempts:[]};}
   function load(){
     try{
       const parsed = JSON.parse(localStorage.getItem(KEY)||"null");
@@ -25,12 +25,13 @@
         sound:parsed.sound===true,
         introSeen:parsed.introSeen===true,
         lessonCompleted:parsed.lessonCompleted===true,
-        lessonViewed:Array.isArray(parsed.lessonViewed)?parsed.lessonViewed.filter((id)=>D.concepts.some((c)=>c.id===id)):[]
+        lessonViewed:Array.isArray(parsed.lessonViewed)?parsed.lessonViewed.filter((id)=>D.concepts.some((c)=>c.id===id)):[],
+        practiceAttempts:Array.isArray(parsed.practiceAttempts)?parsed.practiceAttempts.filter(e=>e&&typeof e==="object"&&["fr","de","ru","ja"].includes(e.language)).slice(-500):[]
       };
     }catch(e){return initial();}
   }
   let state=load(),route="office",activeClue=null,answerId=null,flashIndex=0,selectedLang="fr",flipped=false,introStep=0,lessonStep=0,
-      selection=[],locked=false,toastTimer=null;
+      selection=[],locked=false,toastTimer=null,practiceIndex=0,practiceFeedback=null,practiceHintUsed=false;
   const pairs=D.memoryPairs.flatMap((p)=>{
     const c=D.concepts.find((x)=>x.id===p.concept);
     return [{id:p.id+"-en",pair:p.id,face:c.en,tag:"EN · base"},
@@ -122,7 +123,7 @@
     ${progressBar()}<small class="muted">Progreso de misión: ${pct()} % · ${state.visited.filter((x)=>necessaryClues.includes(x)).length}/3 pistas indispensables</small><div><button class="button small" data-route="investigation">${state.solved?"Revisar caso cerrado":"Continuar investigación"}</button></div></div></section>
     <section class="card brief-block"><span class="eyebrow">MENSAJE DE NORA VALE</span><h2>«Primero nos presentamos»</h2><p>Me llamo Nora. Te enseñaré las palabras del expediente y después iremos juntos a observar la escena. Puedes equivocarte sin penalizaciones.</p>
     <p class="muted">Enseñanza: español · Idioma común: English · Idiomas: FR / DE / RU / JA</p></section></div>
-    <div class="actions"><button class="button outline" data-route="memory">Practicar memoria</button><button class="button outline" data-route="progress">Mi progreso y descargas</button></div>${footnote()}`;
+    <div class="actions"><button class="button outline" data-route="memory">Practicar memoria</button><button class="button outline" data-route="progress">Mi progreso y descargas</button><button class="button outline" data-route="practice">Practicar escritura</button></div>${footnote()}`;
   }
   function exhibit(clue){
     const e=clue.exhibit;
@@ -149,7 +150,7 @@
     let next='';
     if(state.solved)next='<div class="success-panel"><span class="eyebrow">CASO 001 · CERRADO</span><h2>Una contradicción resuelta</h2><p>'+esc(D.storyline.outro)+'</p><button class="button" data-route="progress">Ver expediente y estadísticas →</button></div>';
     else if(canSolve())next='<section class="card solve-card"><span class="eyebrow">FASE 03 · RAZONAMIENTO</span><h2>La deducción final</h2><p>Tienes las pruebas y has recuperado las cuatro parejas de memoria. Puedes analizar el expediente.</p><button class="button" data-action="show-deduction">Resolver expediente →</button></section>';
-    else next='<section class="card padded"><h3>Cómo avanzar</h3><p class="muted">Encuentra las tres pistas y completa las cuatro parejas de memoria. El orden es libre.</p><div class="actions"><button class="button outline" data-route="memory">Abrir juego de memoria</button><button class="button outline" data-route="deck">Repasar vocabulario</button></div></section>';
+    else next='<section class="card padded"><h3>Cómo avanzar</h3><p class="muted">Encuentra las tres pistas y completa las cuatro parejas de memoria. El orden es libre.</p><div class="actions"><button class="button outline" data-route="memory">Abrir juego de memoria</button><button class="button outline" data-route="deck">Repasar vocabulario</button><button class="button outline" data-route="practice">Practicar escritura</button></div></section>';
     root.innerHTML=toolbar("La llave equivocada","Inspecciona la oficina, localiza el mensaje y recupera la relación entre palabras antes de resolver el misterio.")+stages()+
     '<div class="scene-layout"><div><div class="scene-board" role="group" aria-label="Oficina con cuatro objetos interactivos">'+
     '<img src="./assets/office.svg" alt="Biblioteca con una estantería, tablero de pistas, escritorio y ventana iluminada">'+
@@ -166,7 +167,7 @@
         (open?'<div><span class="face-word">'+esc(c.face)+'</span><span class="face-lang">'+esc(c.tag)+'</span></div>':'<span class="back-mark" aria-hidden="true">✦</span>')+'</button>';
     }).join("")+'</div>'+
     '<section class="memory-panel">'+(complete?'<h3>¡Las cuatro parejas están completas!</h3><p>Esta actividad evalúa asociación visual, no pronunciación ni escritura. Para practicar el uso real, abre las fichas y las frases de ejemplo.</p>':
-    '<h3>Sin cronómetro ni pérdida de vidas</h3><p class="muted">¿No recuerdas una palabra? Puedes volver a la preparación, estudiar las cuatro fichas y regresar. El progreso ya logrado se conserva.</p><button class="button outline small" data-route="learn">Repasar antes de continuar</button>')+
+    '<h3>Sin cronómetro ni pérdida de vidas</h3><p class="muted">¿No recuerdas una palabra? Puedes volver a la preparación, estudiar las cuatro fichas y regresar. El progreso ya logrado se conserva.</p><button class="button outline small" data-route="learn">Repasar antes de continuar</button><button class="button outline small" data-route="practice">Escribir sin mirar</button>')+
     '<div class="actions"><button class="button '+(complete?"":"outline")+'" data-route="investigation">'+(complete?"Regresar al caso →":"Volver a investigar")+'</button>'+
     '<button class="button outline" data-action="restart-memory">Barajar y reiniciar parejas</button></div></section>'+footnote();
   }
@@ -183,7 +184,7 @@
     '<button class="button" data-action="next-flash">Siguiente →</button></div>'+
     '<div class="divider"></div><h2>Comparación completa</h2><div class="grid-2">'+
     Object.entries(LANG).map(([code,lang])=>'<div class="card padded"><span class="eyebrow">'+lang.label+' · '+esc(lang.name)+'</span><div class="word-with-audio"><h3>'+esc(c[code].w)+'</h3>'+audioButton(c.id,code)+'</div><p class="muted">'+esc(c[code].reading||c[code].hint||"")+'</p></div>').join("")+'</div>'+
-    '<div class="actions"><button class="button outline" data-action="download-vocab">Descargar vocabulario CSV</button><button class="button outline" data-action="print-cards">Imprimir fichas y ejercicios</button></div>'+footnote();
+    '<div class="actions"><button class="button" data-route="practice">Practicar sin ver respuestas →</button><button class="button outline" data-action="download-vocab">Descargar vocabulario CSV</button><button class="button outline" data-action="print-cards">Imprimir fichas y ejercicios</button></div>'+footnote();
   }
   function deduction(){
     const chosen=D.deduction.options.find((x)=>x.id===answerId);
@@ -193,11 +194,66 @@
     (chosen?'<div class="feedback '+(chosen.correct?"":"error")+'" role="status"><strong>'+ (chosen.correct?"Deducción correcta.":"Todavía no.")+'</strong><br>'+esc(chosen.why)+'</div>':'')+
     '<div class="actions"><button class="button outline" data-route="investigation">Volver a examinar</button>'+(state.solved?'<button class="button" data-route="progress">Ver caso cerrado →</button>':'')+'</div></section>'+footnote();
   }
+
+  function practice(){
+    const P=window.ATLAS_PRACTICE;
+    if(!P){root.innerHTML=toolbar("Práctica no disponible","El motor de recuperación no ha cargado.");return;}
+    const questions=P.questions(D.concepts,selectedLang);
+    const q=questions[practiceIndex%questions.length];
+    const score=P.summary(state.practiceAttempts)[selectedLang];
+    const hint=practiceHintUsed?(q.needsArticle?
+      'Pista: el artículo empieza por «'+esc(q.expected.split(" ")[0][0])+'».':
+      'Pista: la primera letra o carácter es «'+esc(q.expected[0])+'».'):"";
+    const feedback=practiceFeedback?
+      '<div class="practice-notice '+(practiceFeedback.correct?"success":"fail")+'" role="status"><strong>'+
+      (practiceFeedback.correct?"¡Correcto en este intento!":"Aún no es la respuesta completa.")+'</strong><p>'+
+      esc(practiceFeedback.message)+'</p><p>Respuesta de referencia: <strong>'+esc(q.expected)+'</strong></p>'+
+      '<p class="muted">Este resultado es práctica de una ficha provisional, no certificación de dominio.</p></div>':"";
+    root.innerHTML=toolbar("Práctica de recuperación","Escribe sin mirar las tarjetas. ATLAS registra aciertos, errores y ayudas por idioma, sin convertirlos automáticamente en nivel certificado.")+
+      '<div class="language-panel" role="group" aria-label="Elegir idioma">'+Object.entries(LANG).map(([l,v])=>
+      '<button class="lang-chip '+(l===selectedLang?"active":"")+'" data-practice-lang="'+l+'" aria-pressed="'+(l===selectedLang)+'">'+esc(v.name)+'</button>').join("")+'</div>'+
+      '<div class="practice-layout"><section class="card padded">'+
+      '<span class="eyebrow">ENGLISH → '+esc(LANG[selectedLang].name.toUpperCase())+' · PREGUNTA '+(practiceIndex%questions.length+1)+'/'+questions.length+'</span>'+
+      '<p>En español: '+esc(q.spanish)+'</p><div class="practice-question">'+esc(q.prompt)+'</div>'+
+      '<form id="practice-form" class="practice-form"><label for="practice-answer">Escribe la traducción'+(q.needsArticle?" con su artículo":"")+'</label>'+
+      '<input id="practice-answer" name="answer" autocomplete="off" autocapitalize="off" spellcheck="false" required placeholder="'+
+      (selectedLang==="ja"?"Puedes usar kana o kanji":selectedLang==="ru"?"Escribe en cirílico":"Escribe la palabra completa")+'">'+
+      '<div class="actions"><button type="submit" class="button">Comprobar respuesta</button>'+
+      '<button type="button" class="button outline" data-action="practice-hint">Pedir una pista</button></div></form>'+
+      (hint?'<p class="practice-notice">'+hint+' (usar ayuda no cuenta como recuerdo independiente)</p>':"")+
+      feedback+
+      '<div class="actions"><button class="button outline" data-action="practice-next">Otra palabra →</button>'+
+      '<button class="button outline" data-route="deck">Revisar fichas</button></div></section>'+
+      '<aside class="card padded"><span class="eyebrow">INFORME DE APRENDIZAJE · DEMO</span><h2>Tu progreso en '+esc(LANG[selectedLang].name)+'</h2>'+
+      '<div class="practice-stats"><div class="practice-stat"><b>'+score.attempts+'</b> respuestas registradas</div>'+
+      '<div class="practice-stat"><b>'+score.correct_independent+'</b> aciertos sin ayuda</div>'+
+      '<div class="practice-stat"><b>'+score.guided+'</b> prácticas con pistas</div>'+
+      '<div class="practice-stat"><b>0</b> logros lingüísticos certificados</div></div>'+
+      '<div class="divider"></div><p class="muted">Una palabra escrita correctamente una vez no demuestra retención a largo plazo. Más adelante ATLAS la preguntará en frases y días diferentes.</p></aside></div>'+footnote();
+  }
+  function practiceDashboard(){
+    const P=window.ATLAS_PRACTICE;
+    if(!P)return "";
+    const summary=P.summary(state.practiceAttempts);
+    const now=new Date().toDateString();
+    const today=state.practiceAttempts.filter(e=>new Date(e.at).toDateString()===now).length;
+    const latest=new Map();
+    state.practiceAttempts.forEach(e=>latest.set(e.id,e));
+    const due=[...latest.values()].filter(e=>e.due_at&&Date.parse(e.due_at)<=Date.now()).length;
+    return '<section class="card padded" style="margin-top:18px"><span class="eyebrow">REGISTRO DE PRÁCTICA ESCRITA · DEMOSTRACIÓN</span>'+
+      '<h2>Progreso diario por idioma</h2><p class="muted">Hoy: '+today+' intentos · '+due+' palabras listas para volver a practicar. Los aciertos son registros, no un porcentaje de fluidez.</p>'+
+      '<div class="grid-2">'+Object.entries(LANG).map(([lang,meta])=>
+      '<div class="practice-stat"><b>'+esc(meta.name)+'</b><p class="muted">Intentos: '+summary[lang].attempts+
+      ' · Sin ayuda: '+summary[lang].correct_independent+' · Con pistas: '+summary[lang].guided+'</p></div>').join("")+
+      '</div><div class="actions"><button class="button outline" data-route="practice">Hacer otro repaso</button></div></section>';
+  }
   function progress(){
     root.innerHTML=toolbar("Cuaderno de progreso","Tu expediente permanece en este dispositivo. Puedes exportarlo cuando quieras.")+
     '<div class="metrics"><div class="metric"><strong>'+pct()+'%</strong><span>Avance del caso</span></div><div class="metric"><strong>'+state.visited.filter((x)=>necessaryClues.includes(x)).length+'/3</strong><span>Pistas obligatorias</span></div><div class="metric"><strong>'+state.matched.length+'/4</strong><span>Parejas recuperadas</span></div></div>'+
+    practiceDashboard()+
     (state.solved?'<section class="success-panel"><span class="eyebrow">EXPEDIENTE RESUELTO</span><h2>Caso cerrado. Archivo abierto.</h2><p>Detectaste que la nota señalaba la habitación 12 y la llave estaba marcada 21. La siguiente investigación llegará al Archivo; el aprendizaje puede continuar.</p><p>Próximo caso previsto: '+esc(D.storyline.next_case)+'</p></section>':
     '<section class="card padded"><h2>Todavía hay una contradicción por resolver</h2><p class="muted">Revisa el escenario y las tarjetas hasta reunir todas las pruebas.</p><button class="button" data-route="investigation">Volver al expediente</button></section>')+
+    '<div class="actions"><button class="button" data-route="practice">Práctica escrita por idioma</button></div>'+
     '<div class="grid-2" style="margin-top:20px"><section class="card padded"><span class="eyebrow">DESCARGAS</span><h2>Material para estudiar</h2><p class="muted">Descarga las palabras para una hoja de cálculo o imprime tarjetas y una hoja de ejercicios.</p><div class="actions"><button class="button outline" data-action="download-vocab">Vocabulario CSV</button><button class="button outline" data-action="print-cards">Tarjetas PDF / imprimir</button></div></section>'+
     '<section class="card padded"><span class="eyebrow">DATOS Y PRIVACIDAD</span><h2>Progreso portable</h2><p class="muted">Sin cuentas ni nube de datos: el guardado local no sincroniza entre teléfonos y computadoras.</p><div class="actions"><button class="button outline" data-action="export-progress">Exportar progreso JSON</button><button class="button secondary" data-action="reset-progress">Reiniciar progreso</button></div></section></div>'+footnote();
   }
@@ -209,11 +265,11 @@
     });
     const sound=byId("sound-toggle");if(sound)sound.checked=state.sound;
     if(route==="office")office(); else if(route==="intro")introduction(); else if(route==="learn")preparation();
-    else if(route==="investigation")investigation();else if(route==="memory")memory();else if(route==="deck")deckView();else progress();
+    else if(route==="investigation")investigation();else if(route==="memory")memory();else if(route==="deck")deckView();else if(route==="practice")practice();else progress();
   }
   function navigate(to){if(!routes[to])return;
-    if(["investigation","memory"].includes(to)&&!state.introSeen)to="intro";
-    else if(["investigation","memory"].includes(to)&&!state.lessonCompleted)to="learn";
+    if(["investigation","memory","practice"].includes(to)&&!state.introSeen)to="intro";
+    else if(["investigation","memory","practice"].includes(to)&&!state.lessonCompleted)to="learn";
     route=to;activeClue=null;render(); window.scrollTo({top:0,behavior:"instant"});}
   function chooseCard(cardId) {
     if(locked)return;
@@ -278,6 +334,7 @@
     }
     if(b.dataset.card){chooseCard(b.dataset.card);return;}
     if(b.dataset.lang){selectedLang=b.dataset.lang;flipped=false;render();return;}
+    if(b.dataset.practiceLang){selectedLang=b.dataset.practiceLang;practiceIndex=0;practiceFeedback=null;practiceHintUsed=false;render();return;}
     if(b.dataset.answer && canSolve() && !state.solved){
       answerId=b.dataset.answer;state.attempts++;
       const choice=D.deduction.options.find((o)=>o.id===answerId);
@@ -298,6 +355,8 @@
       return;
     }
     if(action==="lesson-prev"){lessonStep=Math.max(0,lessonStep-1);render();return;}
+    if(action==="practice-hint"){practiceHintUsed=true;practiceFeedback=null;render();return;}
+    if(action==="practice-next"){practiceIndex++;practiceHintUsed=false;practiceFeedback=null;render();return;}
     if(action==="show-deduction"){if(canSolve())deduction();else notify("Primero reúne las pistas y completa memoria.");}
     if(action==="flip-card"){flipped=!flipped;chirp();render();}
     if(action==="next-flash"){flashIndex=(flashIndex+1)%D.concepts.length;flipped=false;render();}
@@ -312,9 +371,21 @@
     }
     if(action==="reset-progress"){
       if(window.confirm("¿Borrar pistas, intentos y progreso guardado en este navegador?")){
-        state=initial();deck=shuffled(pairs);selection=[];locked=false;activeClue=null;answerId=null;flashIndex=0;flipped=false;introStep=0;lessonStep=0;persist();navigate("office");notify("Progreso de demostración reiniciado.");
+        state=initial();deck=shuffled(pairs);selection=[];locked=false;activeClue=null;answerId=null;flashIndex=0;flipped=false;introStep=0;lessonStep=0;practiceIndex=0;practiceFeedback=null;practiceHintUsed=false;persist();navigate("office");notify("Progreso de demostración reiniciado.");
       }
     }
+  });
+  document.addEventListener("submit",(event)=>{
+    if(event.target.id!=="practice-form")return;
+    event.preventDefault();
+    const P=window.ATLAS_PRACTICE;
+    const q=P.questions(D.concepts,selectedLang)[practiceIndex%D.concepts.length];
+    const submitted=byId("practice-answer")?.value||"";
+    const result=P.grade(q,submitted);
+    if(result.kind==="blank"){notify("Escribe una respuesta antes de comprobar.");return;}
+    state.practiceAttempts=P.record(state.practiceAttempts,q,result,{hintUsed:practiceHintUsed});
+    practiceFeedback=result;
+    persist();render();
   });
   byId("sound-toggle")?.addEventListener("change",(event)=>{state.sound=event.target.checked;persist();notify(state.sound?"Sonidos activados.":"Sonidos desactivados.");});
   render();

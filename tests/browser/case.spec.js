@@ -92,3 +92,42 @@ test("mobile avoids horizontal overflow",async({page})=>{
  expect(dims[1]).toBeLessThanOrEqual(dims[0]+1);
  await expect(page.locator(".mobile-nav")).toBeVisible();
 });
+
+test("written recall is taught before testing and German requires an article",async({page},testInfo)=>{
+  await page.goto("/");
+  await nav(page,"practice");
+  await expect(page.getByRole("heading",{name:"¿Dónde estamos?"})).toBeVisible();
+  for(let i=0;i<3;i++)await page.locator('[data-action="intro-next"]').click();
+  for(let i=0;i<4;i++)await page.locator('[data-action="lesson-next"]').click();
+  await nav(page,"practice");
+  await expect(page.getByRole("heading",{name:"Práctica de recuperación"})).toBeVisible();
+  await page.locator('[data-practice-lang="de"]').click();
+  await page.locator('[data-action="practice-next"]').click();
+  await expect(page.locator(".practice-question")).toHaveText("book");
+  await page.locator("#practice-answer").fill("Buch");
+  await page.locator("#practice-form button[type=submit]").click();
+  await expect(page.getByText("El sustantivo está bien. Falta el artículo correcto.")).toBeVisible();
+  await page.locator("#practice-answer").fill("das Buch");
+  await page.locator("#practice-form button[type=submit]").click();
+  await expect(page.getByText("¡Correcto en este intento!")).toBeVisible();
+  await expect(page.getByText(/no certificación de dominio/)).toBeVisible();
+  fs.mkdirSync("reports/screenshots",{recursive:true});
+  await page.screenshot({path:"reports/screenshots/written-recall-"+testInfo.project.name+".png",fullPage:true});
+  await page.reload();
+  await nav(page,"practice");
+  await page.locator('[data-practice-lang="de"]').click();
+  await expect(page.getByText("2 respuestas registradas")).toBeVisible();
+  await expect(page.getByText("0 logros lingüísticos certificados")).toBeVisible();
+});
+test("hinted answers are not counted as independent recovery",async({page})=>{
+  await page.goto("/");
+  await nav(page,"practice");
+  for(let i=0;i<3;i++)await page.locator('[data-action="intro-next"]').click();
+  for(let i=0;i<4;i++)await page.locator('[data-action="lesson-next"]').click();
+  await nav(page,"practice");
+  await page.locator('[data-action="practice-hint"]').click();
+  await page.locator("#practice-answer").fill("la clé");
+  await page.locator("#practice-form button[type=submit]").click();
+  await expect(page.getByText("1 prácticas con pistas")).toBeVisible();
+  await expect(page.getByText("0 aciertos sin ayuda")).toBeVisible();
+});

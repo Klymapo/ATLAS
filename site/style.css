@@ -79,3 +79,17 @@
  .concept-emblem{width:56px;height:60px;font-size:2rem}
 }
 @media print{.intro-layout,.lesson-grid{display:none!important}}
+
+/* v0.8 — reusable, no false mastery claims */
+.practice-layout{max-width:900px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(230px,.8fr);gap:16px}
+.practice-question{font-family:Georgia,serif;font-size:clamp(2rem,5vw,3.2rem);margin:15px 0}
+.practice-form{display:grid;gap:10px}
+.practice-form label{font-weight:700}
+.practice-form input{width:100%;min-height:52px;border:2px solid #cdbfae;border-radius:9px;padding:12px 14px;color:var(--ink);background:#fff;font-size:1.2rem}
+.practice-notice{padding:14px;border-radius:8px;background:var(--paper);border-left:4px solid var(--gold);line-height:1.55}
+.practice-notice.success{background:#e7f3eb;border-color:var(--jade)}
+.practice-notice.fail{background:#f8e6e1;border-color:var(--wine)}
+.practice-stats{display:grid;gap:8px}
+.practice-stat{padding:12px;background:#f8f4ed;border-radius:8px}
+.mobile-nav{grid-template-columns:repeat(6,minmax(0,1fr))}
+@media(max-width:760px){.practice-layout{grid-template-columns:1fr}.mobile-nav{grid-template-columns:repeat(6,minmax(0,1fr))}.mobile-nav button span{font-size:.59rem}}
