@@ -10,7 +10,7 @@
 2. Autorizar GitHub y seleccionar **Klymapo/ATLAS**, rama **main**.
 3. Nombre del Worker: `atlas-archivo` (igual que el archivo Wrangler). Si Cloudflare asigna otro nombre, actualizar Wrangler antes de desplegar.
 4. Root path: `/`.
-5. Build command: `python3 -m pip install --user -r requirements.txt && python3 -m tools.build_site --root . --output dist`. Si el contenedor no permite `--user`, usar `python3 -m pip install -r requirements.txt`. Cloudflare soporta Python en su imagen de construcción.
+5. Build command: `python3 -m venv .atlas-build-env && .atlas-build-env/bin/pip install -r requirements.txt && .atlas-build-env/bin/python -m tools.build_site --root . --output dist`. El entorno temporal se crea **en el builder cloud**, nunca en tu laptop y nunca entra a `dist/`. Cloudflare dispone de Python en su imagen de construcción.
 6. Deploy command: `npx wrangler deploy`.
 7. Activar previews de PR para revisar cambios si está disponible. Producción debe usar solo `main`.
 8. Comprobar la URL real `*.workers.dev` que Cloudflare devuelva. **No inventar ni presuponer URL**.
