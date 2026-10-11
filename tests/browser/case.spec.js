@@ -158,3 +158,73 @@ test("invalid progress JSON is rejected without overwriting game state",async({p
   await expect(page.locator("#toast")).toContainText("No se pudo importar");
   await expect(page.getByText("Todavía hay una contradicción por resolver")).toBeVisible();
 });
+
+
+test("PWA is installable from app manifest with real PNG icons and service worker",async({page,request})=>{
+ await page.goto("/");
+ const manifestResponse=await request.get("/manifest.webmanifest");
+ expect(manifestResponse.ok()).toBeTruthy();
+ const manifest=await manifestResponse.json();
+ expect(manifest.display).toBe("standalone");
+ expect(manifest.start_url).toBe("./");
+ expect(manifest.icons.some(i=>i.sizes==="192x192")).toBeTruthy();
+ expect(manifest.icons.some(i=>i.sizes==="512x512")).toBeTruthy();
+ for(const icon of ["icon-192.png","icon-512.png"]){
+   const response=await request.get("/"+icon);
+   expect(response.status()).toBe(200);
+   expect(response.headers()["content-type"]).toContain("image/png");
+ }
+ await expect(page.locator('link[rel="manifest"]')).toHaveAttribute("href","./manifest.webmanifest");
+ await page.waitForFunction(()=>"serviceWorker" in navigator);
+ await page.waitForFunction(async()=>Boolean((await navigator.serviceWorker.getRegistration())?.active),null,{timeout:20000});
+});
+test("new HUB has story, daily learning actions and separate language progress without horizontal overflow",async({page},testInfo)=>{
+ await page.goto("/");
+ await expect(page.locator(".hub-hero")).toBeVisible();
+ await expect(page.getByRole("heading",{name:/Hay una carta/})).toBeVisible();
+ await expect(page.locator(".hub-mission")).toHaveCount(3);
+ await expect(page.locator(".hub-lang-card")).toHaveCount(4);
+ await expect(page.locator('[data-route="story"]').first()).toBeVisible();
+ const widths=await page.evaluate(()=>[innerWidth,document.documentElement.scrollWidth]);
+ expect(widths[1]).toBeLessThanOrEqual(widths[0]+1);
+ fs.mkdirSync("reports/screenshots",{recursive:true});
+ await page.screenshot({path:"reports/screenshots/hub-redesign-"+testInfo.project.name+".png",fullPage:true});
+});
+test("Block 1 is playable, branches persist and language lesson gates the final clue",async({page},testInfo)=>{
+ await page.goto("/");
+ await nav(page,"story");
+ await expect(page.getByRole("heading",{name:"El día en que todavía no había ocurrido"})).toBeVisible();
+ await page.locator('[data-story-inspect="fecha"]').click();
+ await page.locator('[data-story-inspect="matasellos"]').click();
+ await expect(page.getByText("12 DE OCTUBRE")).toBeVisible();
+ await expect(page.getByText("11 DE OCTUBRE")).toBeVisible();
+ await page.locator('[data-story-observation="fecha"]').click();
+ await page.locator('[data-action="story-next"]').click();
+ await page.locator('[data-story-inspect="placa"]').click();
+ await page.locator('[data-story-inspect="plano"]').click();
+ await page.locator('[data-action="story-next"]').click();
+ await expect(page.getByRole("heading",{name:"La archivista que no envió la carta"})).toBeVisible();
+ await page.locator('[data-story-question="quien"]').click();
+ await page.locator('[data-story-question="porqué"]').click();
+ await page.locator('[data-action="story-next"]').click();
+ await page.locator('[data-story-method="descifrador"]').click();
+ await page.locator("#story-alias").fill("Viajero");
+ await page.locator('[data-action="story-next"]').click();
+ await expect(page.getByRole("heading",{name:"El registro de la correspondencia"})).toBeVisible();
+ await expect(page.getByRole("button",{name:/Estudiar las cuatro palabras|Conocer a Nora y estudiar/})).toBeVisible();
+ await expect(page.locator('[data-action="story-next"]')).toBeDisabled();
+ await page.locator('[data-route="intro"]').last().click();
+ for(let i=0;i<3;i++)await page.locator('[data-action="intro-next"]').click();
+ for(let i=0;i<4;i++)await page.locator('[data-action="lesson-next"]').click();
+ await nav(page,"story");
+ await page.locator('[data-story-answer="libro"]').click();
+ await page.locator('[data-action="story-next"]').click();
+ await expect(page.getByRole("heading",{name:"Los números que no encajan"})).toBeVisible();
+ fs.mkdirSync("reports/screenshots",{recursive:true});
+ await page.screenshot({path:"reports/screenshots/block1-finale-"+testInfo.project.name+".png",fullPage:true});
+ await page.reload();
+ await nav(page,"story");
+ await expect(page.getByRole("heading",{name:"Los números que no encajan"})).toBeVisible();
+ await nav(page,"office");
+ await expect(page.getByText("VIAJERO")).toBeVisible();
+});

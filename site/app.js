@@ -146,7 +146,7 @@
   const lastText=state.block1.complete?"La primera puerta se abrió. Ahora el expediente de la llave te espera.":
    state.block1.stage===0?"La invitación tiene una fecha imposible. Elige qué investigar.":"Nora aguarda tu próximo movimiento.";
   root.innerHTML=`<div class="hub-wrapper">
-    <div class="hub-overline"><span class="hub-live-dot"></span> ARCHIVO CENTRAL · PUERTO UMBRAL <span class="hub-datetime">ESTACIÓN DE INVESTIGACIÓN</span></div>
+    <div class="hub-overline"><span class="hub-live-dot"></span> Sede central · Archivo Internacional · Puerto Umbral <span class="hub-datetime">ESTACIÓN DE INVESTIGACIÓN</span></div>
     <section class="hero hub-hero" aria-label="Portada del Archivo">
       <div class="hero-copy">
         <span class="eyebrow">BIENVENIDO, ${esc(alias.toUpperCase())}</span>
