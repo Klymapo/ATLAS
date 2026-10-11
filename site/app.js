@@ -124,6 +124,17 @@
     <p class="muted">Enseñanza: español · Idioma común: English · Idiomas: FR / DE / RU / JA</p></section></div>
     <div class="actions"><button class="button outline" data-route="memory">Practicar memoria</button><button class="button outline" data-route="progress">Mi progreso y descargas</button></div>${footnote()}`;
   }
+  function exhibit(clue){
+    const e=clue.exhibit;
+    if(!e)return "";
+    return '<div class="exhibit" aria-label="Prueba visible: '+esc(e.title)+'">'+
+      '<span class="exhibit-kicker">'+esc(e.category)+'</span>'+
+      '<div class="exhibit-paper exhibit-'+esc(e.kind)+'"><span class="exhibit-stamp">ATLAS · PRUEBA '+esc(clue.id.toUpperCase())+'</span>'+
+      '<div class="exhibit-title">'+esc(e.title)+'</div>'+
+      '<div class="exhibit-mark">'+esc(e.mark)+'</div>'+
+      '<div class="exhibit-annotation">'+esc(e.detail)+'</div></div>'+
+      '<p class="exhibit-conclusion">'+esc(clue.text)+'</p></div>';
+  }
   function evidence(){
     return '<ul class="evidence-list">'+D.clues.map((c)=>{
       const seen=state.visited.includes(c.id);
@@ -133,8 +144,8 @@
   function investigation(){
     const clue=look(activeClue);
     const sidebar = clue?
-       '<div class="message-panel"><div class="meta">OBJETO INSPECCIONADO</div><h3>'+esc(clue.name)+'</h3><p class="story-quote">'+esc(clue.text)+'</p><span class="muted">Término inglés: <b>'+esc(clue.english)+'</b></span><div class="actions"><button class="button small" data-route="deck">Estudiar palabras →</button></div></div>'
-       :'<img class="story-face" src="./assets/nora-vale.svg" alt="Boceto vectorial de Nora Vale"><span class="eyebrow">INSTRUCCIONES DE NORA</span><h3>Inspecciona el lugar</h3><p>Toca las marcas doradas sobre el escenario. Encuentra tres pruebas obligatorias; la ventana es una observación opcional.</p>';
+       '<div class="message-panel" id="evidence-focus"><div class="meta">EVIDENCIA ENCONTRADA</div><h3>'+esc(clue.name)+'</h3>'+exhibit(clue)+'<span class="muted">Objeto relacionado: <b>'+esc(clue.english)+'</b></span><div class="actions"><button class="button small" data-route="deck">Ver ficha →</button></div></div>'
+       :'<div id="evidence-focus"><img class="story-face" src="./assets/nora-vale.svg" alt="Nora Vale, archivista del Archivo"><span class="eyebrow">INSTRUCCIONES DE NORA</span><h3>Inspecciona el lugar</h3><p>Estás en la oficina central del Archivo. Toca las marcas doradas para examinar documentos, una llave y un libro. Las pruebas aparecerán aquí, no solo sus nombres.</p></div>';
     let next='';
     if(state.solved)next='<div class="success-panel"><span class="eyebrow">CASO 001 · CERRADO</span><h2>Una contradicción resuelta</h2><p>'+esc(D.storyline.outro)+'</p><button class="button" data-route="progress">Ver expediente y estadísticas →</button></div>';
     else if(canSolve())next='<section class="card solve-card"><span class="eyebrow">FASE 03 · RAZONAMIENTO</span><h2>La deducción final</h2><p>Tienes las pruebas y has recuperado las cuatro parejas de memoria. Puedes analizar el expediente.</p><button class="button" data-action="show-deduction">Resolver expediente →</button></section>';
@@ -147,7 +158,7 @@
   }
   function memory(){
     const complete=mastered();
-    root.innerHTML=toolbar("Parejas de memoria","Encuentra la equivalencia entre una palabra inglesa y otra de los cuatro idiomas. Cada pareja incluye un idioma diferente.")+stages()+
+    root.innerHTML=toolbar("Parejas de memoria","Ya viste las cuatro palabras con Nora. Ahora encuentra su equivalencia en las tarjetas sin mirar las respuestas.")+stages()+
     '<div class="memory-top"><div><h2>Archivo de asociación</h2><p class="muted">Destapa dos tarjetas. Si no coinciden, podrás volver a probar.</p></div><span class="evidence-counter">'+state.matched.length+'/4 parejas · '+state.turns+' intentos</span></div>'+
     '<div class="memory-grid" role="group" aria-label="Tarjetas de memoria">'+deck.map((c,index)=>{
       const matched=state.matched.includes(c.pair),open=matched||selection.some((x)=>x.id===c.id);
@@ -155,13 +166,13 @@
         (open?'<div><span class="face-word">'+esc(c.face)+'</span><span class="face-lang">'+esc(c.tag)+'</span></div>':'<span class="back-mark" aria-hidden="true">✦</span>')+'</button>';
     }).join("")+'</div>'+
     '<section class="memory-panel">'+(complete?'<h3>¡Las cuatro parejas están completas!</h3><p>Esta actividad evalúa asociación visual, no pronunciación ni escritura. Para practicar el uso real, abre las fichas y las frases de ejemplo.</p>':
-    '<h3>Sin cronómetro ni pérdida de vidas</h3><p class="muted">EN key ↔ FR clé, EN book ↔ DE Buch, EN letter ↔ RU письмо, EN map ↔ JA 地図. Las palabras son parte del prototipo y aún requieren certificación lingüística.</p>')+
+    '<h3>Sin cronómetro ni pérdida de vidas</h3><p class="muted">¿No recuerdas una palabra? Puedes volver a la preparación, estudiar las cuatro fichas y regresar. El progreso ya logrado se conserva.</p><button class="button outline small" data-route="learn">Repasar antes de continuar</button>')+
     '<div class="actions"><button class="button '+(complete?"":"outline")+'" data-route="investigation">'+(complete?"Regresar al caso →":"Volver a investigar")+'</button>'+
     '<button class="button outline" data-action="restart-memory">Barajar y reiniciar parejas</button></div></section>'+footnote();
   }
   function deckView(){
     const c=D.concepts[flashIndex],gl=c[selectedLang],reading=gl.reading||gl.hint||"",
-    meaning=flipped?'<span class="card-number">'+esc(LANG[selectedLang].name)+' / '+esc(c.en)+'</span><div class="big-word">'+esc(gl.w)+'</div><div class="reading">'+esc(reading)+'</div><div class="translation">'+esc(c.es)+'</div>':
+    meaning=flipped?'<span class="card-number">'+esc(LANG[selectedLang].name)+' / '+esc(c.en)+'</span><div class="word-with-audio"><div class="big-word">'+esc(gl.w)+'</div>'+audioButton(c.id,selectedLang)+'</div><div class="reading">'+esc(reading)+'</div><div class="translation">'+esc(c.es)+'</div>':
       '<span class="card-number">ENGLISH / '+esc(c.es)+'</span><div class="big-word">'+esc(c.en)+'</div><div class="reading">Toca para recordar cómo se dice en '+esc(LANG[selectedLang].name)+'.</div>';
     root.innerHTML=toolbar("Mi colección de fichas","Una misma idea, cuatro lenguas. Recuerda primero la palabra sin mirar su traducción.")+
     '<div class="language-panel" role="group" aria-label="Idioma de la tarjeta">'+Object.keys(LANG).map((code)=>
@@ -169,10 +180,9 @@
     '<div class="flashcard '+(flipped?"flipped":"")+'" aria-live="polite">'+meaning+
     '<button class="button outline small" data-action="flip-card">'+(flipped?"Ocultar respuesta":"Voltear tarjeta")+'</button></div>'+
     '<div class="actions"><button class="button outline" data-action="prev-flash">← Anterior</button><span class="evidence-counter">Ficha '+(flashIndex+1)+' de '+D.concepts.length+'</span>'+
-    '<button class="button" data-action="next-flash">Siguiente →</button>'+
-    '<button class="button outline" data-action="speak-word">Escuchar voz sintética</button></div>'+
+    '<button class="button" data-action="next-flash">Siguiente →</button></div>'+
     '<div class="divider"></div><h2>Comparación completa</h2><div class="grid-2">'+
-    Object.entries(LANG).map(([code,lang])=>'<div class="card padded"><span class="eyebrow">'+lang.label+' · '+esc(lang.name)+'</span><h3>'+esc(c[code].w)+'</h3><p class="muted">'+esc(c[code].reading||c[code].hint||"")+'</p></div>').join("")+'</div>'+
+    Object.entries(LANG).map(([code,lang])=>'<div class="card padded"><span class="eyebrow">'+lang.label+' · '+esc(lang.name)+'</span><div class="word-with-audio"><h3>'+esc(c[code].w)+'</h3>'+audioButton(c.id,code)+'</div><p class="muted">'+esc(c[code].reading||c[code].hint||"")+'</p></div>').join("")+'</div>'+
     '<div class="actions"><button class="button outline" data-action="download-vocab">Descargar vocabulario CSV</button><button class="button outline" data-action="print-cards">Imprimir fichas y ejercicios</button></div>'+footnote();
   }
   function deduction(){
@@ -244,11 +254,13 @@
       D.concepts.map((c,i)=>'<section class="print-card"><h2>Ficha '+(i+1)+': '+esc(c.en)+' · '+esc(c.es)+'</h2><p>Francés: '+esc(c.fr.w)+' | Alemán: '+esc(c.de.w)+' | Ruso: '+esc(c.ru.w)+' | Japonés: '+esc(c.ja.w)+'</p><p>Escribe una frase con esta palabra: _______________________________________________</p><p>Recuerda una traducción sin mirar: ______________________________________________</p></section>').join("");
     window.print();
   }
-  function speak(){
+  function speak(conceptId,language){
     if(!("speechSynthesis" in window)){notify("Este navegador no ofrece voz sintetizada.");return;}
-    const word=D.concepts[flashIndex][selectedLang].w;
+    const c=D.concepts.find((x)=>x.id===conceptId);
+    if(!c||!LANG[language])return;
+    const word=c[language].w;
     try{
-      const utter=new SpeechSynthesisUtterance(word);utter.lang=LANG[selectedLang].voice;utter.rate=.83;
+      const utter=new SpeechSynthesisUtterance(word);utter.lang=LANG[language].voice;utter.rate=.83;
       window.speechSynthesis.cancel();window.speechSynthesis.speak(utter);
       notify("Voz sintetizada del dispositivo; no es audio humano validado.");
     }catch(e){notify("No fue posible reproducir la voz del navegador.");}
@@ -256,10 +268,13 @@
   document.addEventListener("click",(event)=>{
     const b=event.target.closest("button");if(!b)return;
     if(b.dataset.route){navigate(b.dataset.route);return;}
+    if(b.dataset.speakWord){speak(b.dataset.speakWord,b.dataset.speakLang);return;}
     if(b.dataset.clue){
       const id=b.dataset.clue;activeClue=id;
       if(!state.visited.includes(id)){state.visited.push(id);persist();chirp();notify("Nueva pista añadida al cuaderno.");}
-      render();return;
+      render();
+      if(window.matchMedia("(max-width:1150px)").matches){byId("evidence-focus")?.scrollIntoView({behavior:"smooth",block:"start"});}
+      return;
     }
     if(b.dataset.card){chooseCard(b.dataset.card);return;}
     if(b.dataset.lang){selectedLang=b.dataset.lang;flipped=false;render();return;}
@@ -287,7 +302,6 @@
     if(action==="flip-card"){flipped=!flipped;chirp();render();}
     if(action==="next-flash"){flashIndex=(flashIndex+1)%D.concepts.length;flipped=false;render();}
     if(action==="prev-flash"){flashIndex=(flashIndex+D.concepts.length-1)%D.concepts.length;flipped=false;render();}
-    if(action==="speak-word")speak();
     if(action==="download-vocab")exportCsv();
     if(action==="print-cards")printCards();
     if(action==="export-progress")exportProgress();
