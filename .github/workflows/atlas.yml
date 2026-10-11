@@ -27,11 +27,27 @@ jobs:
         run: python -m atlas.candidate_visuals --root .
       - name: Audit multilingual curriculum candidates
         run: python -m atlas.candidate_lexicon --root .
+      - name: Build playable web demo
+        run: python -m tools.build_site --root . --output dist
+      - name: Install Node for browser tests
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Check JavaScript syntax
+        run: node --check site/app.js && node --check site/data/demo-content.js
+      - name: Install browser test runner
+        run: npm install --no-audit --no-fund
+      - name: Install headless Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Playwright mobile and desktop tests
+        run: npm run test:e2e
       - name: Attach evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: atlas-quality-report
-          path: reports/
+          path: |
+            reports/
+            test-results/
           retention-days: 7
           if-no-files-found: warn
