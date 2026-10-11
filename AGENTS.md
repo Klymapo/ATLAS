@@ -20,7 +20,7 @@
 - QA integrator: validadores, secuencia de experiencia, seguridad, licencias, compatibilidad de guardado, pruebas de navegador.
 
 ## Sitio y hosting
-El repositorio es **Klymapo/ATLAS** y el Worker de destino se llama **atlas-archivo**. `wrangler.jsonc` publica únicamente `dist/`, generada por Python de forma reproducible. GitHub Pages ya funciona y debe mantenerse hasta confirmar que Workers está desplegado. **La conexión del repositorio con Cloudflare requiere un paso en la cuenta Cloudflare**.
+El repositorio es **Klymapo/ATLAS** y el Worker de destino se llama **atlas**. `wrangler.jsonc` publica únicamente `dist/`, generada por Python de forma reproducible. GitHub Pages ya funciona y debe mantenerse hasta confirmar que Workers está desplegado. **La conexión del repositorio con Cloudflare requiere un paso en la cuenta Cloudflare**.
 
 ## Política de progreso
 `practiceAttempts` en el navegador incluye respuesta correcta, idioma, modalidad y ayuda; es información privada. No publicar métricas personales en repo público. El nightly del asistente solo recibirá datos si hay un camino explícitamente consentido y disponible. No enviar tokens al frontend.
