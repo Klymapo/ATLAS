@@ -34,7 +34,7 @@
  });
  window.addEventListener("appinstalled",()=>{waitingPrompt=null;paint();});
  document.addEventListener("DOMContentLoaded",paint);
- if("serviceWorker" in navigator&&location.protocol==="https:"){
+ if("serviceWorker" in navigator&&window.isSecureContext){
   window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js",{scope:"./"})
    .catch(()=>{/* Online mode still works without offline cache */}));
  }
