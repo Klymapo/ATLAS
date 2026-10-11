@@ -8,10 +8,10 @@
     return;
   }
   const KEY = "atlas-first-case-demo-v03";
-  const routes = {office:"MI OFICINA",investigation:"INVESTIGACIÓN",memory:"ENTRENAMIENTO",deck:"FICHAS",progress:"PROGRESO"};
+  const routes = {office:"MI OFICINA",intro:"BIENVENIDA",learn:"APRENDER",investigation:"INVESTIGACIÓN",memory:"ENTRENAMIENTO",deck:"FICHAS",progress:"PROGRESO"};
   const LANG = {fr:{name:"Francés",label:"FR",voice:"fr-FR"},de:{name:"Alemán",label:"DE",voice:"de-DE"},ru:{name:"Ruso",label:"RU",voice:"ru-RU"},ja:{name:"Japonés",label:"JA",voice:"ja-JP"}};
   const necessaryClues = D.clues.filter((c) => c.require).map((c) => c.id);
-  function initial(){return {visited:[],matched:[],turns:0,attempts:0,solved:false,sound:false};}
+  function initial(){return {visited:[],matched:[],turns:0,attempts:0,solved:false,sound:false,introSeen:false,lessonCompleted:false,lessonViewed:[]};}
   function load(){
     try{
       const parsed = JSON.parse(localStorage.getItem(KEY)||"null");
@@ -22,11 +22,14 @@
         turns:Math.min(9999,Math.max(0,Number(parsed.turns)||0)),
         attempts:Math.min(9999,Math.max(0,Number(parsed.attempts)||0)),
         solved:parsed.solved===true,
-        sound:parsed.sound===true
+        sound:parsed.sound===true,
+        introSeen:parsed.introSeen===true,
+        lessonCompleted:parsed.lessonCompleted===true,
+        lessonViewed:Array.isArray(parsed.lessonViewed)?parsed.lessonViewed.filter((id)=>D.concepts.some((c)=>c.id===id)):[]
       };
     }catch(e){return initial();}
   }
-  let state=load(),route="office",activeClue=null,answerId=null,flashIndex=0,selectedLang="fr",flipped=false,
+  let state=load(),route="office",activeClue=null,answerId=null,flashIndex=0,selectedLang="fr",flipped=false,introStep=0,lessonStep=0,
       selection=[],locked=false,toastTimer=null;
   const pairs=D.memoryPairs.flatMap((p)=>{
     const c=D.concepts.find((x)=>x.id===p.concept);
@@ -70,22 +73,54 @@
   const progressBar=()=>'<div class="progressbar" aria-label="Progreso de misión"><div style="width:'+pct()+'%"></div></div>';
   function stages(){
     return '<div class="mission-stages" aria-label="Fases de misión">'+
-      '<span class="stage '+(foundAll()?"complete":"current")+'">01 · Investigación '+(foundAll()?"✓":"")+'</span>'+
+      '<span class="stage '+(state.lessonCompleted?"complete":"current")+'">00 · Preparación '+(state.lessonCompleted?"✓":"")+'</span>'+
+      '<span class="stage '+(foundAll()?"complete":state.lessonCompleted?"current":"")+'">01 · Investigación '+(foundAll()?"✓":"")+'</span>'+
       '<span class="stage '+(mastered()?"complete":foundAll()?"current":"")+'">02 · Memoria '+(mastered()?"✓":"")+'</span>'+
       '<span class="stage '+(state.solved?"complete":canSolve()?"current":"")+'">03 · Deducción '+(state.solved?"✓":"")+'</span></div>';
   }
   function footnote(){return '<div class="warning-rail"><span aria-hidden="true">◇</span><span>'+esc(D.disclaimer)+'</span></div>';}
+
+  function introduction(){
+    const scene=D.introduction[introStep];
+    root.innerHTML=toolbar("Tu primer día en el Archivo","Sede central · Sala de expedientes · 22:40 h. Antes de investigar, necesitas saber quién te ha llamado.")+
+      '<section class="intro-layout"><div class="intro-portrait card"><img src="./assets/nora-vale.svg" alt="Nora Vale, archivista del Archivo: ilustración vectorial minimalista"><span class="portrait-name">Nora Vale · Archivista</span></div>'+
+      '<div class="card padded"><span class="eyebrow">PRESENTACIÓN · '+(introStep+1)+' DE '+D.introduction.length+'</span><h2>'+esc(scene.title)+'</h2>'+
+      '<p class="story-quote intro-quote">«'+esc(scene.dialogue)+'»</p><p class="muted">'+esc(scene.context)+'</p>'+
+      '<div class="mission-stages">'+D.introduction.map((_,i)=>'<span class="stage '+(i===introStep?"current":i<introStep?"complete":"")+'">'+(i+1)+'</span>').join("")+'</div>'+
+      '<div class="actions"><button class="button" data-action="intro-next">'+(introStep===D.introduction.length-1?"Conocer las cuatro palabras →":"Continuar conversación →")+'</button>'+
+      (introStep>0?'<button class="button outline" data-action="intro-prev">← Volver</button>':'')+'</div></div></section>'+footnote();
+  }
+  function audioButton(id,lang,extraClass=""){
+    const word=D.concepts.find((c)=>c.id===id)?.[lang]?.w||"palabra";
+    return '<button type="button" class="audio-inline '+extraClass+'" data-speak-word="'+esc(id)+'" data-speak-lang="'+esc(lang)+'" aria-label="Escuchar '+esc(word)+' en '+esc(LANG[lang]?.name||lang)+' (voz del navegador)" title="Escuchar pronunciación sintetizada">▶ <span>Escuchar</span></button>';
+  }
+  function preparation(){
+    const c=D.concepts[lessonStep];
+    root.innerHTML=toolbar("Antes de investigar, aprende las pistas","Nora te presenta cuatro conceptos. Cada uno aparece en inglés y sus equivalentes en francés, alemán, ruso y japonés.")+stages()+
+      '<div class="lesson-grid"><section class="card padded"><span class="eyebrow">FICHA '+(lessonStep+1)+' DE '+D.concepts.length+' · VOCABULARIO INICIAL</span>'+
+      '<div class="lesson-concept"><span class="concept-emblem" aria-hidden="true">'+esc(D.objectSymbols[c.id]||"◇")+'</span><div><span class="eyebrow">ENGLISH · IDIOMA PIVOTE</span><h2>'+esc(c.en)+'</h2><p>En español: <strong>'+esc(c.es)+'</strong></p></div></div>'+
+      '<p class="muted">Lee las cuatro equivalencias. Pulsa el audio al lado de cada palabra si tu navegador dispone de voz en ese idioma.</p>'+
+      '<div class="translation-list">'+Object.entries(LANG).map(([lang,l])=>'<div class="translation-row"><div><span class="translation-locale">'+l.label+' · '+esc(l.name)+'</span><div class="translation-word">'+esc(c[lang].w)+'</div><span class="translation-reading">'+esc(c[lang].reading||c[lang].hint||"")+'</span></div>'+audioButton(c.id,lang)+'</div>').join("")+'</div>'+
+      '<div class="actions"><button class="button" data-action="lesson-next">'+(lessonStep===D.concepts.length-1?"Terminar preparación e investigar →":"Ya la estudié · Siguiente →")+'</button>'+
+      (lessonStep>0?'<button class="button outline" data-action="lesson-prev">← Anterior</button>':'')+'</div>'+
+      '<p class="muted small">La preparación no es un examen: tendrás las fichas disponibles para repasar cuando quieras.</p></section>'+
+      '<aside class="card padded"><span class="eyebrow">NOTAS DE NORA</span><h2>Primero aprender. Después recordar.</h2>'+
+      '<p>En el Archivo no te pediré traducir palabras que todavía no has visto.</p>'+
+      '<p>Estas cuatro palabras aparecen en las cartas y objetos de nuestro primer caso. Memorízalas de forma visual y compara sus sonidos.</p>'+
+      '<div class="divider"></div><p class="muted">Avance de preparación: '+Math.max(state.lessonViewed.length,lessonStep)+'/'+D.concepts.length+' palabras recorridas.</p>'+
+      '<button class="button outline small" data-route="deck">Consultar fichas de estudio</button></aside></div>'+footnote();
+  }
   function office(){
     root.innerHTML=`
-    <div class="hero"><div class="hero-copy"><span class="eyebrow">Tu nueva aventura comienza aquí</span><h1>Hay una carta<br>esperando.</h1>
-    <div class="goldline"></div><p>Un misterio pequeño puede esconder una contradicción enorme. Descubre el expediente de Nora, compara cuatro idiomas y encuentra la pista decisiva.</p>
-    <div class="actions"><button class="button" data-route="investigation">Abrir caso 001 <span aria-hidden="true">→</span></button>
-    <button class="button outline" style="color:#fff;border-color:#75818a" data-route="deck">Ver mis fichas</button></div></div>
+    <div class="hero"><div class="hero-copy"><span class="eyebrow">Sede central · Archivo Internacional · 22:40</span><h1>Hay una carta<br>esperando.</h1>
+    <div class="goldline"></div><p>Acabas de llegar al Archivo, una agencia que investiga mensajes y documentos alterados. Nora Vale, la archivista, quiere hablar contigo antes de tu primer caso.</p>
+    <div class="actions"><button class="button" data-route="${state.introSeen?(state.lessonCompleted?"investigation":"learn"):"intro"}">${state.introSeen?(state.lessonCompleted?"Abrir caso 001":"Aprender las cuatro palabras"):"Conocer a Nora"} <span aria-hidden="true">→</span></button>
+    <button class="button outline" style="color:#fff;border-color:#75818a" data-route="learn">Preparación / repaso</button></div></div>
     <div class="hero-art"><img src="./assets/office.svg" alt="Ilustración vectorial de la oficina central del Archivo"></div></div>
     <div class="dashboard-grid">
     <section class="card case-card"><div class="case-icon" aria-hidden="true">◇</div><div><span class="eyebrow">EXPEDIENTE DISPONIBLE</span><h2>${esc(D.storyline.title)}</h2><p class="muted">${esc(D.storyline.opening)}</p>
     ${progressBar()}<small class="muted">Progreso de misión: ${pct()} % · ${state.visited.filter((x)=>necessaryClues.includes(x)).length}/3 pistas indispensables</small><div><button class="button small" data-route="investigation">${state.solved?"Revisar caso cerrado":"Continuar investigación"}</button></div></div></section>
-    <section class="card brief-block"><span class="eyebrow">MENSAJE DE NORA VALE</span><h2>«Observa antes de deducir»</h2><p>En este Archivo, cada palabra es una pista. Puedes equivocarte, revisar tus notas y volver a intentarlo sin penalizaciones.</p>
+    <section class="card brief-block"><span class="eyebrow">MENSAJE DE NORA VALE</span><h2>«Primero nos presentamos»</h2><p>Me llamo Nora. Te enseñaré las palabras del expediente y después iremos juntos a observar la escena. Puedes equivocarte sin penalizaciones.</p>
     <p class="muted">Enseñanza: español · Idioma común: English · Idiomas: FR / DE / RU / JA</p></section></div>
     <div class="actions"><button class="button outline" data-route="memory">Practicar memoria</button><button class="button outline" data-route="progress">Mi progreso y descargas</button></div>${footnote()}`;
   }
@@ -163,10 +198,13 @@
       b.classList.toggle("active",active); if(active)b.setAttribute("aria-current","page"); else b.removeAttribute("aria-current");
     });
     const sound=byId("sound-toggle");if(sound)sound.checked=state.sound;
-    if(route==="office")office(); else if(route==="investigation")investigation();
-    else if(route==="memory")memory();else if(route==="deck")deckView();else progress();
+    if(route==="office")office(); else if(route==="intro")introduction(); else if(route==="learn")preparation();
+    else if(route==="investigation")investigation();else if(route==="memory")memory();else if(route==="deck")deckView();else progress();
   }
-  function navigate(to){if(!routes[to])return;route=to;activeClue=null;render(); window.scrollTo({top:0,behavior:"instant"});}
+  function navigate(to){if(!routes[to])return;
+    if(["investigation","memory"].includes(to)&&!state.introSeen)to="intro";
+    else if(["investigation","memory"].includes(to)&&!state.lessonCompleted)to="learn";
+    route=to;activeClue=null;render(); window.scrollTo({top:0,behavior:"instant"});}
   function chooseCard(cardId) {
     if(locked)return;
     const card=deck.find((c)=>c.id===cardId);
@@ -231,6 +269,20 @@
       if(choice?.correct){state.solved=true;chirp();}persist();deduction();return;
     }
     const action=b.dataset.action;
+    if(action==="intro-next"){
+      if(introStep<D.introduction.length-1){introStep++;render();}
+      else{state.introSeen=true;persist();lessonStep=0;navigate("learn");}
+      return;
+    }
+    if(action==="intro-prev"){introStep=Math.max(0,introStep-1);render();return;}
+    if(action==="lesson-next"){
+      const id=D.concepts[lessonStep].id;
+      if(!state.lessonViewed.includes(id))state.lessonViewed.push(id);
+      if(lessonStep<D.concepts.length-1){lessonStep++;persist();render();}
+      else{state.lessonCompleted=true;persist();navigate("investigation");notify("Preparación terminada. Ahora sí, ¡a investigar!");}
+      return;
+    }
+    if(action==="lesson-prev"){lessonStep=Math.max(0,lessonStep-1);render();return;}
     if(action==="show-deduction"){if(canSolve())deduction();else notify("Primero reúne las pistas y completa memoria.");}
     if(action==="flip-card"){flipped=!flipped;chirp();render();}
     if(action==="next-flash"){flashIndex=(flashIndex+1)%D.concepts.length;flipped=false;render();}
@@ -246,7 +298,7 @@
     }
     if(action==="reset-progress"){
       if(window.confirm("¿Borrar pistas, intentos y progreso guardado en este navegador?")){
-        state=initial();deck=shuffled(pairs);selection=[];locked=false;activeClue=null;answerId=null;flashIndex=0;flipped=false;persist();navigate("office");notify("Progreso de demostración reiniciado.");
+        state=initial();deck=shuffled(pairs);selection=[];locked=false;activeClue=null;answerId=null;flashIndex=0;flipped=false;introStep=0;lessonStep=0;persist();navigate("office");notify("Progreso de demostración reiniciado.");
       }
     }
   });
