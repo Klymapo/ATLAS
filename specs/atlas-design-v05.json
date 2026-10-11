@@ -1,0 +1,175 @@
+{
+  "version": "0.5.0",
+  "status": "DESIGN_PROPOSAL_NOT_IMPLEMENTED",
+  "cost_policy": {
+    "budget_usd": 0,
+    "cloud_only": true,
+    "offline_pc_installation": false,
+    "repository": "Klymapo/ATLAS"
+  },
+  "presentation": {
+    "ui_language": "es",
+    "pivot_language": "en",
+    "study_languages": [
+      "fr",
+      "de",
+      "ru",
+      "ja"
+    ],
+    "visual_style": "minimal-vector-noir",
+    "forbidden_styles": [
+      "anime",
+      "chibi"
+    ],
+    "narrative_ending": "cases_only_no_global_ending"
+  },
+  "protagonist": {
+    "alias_optional": true,
+    "requires_real_identity": false,
+    "identity_role": "recruited_archive_investigator",
+    "past_detail_optional": true,
+    "starting_explanations": [
+      "who_am_i",
+      "where_am_i",
+      "why_am_i_here",
+      "who_is_nora",
+      "what_is_my_task"
+    ]
+  },
+  "story_state_machine": [
+    "ARRIVAL",
+    "IDENTITY",
+    "NORA",
+    "OPTIONAL_DIAGNOSTIC",
+    "TEACH",
+    "GUIDED_RECALL",
+    "FREE_RECALL",
+    "INQUIRY",
+    "DEDUCTION",
+    "REPORT",
+    "SPACED_REVIEW"
+  ],
+  "grading": {
+    "state_categories": [
+      "not_taught",
+      "exposed",
+      "recognized",
+      "guided_recall",
+      "free_recall",
+      "applied",
+      "review_due",
+      "durable_retention",
+      "not_assessed"
+    ],
+    "modalities": [
+      "recognition",
+      "listening",
+      "typing",
+      "sentence",
+      "speaking"
+    ],
+    "individual_progress_key": "language+concept+sense+modality",
+    "auto_assessed": [
+      "recognition",
+      "typing",
+      "sentence_restricted",
+      "listening_when_verified_audio_available"
+    ],
+    "never_auto_assessed_without_independent_validation": [
+      "speaking",
+      "free_conversation",
+      "native_pronunciation"
+    ],
+    "benchmark_for_earned_badge": {
+      "status": "TENTATIVE_NOT_VALIDATED",
+      "minimum_accuracy": 0.8,
+      "independent_test": true,
+      "delayed_recall": true,
+      "new_context": true,
+      "requires_language_qa": true,
+      "requires_pedagogy_qa": true
+    }
+  },
+  "language_required_content": {
+    "fr": [
+      "lemma",
+      "gender",
+      "article",
+      "reading",
+      "plural_when_taught",
+      "context",
+      "source",
+      "review_status"
+    ],
+    "de": [
+      "lemma",
+      "gender",
+      "article",
+      "plural_when_taught",
+      "reading",
+      "case_when_taught",
+      "context",
+      "source",
+      "review_status"
+    ],
+    "ru": [
+      "lemma",
+      "cyrillic",
+      "reading",
+      "stress_when_taught",
+      "grammatical_gender_when_applicable",
+      "case_when_taught",
+      "context",
+      "source",
+      "review_status"
+    ],
+    "ja": [
+      "lemma",
+      "kana",
+      "kanji_when_taught",
+      "reading",
+      "register_when_applicable",
+      "particle_when_taught",
+      "context",
+      "source",
+      "review_status"
+    ]
+  },
+  "sound": {
+    "default_enabled": false,
+    "autoplay": false,
+    "independent_channels": [
+      "speech",
+      "music",
+      "sfx"
+    ],
+    "duck_music_on_speech": true,
+    "game_sounds_blocking_exams": false,
+    "require_license_manifest_for_recordings": true,
+    "accept_tts_as_human_recording": false
+  },
+  "badges": {
+    "official": false,
+    "title": "Distinción interna del Archivo",
+    "pdf_client_side": true,
+    "include": [
+      "alias",
+      "language",
+      "skills_assessed",
+      "skills_not_assessed",
+      "achievement_id",
+      "date",
+      "evidence",
+      "non_official_notice"
+    ],
+    "notice": "Distinción lúdica interna. No constituye certificación oficial de competencia lingüística.",
+    "never_claim_equivalent_certification": true
+  },
+  "implementation_priority": [
+    "narrative_prologue",
+    "retrieval_assessment",
+    "full_course_schema",
+    "optional_sfx_music",
+    "evidence_based_badges"
+  ]
+}
