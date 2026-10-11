@@ -6,6 +6,16 @@ from tools.build_site import build
 ROOT=Path(__file__).resolve().parents[1]
 
 class WebsiteTests(unittest.TestCase):
+    def test_story_exhibits_and_onboarding_exist(self):
+        raw=(ROOT/"site/data/demo-content.js").read_text(encoding="utf8")
+        info=json.loads(raw.removeprefix("window.ATLAS_DEMO = ").strip().removesuffix(";"))
+        self.assertEqual(len(info["introduction"]),3)
+        self.assertIn("Nora Vale",info["introduction"][0]["dialogue"])
+        self.assertEqual(set(info["objectSymbols"]),set(c["id"] for c in info["concepts"]))
+        self.assertTrue(all(c["exhibit"]["mark"] for c in info["clues"]))
+        code=(ROOT/"site/app.js").read_text(encoding="utf8")
+        for token in ("introSeen","lessonCompleted","function preparation()","function introduction()","function exhibit(","data-speak-word"):
+            self.assertIn(token,code)
     def test_concepts_and_languages(self):
         raw=(ROOT/"site/data/demo-content.js").read_text(encoding="utf8")
         info=json.loads(raw.removeprefix("window.ATLAS_DEMO = ").strip().removesuffix(";"))

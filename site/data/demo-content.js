@@ -1,5 +1,5 @@
 window.ATLAS_DEMO = {
-  "version": "0.3.0",
+  "version": "0.4.0",
   "status": "DEMO_ONLY_UNVERIFIED",
   "lang_ui": "es",
   "lang_pivot": "en",
@@ -8,7 +8,7 @@ window.ATLAS_DEMO = {
     "case_id": "demo-001",
     "title": "La llave equivocada",
     "location": "Oficina del Archivo",
-    "opening": "Nora ha recibido un sobre sin remitente. Las pistas parecen fáciles, pero el registro y el número de la llave no coinciden.",
+    "opening": "Nora Vale te espera en la sede central. Ha aparecido una carta con dos números contradictorios. Examina la habitación para descubrir qué cambió.",
     "twist": "Alguien cambió la etiqueta de la llave para dirigir la investigación a otra habitación.",
     "outro": "Caso cerrado. El Archivo sigue abierto: otro expediente acaba de llegar.",
     "next_case": "El reloj detenido · Berlín"
@@ -27,7 +27,14 @@ window.ATLAS_DEMO = {
         "left": "17%",
         "top": "32%"
       },
-      "require": true
+      "require": true,
+      "exhibit": {
+        "kind": "note",
+        "category": "DOCUMENTO HALLADO · BIBLIOTECA",
+        "title": "Hoja entre páginas",
+        "mark": "ROOM 12",
+        "detail": "Anotación original: HABITACIÓN 12"
+      }
     },
     {
       "id": "board",
@@ -42,7 +49,14 @@ window.ATLAS_DEMO = {
         "left": "50%",
         "top": "27%"
       },
-      "require": true
+      "require": true,
+      "exhibit": {
+        "kind": "message",
+        "category": "TABLÓN DE EVIDENCIAS",
+        "title": "Mensaje fijado con una chincheta",
+        "mark": "THE KEY IS IN THE BOOK.",
+        "detail": "«La llave está en el libro». El mensaje conduce a la estantería."
+      }
     },
     {
       "id": "desk",
@@ -57,7 +71,14 @@ window.ATLAS_DEMO = {
         "left": "52%",
         "top": "73%"
       },
-      "require": true
+      "require": true,
+      "exhibit": {
+        "kind": "tag",
+        "category": "OBJETO RECUPERADO · ESCRITORIO",
+        "title": "Etiqueta atada a una llave",
+        "mark": "21",
+        "detail": "Número de la etiqueta: 21 · No coincide con la nota del libro."
+      }
     },
     {
       "id": "window",
@@ -72,7 +93,14 @@ window.ATLAS_DEMO = {
         "left": "81%",
         "top": "35%"
       },
-      "require": false
+      "require": false,
+      "exhibit": {
+        "kind": "report",
+        "category": "OBSERVACIÓN · VENTANA",
+        "title": "Registro de inspección",
+        "mark": "SIN HUELLAS",
+        "detail": "No hay indicios de entrada o salida por la ventana."
+      }
     }
   ],
   "concepts": [
@@ -210,5 +238,28 @@ window.ATLAS_DEMO = {
       }
     ]
   },
-  "disclaimer": "Demostración educativa: traducciones, ejemplos y audios aún NO certificados por ATLAS. Las voces disponibles son síntesis del navegador, no grabaciones verificadas."
+  "disclaimer": "Demostración educativa: traducciones, ejemplos y audios aún NO certificados por ATLAS. Las voces disponibles son síntesis del navegador, no grabaciones verificadas.",
+  "introduction": [
+    {
+      "title": "¿Dónde estamos?",
+      "dialogue": "Bienvenido al Archivo de las Cuatro Voces. Soy Nora Vale, la archivista. Esta es nuestra sede central: aquí reunimos cartas y documentos que no encajan.",
+      "context": "Son las 22:40. Acabas de entrar en una biblioteca convertida en oficina de investigación internacional."
+    },
+    {
+      "title": "Tu primer expediente",
+      "dialogue": "Alguien modificó una pista de nuestro caso. Hay un libro, una llave y una carta. No necesitas saber idiomas todavía: primero te voy a enseñar cuatro palabras.",
+      "context": "Tus notas estarán siempre disponibles. Estudiaremos inglés como referencia para francés, alemán, ruso y japonés."
+    },
+    {
+      "title": "Una regla del Archivo",
+      "dialogue": "Aquí no te examinaré antes de enseñarte. Observa las palabras, escucha si quieres y luego pondremos a prueba tu memoria. Si te equivocas, seguimos investigando.",
+      "context": "Cuando hayas estudiado las cuatro fichas, iremos a la escena y podrás inspeccionar las evidencias reales."
+    }
+  ],
+  "objectSymbols": {
+    "key": "⚿",
+    "book": "▣",
+    "letter": "✉",
+    "map": "◇"
+  }
 };

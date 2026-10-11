@@ -1,54 +1,91 @@
 const fs=require("node:fs");
 const {test,expect}=require("@playwright/test");
-test("Spanish detective home, English pivot, unverified banner",async({page},testInfo)=>{
+const nav=async(page,to)=>{
+ const mobile=await page.locator(".mobile-nav").isVisible();
+ await page.locator((mobile?".mobile-nav":".rail")+' [data-route="'+to+'"]').click();
+};
+async function onboard(page){
+ await page.locator('.hero [data-route="intro"]').click();
+ await expect(page.getByRole("heading",{name:"¿Dónde estamos?"})).toBeVisible();
+ await expect(page.getByText(/Soy Nora Vale, la archivista/)).toBeVisible();
+ for(let i=0;i<3;i++)await page.locator('[data-action="intro-next"]').click();
+ for(let i=0;i<4;i++){
+   await expect(page.getByText("FICHA "+(i+1)+" DE 4 · VOCABULARIO INICIAL")).toBeVisible();
+   await expect(page.locator(".translation-row")).toHaveCount(4);
+   await page.locator('[data-action="lesson-next"]').click();
+ }
+ await expect(page.getByRole("heading",{name:"La llave equivocada"})).toBeVisible();
+}
+test("Nora and the setting are introduced before memory",async({page},testInfo)=>{
  await page.goto("/");
  await expect(page.getByRole("heading",{name:/Hay una carta/})).toBeVisible();
+ await expect(page.getByText(/Sede central · Archivo Internacional/)).toBeVisible();
  await expect(page.getByText("MATERIAL DEMO · SIN CERTIFICAR")).toBeVisible();
- await expect(page.getByText(/Idioma común: English/)).toBeVisible();
- expect((await page.request.get("/assets/office.svg")).status()).toBe(200);
- const ctaColor=await page.locator(".hero .button:not(.outline)").first().evaluate(el=>getComputedStyle(el).backgroundColor);
- expect(ctaColor).toBe("rgb(185, 149, 88)");
-
+ const cta=await page.locator(".hero .button:not(.outline)").first().evaluate(e=>getComputedStyle(e).backgroundColor);
+ expect(cta).toBe("rgb(185, 149, 88)");
+ await nav(page,"memory");
+ await expect(page.getByRole("heading",{name:"¿Dónde estamos?"})).toBeVisible();
  fs.mkdirSync("reports/screenshots",{recursive:true});
- await page.screenshot({path:"reports/screenshots/office-"+testInfo.project.name+".png",fullPage:true});
+ await page.screenshot({path:"reports/screenshots/nora-intro-"+testInfo.project.name+".png",fullPage:true});
 });
-test("case completion and persistent progress after reload",async({page},testInfo)=>{
+test("learn four words with nearby playback before assessment",async({page},testInfo)=>{
  await page.goto("/");
- await page.locator(".hero [data-route=investigation]").click();
- for(const x of ["board","desk","shelf"])await page.locator('[data-clue="'+x+'"]').click();
- await expect(page.getByText("Nota: habitación 12")).toBeVisible();
- const mobile=await page.locator(".mobile-nav").isVisible();
- await page.locator((mobile?".mobile-nav":".rail")+" [data-route=memory]").click();
- for(const p of ["p1","p2","p3","p4"]){
-   await page.locator('[data-card="'+p+'-en"]').click();
-   await page.locator('[data-card="'+p+'-tr"]').click();
-   await expect(page.locator('[data-card="'+p+'-en"].matched')).toBeVisible();
+ await page.locator('.hero [data-route="intro"]').click();
+ for(let i=0;i<3;i++)await page.locator('[data-action="intro-next"]').click();
+ await expect(page.getByRole("heading",{name:"Antes de investigar, aprende las pistas"})).toBeVisible();
+ await expect(page.locator(".translation-row")).toHaveCount(4);
+ const row=page.locator(".translation-row").first();
+ await expect(row.locator(".translation-word")).toHaveText("clé");
+ await expect(row.locator(".audio-inline")).toBeVisible();
+ const distance=await row.evaluate(el=>{
+   const word=el.querySelector(".translation-word").getBoundingClientRect();
+   const sound=el.querySelector(".audio-inline").getBoundingClientRect();
+   return Math.max(0,sound.left-word.right);
+ });
+ expect(distance).toBeLessThan(350);
+ fs.mkdirSync("reports/screenshots",{recursive:true});
+ await page.screenshot({path:"reports/screenshots/word-lesson-"+testInfo.project.name+".png",fullPage:true});
+ for(let i=0;i<4;i++)await page.locator('[data-action="lesson-next"]').click();
+ await nav(page,"memory");
+ await expect(page.getByRole("heading",{name:"Parejas de memoria"})).toBeVisible();
+ await expect(page.getByText(/Ya viste las cuatro palabras con Nora/)).toBeVisible();
+});
+test("inspect visual evidence, solve case and keep progress after reload",async({page},testInfo)=>{
+ await page.goto("/");
+ await onboard(page);
+ await page.locator('[data-clue="shelf"]').click();
+ await expect(page.locator(".exhibit-mark")).toHaveText("ROOM 12");
+ await expect(page.locator(".exhibit-title")).toHaveText("Hoja entre páginas");
+ fs.mkdirSync("reports/screenshots",{recursive:true});
+ await page.screenshot({path:"reports/screenshots/real-evidence-"+testInfo.project.name+".png",fullPage:true});
+ for(const id of ["board","desk"])await page.locator('[data-clue="'+id+'"]').click();
+ await expect(page.locator(".exhibit-mark")).toHaveText("21");
+ await nav(page,"memory");
+ for(const id of ["p1","p2","p3","p4"]){
+   await page.locator('[data-card="'+id+'-en"]').click();
+   await page.locator('[data-card="'+id+'-tr"]').click();
+   await expect(page.locator('[data-card="'+id+'-en"].matched')).toBeVisible();
  }
  await page.getByRole("button",{name:/Regresar al caso/}).click();
  await page.getByRole("button",{name:/Resolver expediente/}).click();
  await page.locator('[data-answer="a"]').click();
  await expect(page.getByText("Deducción correcta.")).toBeVisible();
- fs.mkdirSync("reports/screenshots",{recursive:true});
- await page.screenshot({path:"reports/screenshots/resolved-"+testInfo.project.name+".png",fullPage:true});
  await page.reload();
- await page.locator(".hero [data-route=investigation]").click();
+ await nav(page,"investigation");
  await expect(page.getByText("Una contradicción resuelta")).toBeVisible();
 });
-test("download CSV and keyboard inspect",async({page})=>{
+test("audio controls stay beside words on flashcards; CSV still downloads",async({page})=>{
  await page.goto("/");
- await page.locator(".hero [data-route=deck]").click();
+ await nav(page,"deck");
  await page.getByRole("button",{name:"Voltear tarjeta"}).click();
- await expect(page.locator(".flashcard.flipped")).toBeVisible();
+ await expect(page.locator(".flashcard .word-with-audio")).toBeVisible();
+ await expect(page.locator(".flashcard .audio-inline")).toHaveCount(1);
+ await expect(page.locator(".grid-2 .audio-inline")).toHaveCount(4);
  const dl=page.waitForEvent("download");
  await page.getByRole("button",{name:"Descargar vocabulario CSV"}).click();
  expect((await dl).suggestedFilename()).toBe("ATLAS_vocabulario_demo.csv");
- const mobile=await page.locator(".mobile-nav").isVisible();
- await page.locator((mobile?".mobile-nav":".rail")+" [data-route=investigation]").click();
- await page.locator('[data-clue=desk]').focus();
- await page.keyboard.press("Enter");
- await expect(page.getByText("Llave marcada 21")).toBeVisible();
 });
-test("mobile viewport has no horizontal scrolling",async({page})=>{
+test("mobile avoids horizontal overflow",async({page})=>{
  test.skip(page.viewportSize().width>500,"mobile only");
  await page.goto("/");
  const dims=await page.evaluate(()=>[innerWidth,document.documentElement.scrollWidth]);

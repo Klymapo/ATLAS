@@ -27,3 +27,55 @@
 /* Primary invitation must not disappear into the navy hero. */
 .hero .button:not(.outline){background:var(--gold);color:var(--ink);border-color:var(--gold)}
 .hero .button:not(.outline):hover{background:#efd8aa;color:var(--ink)}
+
+
+/* v0.4: Story-first, teach-before-test, accessible evidence and adjacent pronunciation */
+.intro-layout,.lesson-grid{display:grid;grid-template-columns:minmax(210px,.7fr) minmax(0,1.3fr);gap:20px;align-items:start}
+.intro-portrait{background:#e6d9c3;padding:18px;display:grid;gap:12px;text-align:center}
+.intro-portrait img{display:block;width:100%;height:390px;object-fit:contain}
+.portrait-name{color:var(--ink);font-weight:800;letter-spacing:.08em;font-size:.78rem}
+.intro-quote{font-size:clamp(1.12rem,1.9vw,1.45rem);line-height:1.6;padding:18px 0 12px}
+.lesson-concept{display:flex;align-items:center;gap:18px;padding:22px;background:var(--paper);border-radius:13px;margin:15px 0 23px}
+.lesson-concept h2{font-size:2.8rem;margin:0 0 4px}
+.lesson-concept p{margin:0}
+.concept-emblem{font-size:2.7rem;display:grid;place-items:center;color:var(--wine);width:78px;height:78px;background:#fff9;border:1px solid #dbcbb4;border-radius:12px;flex:none}
+.translation-list{display:grid;gap:10px;margin:18px 0}
+.translation-row{background:#f8f4eb;border:1px solid #e4d6c4;border-radius:11px;padding:15px 17px;display:flex;align-items:center;justify-content:space-between;gap:12px;min-width:0}
+.translation-row>div{min-width:0}
+.translation-locale{display:block;font-size:.72rem;color:#716454;font-weight:800;letter-spacing:.06em}
+.translation-word{font-size:clamp(1.25rem,1.8vw,1.55rem);font-weight:800;overflow-wrap:anywhere}
+.translation-reading{display:block;color:#736c60;font-size:.81rem;overflow-wrap:anywhere}
+.word-with-audio{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:12px;min-width:0}
+.card.padded .word-with-audio{justify-content:space-between}
+.audio-inline{display:inline-flex;align-items:center;gap:7px;justify-content:center;min-height:44px;min-width:44px;border:1px solid #c5b18e;border-radius:8px;padding:10px 13px;background:#f0e0bf;color:#182635;font-size:.78rem;font-weight:800;white-space:nowrap;flex:none}
+.audio-inline:hover{background:#e4c68e}
+.audio-inline:active{transform:translateY(1px)}
+.word-with-audio h3{margin:0;overflow-wrap:anywhere}
+.word-with-audio .big-word{overflow-wrap:anywhere}
+.exhibit{margin:13px 0 18px}
+.exhibit-kicker{display:block;color:var(--wine);font-size:.64rem;letter-spacing:.1em;font-weight:800;margin-bottom:10px}
+.exhibit-paper{background:#f7edd9;border:1px solid #d5bb8f;box-shadow:3px 6px 14px #2c241322;border-radius:2px;padding:20px 14px;position:relative;min-height:174px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;transform:rotate(-.5deg)}
+.exhibit-paper.exhibit-tag{background:#e9d5ab;border:2px solid #b99558;border-radius:10px}
+.exhibit-paper.exhibit-report{background:#ebefe8}
+.exhibit-stamp{font-size:.62rem;color:#8f4952;letter-spacing:.09em;align-self:flex-start}
+.exhibit-title{font:italic .89rem Georgia,serif;color:#63594b}
+.exhibit-mark{font:700 clamp(1.5rem,2.8vw,2.15rem) Georgia,serif;letter-spacing:.05em;overflow-wrap:anywhere;color:#182635}
+.exhibit-annotation{font-size:.81rem;color:#6d5e49;line-height:1.45}
+.exhibit-conclusion{margin:14px 0;font-size:.88rem;font-weight:600;color:#4e5c63}
+#evidence-focus{scroll-margin-top:16px}
+@media(max-width:930px){
+ .intro-layout,.lesson-grid{grid-template-columns:1fr}
+ .intro-portrait{display:flex;gap:20px;align-items:center;justify-content:center}
+ .intro-portrait img{height:190px;max-width:140px}
+}
+@media(max-width:600px){
+ .intro-portrait img{height:160px;max-width:100px}
+ .intro-portrait{justify-content:flex-start}
+ .translation-row{padding:12px;gap:7px}
+ .audio-inline{padding:9px 10px}
+ .audio-inline span{font-size:.72rem}
+ .lesson-concept{padding:15px;gap:10px}
+ .lesson-concept h2{font-size:2.1rem}
+ .concept-emblem{width:56px;height:60px;font-size:2rem}
+}
+@media print{.intro-layout,.lesson-grid{display:none!important}}
