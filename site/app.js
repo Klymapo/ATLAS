@@ -231,9 +231,26 @@
       '<div class="practice-stat"><b>0</b> logros lingüísticos certificados</div></div>'+
       '<div class="divider"></div><p class="muted">Una palabra escrita correctamente una vez no demuestra retención a largo plazo. Más adelante ATLAS la preguntará en frases y días diferentes.</p></aside></div>'+footnote();
   }
+  function practiceDashboard(){
+    const P=window.ATLAS_PRACTICE;
+    if(!P)return "";
+    const summary=P.summary(state.practiceAttempts);
+    const now=new Date().toDateString();
+    const today=state.practiceAttempts.filter(e=>new Date(e.at).toDateString()===now).length;
+    const latest=new Map();
+    state.practiceAttempts.forEach(e=>latest.set(e.id,e));
+    const due=[...latest.values()].filter(e=>e.due_at&&Date.parse(e.due_at)<=Date.now()).length;
+    return '<section class="card padded" style="margin-top:18px"><span class="eyebrow">REGISTRO DE PRÁCTICA ESCRITA · DEMOSTRACIÓN</span>'+
+      '<h2>Progreso diario por idioma</h2><p class="muted">Hoy: '+today+' intentos · '+due+' palabras listas para volver a practicar. Los aciertos son registros, no un porcentaje de fluidez.</p>'+
+      '<div class="grid-2">'+Object.entries(LANG).map(([lang,meta])=>
+      '<div class="practice-stat"><b>'+esc(meta.name)+'</b><p class="muted">Intentos: '+summary[lang].attempts+
+      ' · Sin ayuda: '+summary[lang].correct_independent+' · Con pistas: '+summary[lang].guided+'</p></div>').join("")+
+      '</div><div class="actions"><button class="button outline" data-route="practice">Hacer otro repaso</button></div></section>';
+  }
   function progress(){
     root.innerHTML=toolbar("Cuaderno de progreso","Tu expediente permanece en este dispositivo. Puedes exportarlo cuando quieras.")+
     '<div class="metrics"><div class="metric"><strong>'+pct()+'%</strong><span>Avance del caso</span></div><div class="metric"><strong>'+state.visited.filter((x)=>necessaryClues.includes(x)).length+'/3</strong><span>Pistas obligatorias</span></div><div class="metric"><strong>'+state.matched.length+'/4</strong><span>Parejas recuperadas</span></div></div>'+
+    practiceDashboard()+
     (state.solved?'<section class="success-panel"><span class="eyebrow">EXPEDIENTE RESUELTO</span><h2>Caso cerrado. Archivo abierto.</h2><p>Detectaste que la nota señalaba la habitación 12 y la llave estaba marcada 21. La siguiente investigación llegará al Archivo; el aprendizaje puede continuar.</p><p>Próximo caso previsto: '+esc(D.storyline.next_case)+'</p></section>':
     '<section class="card padded"><h2>Todavía hay una contradicción por resolver</h2><p class="muted">Revisa el escenario y las tarjetas hasta reunir todas las pruebas.</p><button class="button" data-route="investigation">Volver al expediente</button></section>')+
     '<div class="actions"><button class="button" data-route="practice">Práctica escrita por idioma</button></div>'+
