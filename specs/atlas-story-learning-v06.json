@@ -1,0 +1,366 @@
+{
+  "version": "0.6.0",
+  "status": "DESIGN_CONTRACT_NOT_IMPLEMENTED",
+  "story": {
+    "title": "El Archivo de las Cuatro Voces",
+    "setting": "Puerto Umbral",
+    "intro_case": "La firma del día siguiente",
+    "starter_case": "La llave equivocada",
+    "global_ending": false,
+    "player": {
+      "alias_optional": true,
+      "roles": [
+        "observer",
+        "interviewer",
+        "decipherer"
+      ],
+      "forced_backstory": false
+    },
+    "context_before_exam": [
+      "identity",
+      "where",
+      "why_recruited",
+      "who_is_nora",
+      "current_goal"
+    ],
+    "main_roles": [
+      "Nora Vale",
+      "Elías Rook",
+      "Mina Sato"
+    ],
+    "branches_min": 2
+  },
+  "prologue": [
+    {
+      "id": "arrival",
+      "type": "inspect",
+      "requires": [],
+      "teaches": [],
+      "next": [
+        "nora"
+      ],
+      "can_skip_story": false
+    },
+    {
+      "id": "nora",
+      "type": "dialogue",
+      "requires": [
+        "arrival"
+      ],
+      "teaches": [],
+      "next": [
+        "identity"
+      ],
+      "can_skip_story": true
+    },
+    {
+      "id": "identity",
+      "type": "character_create",
+      "requires": [
+        "nora"
+      ],
+      "teaches": [],
+      "next": [
+        "teach"
+      ],
+      "can_skip_story": false
+    },
+    {
+      "id": "teach",
+      "type": "learning_exposure",
+      "requires": [
+        "identity"
+      ],
+      "teaches": [
+        "key",
+        "book",
+        "letter",
+        "map"
+      ],
+      "next": [
+        "guided"
+      ],
+      "can_skip_story": false
+    },
+    {
+      "id": "guided",
+      "type": "learning_retrieval_guided",
+      "requires": [
+        "teach"
+      ],
+      "teaches": [],
+      "next": [
+        "recall"
+      ],
+      "can_skip_story": false
+    },
+    {
+      "id": "recall",
+      "type": "learning_retrieval_independent",
+      "requires": [
+        "guided"
+      ],
+      "teaches": [],
+      "next": [
+        "investigate"
+      ],
+      "can_skip_story": false
+    },
+    {
+      "id": "investigate",
+      "type": "evidence_collect",
+      "requires": [
+        "teach"
+      ],
+      "teaches": [],
+      "next": [
+        "deduction"
+      ],
+      "can_skip_story": false
+    },
+    {
+      "id": "deduction",
+      "type": "evidence_based_decision",
+      "requires": [
+        "investigate"
+      ],
+      "teaches": [],
+      "next": [
+        "report"
+      ],
+      "can_skip_story": false
+    },
+    {
+      "id": "report",
+      "type": "local_case_close",
+      "requires": [
+        "deduction"
+      ],
+      "teaches": [],
+      "next": [
+        "spaced_review"
+      ],
+      "can_skip_story": false
+    },
+    {
+      "id": "spaced_review",
+      "type": "learning_recall_delayed",
+      "requires": [
+        "recall"
+      ],
+      "teaches": [],
+      "next": [],
+      "can_skip_story": false
+    }
+  ],
+  "starter_concepts": [
+    {
+      "sense": "physical-key",
+      "en": "key",
+      "es": "llave",
+      "fr": {
+        "form": "la clé",
+        "gender": "f"
+      },
+      "de": {
+        "form": "der Schlüssel",
+        "gender": "m",
+        "article": "der"
+      },
+      "ru": {
+        "form": "ключ",
+        "script": "cyrillic"
+      },
+      "ja": {
+        "form": "鍵",
+        "reading": "かぎ",
+        "script": "kanji-kana"
+      }
+    },
+    {
+      "sense": "physical-book",
+      "en": "book",
+      "es": "libro",
+      "fr": {
+        "form": "le livre",
+        "gender": "m"
+      },
+      "de": {
+        "form": "das Buch",
+        "gender": "n",
+        "article": "das"
+      },
+      "ru": {
+        "form": "книга",
+        "script": "cyrillic"
+      },
+      "ja": {
+        "form": "本",
+        "reading": "ほん",
+        "script": "kanji-kana"
+      }
+    },
+    {
+      "sense": "postal-letter",
+      "en": "letter",
+      "es": "carta",
+      "fr": {
+        "form": "la lettre",
+        "gender": "f"
+      },
+      "de": {
+        "form": "der Brief",
+        "gender": "m",
+        "article": "der"
+      },
+      "ru": {
+        "form": "письмо",
+        "script": "cyrillic"
+      },
+      "ja": {
+        "form": "手紙",
+        "reading": "てがみ",
+        "script": "kanji-kana"
+      }
+    },
+    {
+      "sense": "geographic-map",
+      "en": "map",
+      "es": "mapa",
+      "fr": {
+        "form": "la carte",
+        "gender": "f"
+      },
+      "de": {
+        "form": "die Karte",
+        "gender": "f",
+        "article": "die"
+      },
+      "ru": {
+        "form": "карта",
+        "script": "cyrillic"
+      },
+      "ja": {
+        "form": "地図",
+        "reading": "ちず",
+        "script": "kanji-kana"
+      }
+    }
+  ],
+  "learning": {
+    "ui_language": "es",
+    "pivot_language": "en",
+    "targets": [
+      "fr",
+      "de",
+      "ru",
+      "ja"
+    ],
+    "stages": [
+      "unseen",
+      "taught",
+      "recognized",
+      "guided_recall",
+      "independent_recall",
+      "applied",
+      "durable"
+    ],
+    "modalities": [
+      "recognition",
+      "reading",
+      "grammar",
+      "writing",
+      "listening",
+      "speaking"
+    ],
+    "mastery_requires": [
+      "independent_recall",
+      "applied",
+      "delayed_recall"
+    ],
+    "unacceptable_for_mastery": [
+      "exposure_only",
+      "audio_playback_only",
+      "memory_match_only",
+      "hinted_answer_only"
+    ],
+    "not_assessed_by_default": [
+      "speaking"
+    ],
+    "individual_progress_key": [
+      "language",
+      "concept",
+      "sense",
+      "modality"
+    ],
+    "german_nouns_must_have": [
+      "article",
+      "gender"
+    ],
+    "writing_ja_cyrillic_requires_script_teaching": true,
+    "content_requires_qa": true,
+    "content_certification": "PENDING"
+  },
+  "case_001": {
+    "evidence": [
+      {
+        "id": "A",
+        "kind": "book_note",
+        "mark": "ROOM 12",
+        "is_visible": true
+      },
+      {
+        "id": "B",
+        "kind": "physical_key",
+        "mark": "21",
+        "is_visible": true
+      },
+      {
+        "id": "C",
+        "kind": "assignment_log",
+        "mark": "12 -> 21",
+        "is_visible": true
+      },
+      {
+        "id": "D",
+        "kind": "letter",
+        "mark": "postal_letter",
+        "is_visible": true
+      },
+      {
+        "id": "E",
+        "kind": "map",
+        "mark": "city_map",
+        "is_visible": true
+      }
+    ],
+    "deduction_requires": [
+      "A",
+      "B",
+      "C"
+    ],
+    "can_conclude": [
+      "tag_replaced",
+      "assignment_changed"
+    ],
+    "cannot_conclude": [
+      "nora_is_culprit",
+      "intent_proven"
+    ],
+    "local_resolution": true,
+    "ends_universe": false
+  },
+  "game": {
+    "route_variants": [
+      "observer",
+      "interviewer",
+      "decipherer"
+    ],
+    "misses_do_not_block_story": true,
+    "memory_is_practice_not_assessment": true,
+    "rank_separate_from_language_level": true,
+    "badges_nonofficial": true,
+    "never_start_sound_automatically": true,
+    "static_cloud_only": true
+  }
+}
