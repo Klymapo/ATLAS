@@ -10,7 +10,7 @@
 2. Autorizar GitHub y seleccionar **Klymapo/ATLAS**, rama **main**.
 3. Nombre del Worker: `atlas-archivo` (igual que el archivo Wrangler). Si Cloudflare asigna otro nombre, actualizar Wrangler antes de desplegar.
 4. Root path: `/`.
-5. Build command: `python3 -m venv .atlas-build-env && .atlas-build-env/bin/pip install -r requirements.txt && .atlas-build-env/bin/python -m tools.build_site --root . --output dist`. El entorno temporal se crea **en el builder cloud**, nunca en tu laptop y nunca entra a `dist/`. Cloudflare dispone de Python en su imagen de construcción.
+5. **Build command (obligatorio):** `python3 -m tools.build_site --root . --output dist`. Cloudflare ya instala automáticamente `requirements.txt` en el builder de este proyecto (confirmado en el log del 11 de octubre de 2026), por lo que el comando debe generar `dist/` directamente. Si la instalación automática deja de funcionar, configurar explícitamente la instalación de dependencias antes del build.
 6. Deploy command: `npx wrangler deploy`.
 7. Activar previews de PR para revisar cambios si está disponible. Producción debe usar solo `main`.
 8. Comprobar la URL real `*.workers.dev` que Cloudflare devuelva. **No inventar ni presuponer URL**.
@@ -32,3 +32,19 @@ Fuentes:
 - Workers Static Assets https://developers.cloudflare.com/workers/static-assets/
 - Workers GitHub Integration https://developers.cloudflare.com/workers/ci-cd/builds/git-integration/github-integration/
 - Workers Builds image https://developers.cloudflare.com/workers/ci-cd/builds/build-image/
+
+## Solución al error «assets.directory ... /repo/dist does not exist»
+
+En los logs de Cloudflare del 2026-10-11 el entorno instaló `bun`, Pillow y CairoSVG, **pero pasó directamente a** `npx wrangler deploy`. No hubo paso `Build command`: `dist/` no existía. Esto no exige cambiar `wrangler.jsonc` ni exponer el código fuente.
+
+- Dentro de **Workers & Pages → atlas-archivo → Settings → Build** establecer exactamente:
+  - **Build command:** `python3 -m tools.build_site --root . --output dist`
+  - **Deploy command:** `npx wrangler deploy`
+  - **Root directory:** raíz del repositorio `/`.
+- Guardar y elegir **Retry deployment**; las configuraciones de build actualizadas se aplican al reintentar la compilación.
+- En el log exitoso debe verse el comando de build, el JSON `{"result": "DEMO_ONLY", ...}` generado por el constructor y solo después Wrangler subiendo los assets.
+- Si el nombre del Worker en Cloudflare no coincide con `atlas-archivo` en `wrangler.jsonc`, corregirlo antes de intentar publicar.
+
+**Importante:** Cloudflare Workers Builds no toma el *Build command* de la configuración Custom Builds de Wrangler. El campo obligatorio se establece en el panel de Cloudflare; cambiar solamente el archivo de GitHub no puede reparar un proyecto cuyo Build command está vacío.
+
+Fuente oficial: https://developers.cloudflare.com/workers/ci-cd/builds/configuration/ 

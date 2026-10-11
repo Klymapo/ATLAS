@@ -1,5 +1,9 @@
 // Cloudflare Workers static-only deployment: never point at the repo root.
 // The Python builder creates dist/ from an allowlist and copies SVG candidates unchanged.
+// Cloudflare Dashboard > Settings > Build MUST run:
+// python3 -m tools.build_site --root . --output dist
+// BEFORE its Deploy command `npx wrangler deploy`.
+// Workers Builds does not use Wrangler Custom Builds as its Git build command.
 {
   "name": "atlas-archivo",
   "compatibility_date": "2026-10-11",
