@@ -32,3 +32,8 @@ python -m atlas.gate --root .
 Resultados: `reports/atlas.json` y `reports/atlas.md`, publicados como artifact en GitHub Actions.
 
 **Límites:** un test automático no certifica anatomía chibi, naturalidad nativa, eficacia educativa o derechos de audio. No hay servicios comerciales, GPU ni dependencias locales requeridas.
+## Diseño visual 0.2 (propuestas, sin aprobación)
+
+Los cinco SVG están en [candidates/visual-pack-v02](candidates/visual-pack-v02/README.md). La CI comprueba que no se salgan de la paleta, que no incluyan recursos externos y que las declaraciones de revisión permanezcan en PENDING. La acción produce una **lámina de comparación PNG** como artifact de GitHub.
+
+Antes de promover estos bocetos como maestros oficiales, el usuario debe aprobar el diseño de personaje y la dirección artística. No se alterará el registro de masters ni el manifiesto de producción hasta entonces.
