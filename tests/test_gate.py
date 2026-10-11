@@ -49,6 +49,17 @@ class QualityTests(unittest.TestCase):
     def test_silhouette_drift_fails(self):
         self.master();self.icon("assets/a.png",shape="square")
         self.assertIn(("visual","FAIL"),self.result(self.item("assets/a.png")))
+    def test_same_silhouette_different_internal_colors_rejected(self):
+        self.master();self.icon("assets/a.png")
+        with Image.open(self.root/"assets/a.png") as image:
+            im=image.copy()
+        im.putdata([(255,255,255,p[3]) if p[3] else p for p in im.getdata()])
+        im.save(self.root/"assets/a.png")
+        self.assertIn(("visual","FAIL"),self.result(self.item("assets/a.png")))
+    def test_new_character_style_remains_pending_independent_review(self):
+        self.master();self.icon("assets/a.png",shape="square")
+        item=self.item("assets/a.png");item["comparison_mode"]="style"
+        self.assertIn(("visual-human","PENDING"),self.result(item))
     def test_self_approval_fails(self):
         self.master();self.icon("assets/a.png")
         (self.root/"evidence/a.txt").write_text("mock")
