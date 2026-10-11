@@ -6,7 +6,7 @@ from pathlib import Path
 from shutil import copyfile, rmtree
 
 ASSETS=("investigator.svg","nora-vale.svg","office.svg","props.svg","expressions.svg")
-FILES=("index.html","style.css","app.js","favicon.svg","data/demo-content.js")
+FILES=("index.html","style.css","app.js","practice.js","favicon.svg","data/demo-content.js")
 
 def build(root,destination):
     root=Path(root).resolve(); destination=Path(destination).resolve()

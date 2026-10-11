@@ -9,6 +9,7 @@
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./style.css">
   <script defer src="./data/demo-content.js"></script>
+  <script defer src="./practice.js"></script>
   <script defer src="./app.js"></script>
 </head>
 <body>
@@ -22,12 +23,13 @@
         <button type="button" class="nav-link" data-route="investigation"><span aria-hidden="true">◇</span> Investigar</button>
         <button type="button" class="nav-link" data-route="memory"><span aria-hidden="true">▦</span> Memoria</button>
         <button type="button" class="nav-link" data-route="deck"><span aria-hidden="true">▤</span> Fichas</button>
+        <button type="button" class="nav-link" data-route="practice"><span aria-hidden="true">✎</span> Práctica escrita</button>
         <button type="button" class="nav-link" data-route="progress"><span aria-hidden="true">◷</span> Progreso</button>
       </nav>
       <div class="rail-bottom">
         <label class="sound-control"><input id="sound-toggle" type="checkbox"><span>Sonidos suaves</span></label>
         <p>Enseñanza en <strong>español</strong><br>Pivote: <strong>English</strong><br>FR · DE · RU · JA</p>
-        <span class="mini-version">PROTOTIPO v0.4 · 100 % WEB</span>
+        <span class="mini-version">PROTOTIPO v0.8 · 100 % WEB</span>
       </div>
     </aside>
     <div class="workspace">
@@ -41,6 +43,7 @@
     <button type="button" data-route="investigation">◇ <span>Caso</span></button>
     <button type="button" data-route="memory">▦ <span>Memoria</span></button>
     <button type="button" data-route="deck">▤ <span>Fichas</span></button>
+    <button type="button" data-route="practice">✎ <span>Escribir</span></button>
     <button type="button" data-route="progress">◷ <span>Datos</span></button>
   </nav>
   <div class="toast" role="status" aria-live="polite" id="toast"></div>

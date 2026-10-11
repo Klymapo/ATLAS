@@ -16,6 +16,16 @@ class WebsiteTests(unittest.TestCase):
         code=(ROOT/"site/app.js").read_text(encoding="utf8")
         for token in ("introSeen","lessonCompleted","function preparation()","function introduction()","function exhibit(","data-speak-word"):
             self.assertIn(token,code)
+    def test_practice_is_live_and_noncertified(self):
+        markup=(ROOT/"site/index.html").read_text()
+        app=(ROOT/"site/app.js").read_text()
+        self.assertIn('src="./practice.js"',markup)
+        self.assertIn('data-route="practice"',markup)
+        self.assertIn('id="practice-form"',app)
+        self.assertIn('practiceAttempts',app)
+        self.assertIn('data-practice-lang',app)
+        self.assertIn('P.record(',app)
+        self.assertIn('"PENDING"',(ROOT/"site/practice.js").read_text())
     def test_concepts_and_languages(self):
         raw=(ROOT/"site/data/demo-content.js").read_text(encoding="utf8")
         info=json.loads(raw.removeprefix("window.ATLAS_DEMO = ").strip().removesuffix(";"))

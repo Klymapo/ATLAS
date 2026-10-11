@@ -65,7 +65,7 @@ La idea: ejecutar alrededor de las 03:00 (CDMX) una revisión en este orden:
 5. Pasar por lingüistas FR/DE/RU/JA, pedagogía, narrativa, comparación visual y tests. Un agente no se autoaprueba.
 6. Abrir PR; el Quality Gate y revisiones de contenidos determinarán qué entra al banco liberable.
 
-**IMPORTANTE:** aún no se pudo crear esa tarea periódica, pues ChatGPT devolvió límite de cinco tareas activas. No se cancelaron tareas existentes. Si se libera una tarea activa y se programa, el trabajo solo se puede garantizar dentro de los permisos y herramientas disponibles en la ejecución futura.
+**Actualización del 11 de octubre de 2026:** se creó una tarea periódica nocturna «ATLAS: revisión nocturna», con horario flexible próximo a las 03:00, hora CDMX. Puede revisar fuentes disponibles y preparar borradores/PR, pero no puede leer localStorage del teléfono ni garantizar creación automática de contenido verificado cada noche.
 
 Los GitHub Actions programados pueden sufrir retrasos y desactivarse si el repositorio público queda sin actividad prolongada. No confiar en un cron como único modo de liberar historia a un jugador rápido.
 
@@ -74,7 +74,7 @@ Los GitHub Actions programados pueden sufrir retrasos y desactivarse si el repos
 - Regresiones con Node: tests/continuous_learning.test.mjs
 - Contrato de objetivos: specs/continuous-learning-v07.json
 - CI ampliada para ejecutar pruebas del motor con GitHub Actions.
-- **No incorpora pantallas nuevas al juego público**. No genera de manera automática contenido lingüístico ni escenas. Esta es la base reutilizable para integrar en el siguiente hito.
+- El motor `engine/continuous_learning.mjs` continúa como motor estricto de contenido APROBADO y gates. La web v0.8 incorpora por separado `site/practice.js` para ejercicios de recuperación **solo DEMO**, sin otorgar certificaciones y sin habilitar contenido no aprobado; ambos deben converger cuando existan bancos auditados.
 
 ## Bibliografía
 - L2 spaced practice, meta-análisis (2022): https://doi.org/10.1111/lang.12479

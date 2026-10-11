@@ -1,6 +1,6 @@
 # ATLAS — El Archivo de las Cuatro Voces
 
-Infraestructura de control de calidad **100 % nube, coste de software 0** para una aventura detectivesca chibi de aprendizaje multilingüe.
+Infraestructura de control de calidad **100 % nube, coste de software 0** para una aventura detectivesca vectorial minimalista de aprendizaje multilingüe.
 
 - Interfaz y explicaciones: **español**
 - Idioma pivote: **inglés**
@@ -56,3 +56,8 @@ Sitio en `site/`: oficina detectivesca, pistas, cartas de memoria, deducción fi
 4. Para probar en nube sin publicar, abrir Codespaces y ejecutar `python -m tools.build_site` y `python -m http.server 4173 --directory dist`, compartiendo el puerto únicamente cuando se desee.
 
 Dependencias de juego: HTML/CSS/JS nativos y SVG reutilizados. Herramientas de QA: Python, Pillow, CairoSVG, Node y Playwright, ejecutadas en GitHub Actions gratuitos para repositorios públicos, sujetos a condiciones de GitHub.
+
+## ATLAS v0.8 — escritura y despliegue continuo
+La web incluye una **práctica escrita de cuatro palabras en cuatro idiomas**, con género/artículo FR/DE, ayudas explícitas y resultados en localStorage. Es material demo NO certificado y no afirma retención duradera. Motor independiente y ampliable por datos: `site/practice.js`.
+
+Para hospedar también en Cloudflare Workers con el mismo método de Pokémon Infinite, conectar repo GitHub y compilar `dist/` según [`docs/CLOUDFLARE.md`](docs/CLOUDFLARE.md). **No se ha activado Cloudflare todavía; GitHub Pages continúa como hosting confirmado.**
