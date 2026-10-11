@@ -6,7 +6,7 @@ from pathlib import Path
 from shutil import copyfile, rmtree
 
 ASSETS=("investigator.svg","nora-vale.svg","office.svg","props.svg","expressions.svg")
-FILES=("index.html","style.css","app.js","practice.js","favicon.svg","data/demo-content.js")
+FILES=("index.html","style.css","app.js","practice.js","pwa.js","sw.js","manifest.webmanifest","favicon.svg","data/demo-content.js","data/block1.js")
 
 def build(root,destination):
     root=Path(root).resolve(); destination=Path(destination).resolve()
@@ -36,6 +36,17 @@ def build(root,destination):
         copyfile(original,target)
         if original.read_bytes()!=target.read_bytes():raise ValueError("Source asset modified")
         sha["assets/"+name]=hashlib.sha256(target.read_bytes()).hexdigest()
+    # PWA icons are generated from our own vector favicon in the temporary cloud build.
+    import cairosvg
+    from PIL import Image
+    from io import BytesIO
+    for px in (192,512):
+        png=cairosvg.svg2png(bytestring=(root/"site/favicon.svg").read_bytes(),
+                            output_width=px,output_height=px)
+        im=Image.open(BytesIO(png)).convert("RGBA")
+        target=destination/f"icon-{px}.png"
+        im.save(target,format="PNG",optimize=True)
+        sha[target.name]=hashlib.sha256(target.read_bytes()).hexdigest()
     (destination/"asset-manifest.json").write_text(json.dumps({"status":"DEMO_ONLY","certification":"PENDING","assets_sha256":sha},indent=2),encoding="utf8")
     return {"result":"DEMO_ONLY","files":len(sha)+1,"path":str(destination)}
 
