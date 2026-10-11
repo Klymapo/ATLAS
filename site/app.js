@@ -255,7 +255,7 @@
     '<section class="card padded"><h2>Todavía hay una contradicción por resolver</h2><p class="muted">Revisa el escenario y las tarjetas hasta reunir todas las pruebas.</p><button class="button" data-route="investigation">Volver al expediente</button></section>')+
     '<div class="actions"><button class="button" data-route="practice">Práctica escrita por idioma</button></div>'+
     '<div class="grid-2" style="margin-top:20px"><section class="card padded"><span class="eyebrow">DESCARGAS</span><h2>Material para estudiar</h2><p class="muted">Descarga las palabras para una hoja de cálculo o imprime tarjetas y una hoja de ejercicios.</p><div class="actions"><button class="button outline" data-action="download-vocab">Vocabulario CSV</button><button class="button outline" data-action="print-cards">Tarjetas PDF / imprimir</button></div></section>'+
-    '<section class="card padded"><span class="eyebrow">DATOS Y PRIVACIDAD</span><h2>Progreso portable</h2><p class="muted">Sin cuentas ni nube de datos: el guardado local no sincroniza entre teléfonos y computadoras.</p><div class="actions"><button class="button outline" data-action="export-progress">Exportar progreso JSON</button><button class="button secondary" data-action="reset-progress">Reiniciar progreso</button></div></section></div>'+footnote();
+    '<section class="card padded"><span class="eyebrow">DATOS Y PRIVACIDAD</span><h2>Progreso portable</h2><p class="muted">Sin cuentas ni nube de datos: el guardado local no sincroniza entre teléfonos y computadoras.</p><div class="actions"><button class="button outline" data-action="export-progress">Exportar progreso JSON</button><button class="button outline" data-action="import-progress">Importar progreso JSON</button><button class="button secondary" data-action="reset-progress">Reiniciar progreso</button><input id="import-progress-file" type="file" accept=".json,application/json" hidden aria-label="Seleccionar archivo JSON para importar"></div></section></div>'+footnote();
   }
   function render() {
     byId("breadcrumb-current").textContent=routes[route];
@@ -364,6 +364,7 @@
     if(action==="download-vocab")exportCsv();
     if(action==="print-cards")printCards();
     if(action==="export-progress")exportProgress();
+    if(action==="import-progress")byId("import-progress-file")?.click();
     if(action==="restart-memory"){
       if(window.confirm("¿Quieres reiniciar las parejas de memoria? No perderás las pistas ni el caso cerrado.")){
         state.matched=[];state.turns=0;deck=shuffled(pairs);selection=[];locked=false;persist();chirp();render();
@@ -374,6 +375,33 @@
         state=initial();deck=shuffled(pairs);selection=[];locked=false;activeClue=null;answerId=null;flashIndex=0;flipped=false;introStep=0;lessonStep=0;practiceIndex=0;practiceFeedback=null;practiceHintUsed=false;persist();navigate("office");notify("Progreso de demostración reiniciado.");
       }
     }
+  });
+  document.addEventListener("change",async(event)=>{
+    if(event.target?.id!=="import-progress-file")return;
+    const input=event.target;
+    const file=input.files?.[0]; input.value="";
+    if(!file)return;
+    if(file.size>1000000){notify("El archivo es demasiado grande (máximo 1 MB).");return;}
+    try{
+      const parsed=JSON.parse(await file.text());
+      if(parsed?.schema_version!==1||!parsed.data||
+         !Array.isArray(parsed.data.visited)||!Array.isArray(parsed.data.matched))
+        throw new Error("El archivo no tiene un formato de progreso ATLAS válido.");
+      if(!window.confirm("¿Reemplazar el progreso de este navegador con el archivo importado? Exporta primero una copia de seguridad si quieres conservar el actual."))
+        return;
+      const previous=localStorage.getItem(KEY);
+      try{
+        localStorage.setItem(KEY,JSON.stringify(parsed.data));
+        state=load();
+      }catch(e){
+        if(previous!==null)localStorage.setItem(KEY,previous);
+        else localStorage.removeItem(KEY);
+        throw e;
+      }
+      selection=[];locked=false;practiceFeedback=null;practiceHintUsed=false;
+      navigate("progress");
+      notify("Progreso importado y validado. Conserva una copia del JSON.");
+    }catch(e){notify("No se pudo importar: "+String(e.message||"archivo inválido").slice(0,140));}
   });
   document.addEventListener("submit",(event)=>{
     if(event.target.id!=="practice-form")return;

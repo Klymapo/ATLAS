@@ -17,6 +17,11 @@
 
 El Static Assets Worker permite servir assets sin ejecutar un Worker para cada solicitud. Las solicitudes estáticas y el almacenamiento de assets se indican gratuitos sin tope de solicitudes estáticas; siguen existiendo límites de plataforma/cuenta. No añadir base de datos, IA o servicios de pago.
 
+## Migración segura desde GitHub Pages
+GitHub Pages (`klymapo.github.io`) y Cloudflare (`*.workers.dev`) son **orígenes distintos**: sus datos de localStorage no se comparten. En el sitio antiguo entra a **Progreso → Exportar progreso JSON**, guarda el archivo en tu teléfono; luego abre la nueva versión en Cloudflare, entra a **Progreso → Importar progreso JSON** y selecciona el archivo. La importación reemplaza el estado local **solo después de tu confirmación**, lo valida y conserva la estructura de partidas antiguas. No utilices Cloudflare como dirección principal hasta probar esa migración con una copia.
+
+Nunca publicar los JSON personales en un repositorio público.
+
 ## Criterio para publicar
 GitHub requiere PR y verificación de calidad para actualizar main. Cloudflare despliega al detectar un cambio en main. Una acción nocturna solo genera rama/PR; no publica contenido sin revisión y QA. Para revisar si el sitio se sirve, observar Logs/Deployments en Cloudflare. No prometer que GitHub puede leer datos locales de navegador.
 
