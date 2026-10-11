@@ -504,6 +504,7 @@
     if(action==="story-next"){
       const st=state.block1;
       const current=B.scenes[st.stage];
+      const hasWrittenRecall=state.practiceAttempts.some(e=>e.correct===true&&e.hint_used===false);
       const required=current.id==="sobre"?["fecha","matasellos"].every(x=>st.inspected.includes(x))&&!!st.observed:
        current.id==="puerto"?["placa","plano"].every(x=>st.inspected.includes(x)):
        current.id==="nora"?st.asked.includes("quien")&&st.asked.includes("porqué"):
