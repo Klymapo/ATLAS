@@ -32,6 +32,18 @@ class CandidateVisualTests(unittest.TestCase):
         self.assertGreaterEqual(manifest["character_spec"]["min_head_units"],6.0)
         self.assertIn("anime",manifest["prohibited_styles"])
         self.assertIn("chibi",manifest["prohibited_styles"])
+    def test_character_heads_are_scaled_to_adult_proportions(self):
+        base=Path(__file__).resolve().parents[1]/"candidates/visual-pack-v02"
+        for filename in ("investigator.svg","nora-vale.svg"):
+            text=(base/filename).read_text()
+            self.assertIn('transform="translate(240 130) scale(.72) translate(-240 -130)"',text)
+            self.assertIn('<ellipse cx="240" cy="130" rx="42" ry="55"',text)
+    def test_scene_skyline_stays_inside_window(self):
+        base=Path(__file__).resolve().parents[1]/"candidates/visual-pack-v02/office.svg"
+        text=base.read_text()
+        self.assertIn('transform="translate(688 117)"',text)
+        self.assertNotIn('transform="translate(688 160)"',text)
+        self.assertIn('width="80" height="111"',text)
     def test_pack_human_review_is_not_approved(self):
         manifest=json.loads((Path(__file__).resolve().parents[1]/"candidates/visual-pack-v02/manifest.json").read_text())
         self.assertEqual(manifest["state"],"awaiting-art-director-approval")

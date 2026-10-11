@@ -16,7 +16,7 @@
 <circle cx="253" cy="343" r="5" fill="#182635" stroke="none"/>
 <circle cx="253" cy="397" r="5" fill="#182635" stroke="none"/>
 <path d="M219 179 L222 224 L260 224 L262 178 Z" fill="#F0E6D5"/>
-<ellipse cx="240" cy="130" rx="42" ry="55" fill="#F0E6D5"/>
+<g transform="translate(240 130) scale(.72) translate(-240 -130)"><ellipse cx="240" cy="130" rx="42" ry="55" fill="#F0E6D5"/>
 <path d="M198 116 Q194 60 238 67 Q286 62 283 118 Q264 101 251 94 Q228 119 198 116Z" fill="#182635"/>
 <path d="M201 114 L195 161 Q188 180 211 191 L205 152Z" fill="#182635"/>
 <path d="M280 115 L291 163 Q294 182 274 189 L274 155Z" fill="#182635"/>
@@ -28,4 +28,4 @@
 <path d="M303 275 L348 284 L350 394 L297 390Z" fill="#8F4952"/>
 <path d="M303 303 L348 310" fill="none" stroke-width="3"/>
 <path d="M303 326 L347 331" fill="none" stroke-width="3"/>
-<path d="M310 282 Q326 246 341 259" fill="none" stroke-width="7"/></g></svg>
+<path d="M310 282 Q326 246 341 259" fill="none" stroke-width="7"/></g></g></svg>
