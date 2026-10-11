@@ -23,3 +23,7 @@
  .print-card{border:1px solid #888;padding:6mm;margin:0 0 6mm;break-inside:avoid;page-break-inside:avoid}
  .print-card h2{font-size:16pt;margin-bottom:4mm}
 }
+
+/* Primary invitation must not disappear into the navy hero. */
+.hero .button:not(.outline){background:var(--gold);color:var(--ink);border-color:var(--gold)}
+.hero .button:not(.outline):hover{background:#efd8aa;color:var(--ink)}

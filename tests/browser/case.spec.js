@@ -6,6 +6,9 @@ test("Spanish detective home, English pivot, unverified banner",async({page},tes
  await expect(page.getByText("MATERIAL DEMO · SIN CERTIFICAR")).toBeVisible();
  await expect(page.getByText(/Idioma común: English/)).toBeVisible();
  expect((await page.request.get("/assets/office.svg")).status()).toBe(200);
+ const ctaColor=await page.locator(".hero .button:not(.outline)").first().evaluate(el=>getComputedStyle(el).backgroundColor);
+ expect(ctaColor).toBe("rgb(185, 149, 88)");
+
  fs.mkdirSync("reports/screenshots",{recursive:true});
  await page.screenshot({path:"reports/screenshots/office-"+testInfo.project.name+".png",fullPage:true});
 });
