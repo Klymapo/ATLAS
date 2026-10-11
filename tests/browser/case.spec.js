@@ -131,3 +131,30 @@ test("hinted answers are not counted as independent recovery",async({page})=>{
   await expect(page.getByText("1 prácticas con pistas")).toBeVisible();
   await expect(page.getByText("0 aciertos sin ayuda")).toBeVisible();
 });
+
+test("a saved GitHub Pages progress JSON can be imported on another origin without a server",async({page})=>{
+  await page.goto("/");
+  await nav(page,"progress");
+  const archive={schema_version:1,date:"2026-10-11T00:00:00.000Z",status:"LOCAL_DEMO_PROGRESS",
+    data:{visited:["shelf","board","desk"],matched:["p1","p2","p3","p4"],
+    turns:4,attempts:1,solved:true,lessonCompleted:true,introSeen:true,sound:false,lessonViewed:["key","book","letter","map"],
+    practiceAttempts:[]}};
+  page.on("dialog",dialog=>dialog.accept());
+  await page.locator("#import-progress-file").setInputFiles({
+    name:"ATLAS_progreso_demo.json",mimeType:"application/json",
+    buffer:Buffer.from(JSON.stringify(archive))
+  });
+  await expect(page.getByRole("heading",{name:"Caso cerrado. Archivo abierto."})).toBeVisible();
+  await page.reload();
+  await nav(page,"progress");
+  await expect(page.getByRole("heading",{name:"Caso cerrado. Archivo abierto."})).toBeVisible();
+});
+test("invalid progress JSON is rejected without overwriting game state",async({page})=>{
+  await page.goto("/");
+  await nav(page,"progress");
+  await page.locator("#import-progress-file").setInputFiles({
+    name:"invalid.json",mimeType:"application/json",buffer:Buffer.from('{"schema_version":1,"data":{"visited":"hacked"}}')
+  });
+  await expect(page.locator("#toast")).toContainText("No se pudo importar");
+  await expect(page.getByText("Todavía hay una contradicción por resolver")).toBeVisible();
+});
