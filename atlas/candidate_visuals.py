@@ -53,8 +53,6 @@ def verify_svg(raw: bytes) -> list[str]:
                 errors.append(f"Referencia externa o ejecución: {attrname}")
             if attrname in ("stroke","fill") and value not in PALETTE | {"none"}:
                 errors.append(f"Color fuera de paleta: {value}")
-        if tag=="g" and node is root[1] if len(root)>1 else False:
-            pass
     titles = [n for n in root if n.tag.rsplit("}",1)[-1]=="title" and (n.text or "").strip()]
     if not titles:
         errors.append("Falta título de imagen")
@@ -67,11 +65,18 @@ def audit(root: Path, render: bool = True) -> dict:
     errors=[]
     if m.get("state")!="awaiting-art-director-approval":
         errors.append("La propuesta debe permanecer PENDING")
-    if m.get("style_id")!="chibi-noir-fixed-palette-v02":
+    if m.get("style_id")!="minimal-vector-noir-v1":
         errors.append("ID de estilo incorrecto")
     palette=m.get("palette",{})
     if set(palette.values()) != PALETTE - {"#000000","#FFFFFF"} | {"#000000","#FFFFFF"}:
         errors.append("Paleta maestra modificada")
+    spec=m.get("character_spec",{})
+    if not (6.0 <= spec.get("min_head_units",0) < spec.get("max_head_units",0) <= 8.0):
+        errors.append("Proporciones no realistas o sin especificar (6–8 cabezas)")
+    if spec.get("shading") != "flat fills, no gradients":
+        errors.append("Sombras fuera de las reglas vectoriales")
+    if not {"anime","manga","chibi","kawaii"}.issubset(set(m.get("prohibited_styles",[]))):
+        errors.append("Faltan exclusiones explícitas de anime/chibi")
     expected={"investigator.svg","nora-vale.svg","office.svg","props.svg","expressions.svg"}
     gallery=m.get("gallery",[])
     paths=[]

@@ -26,6 +26,12 @@ class CandidateVisualTests(unittest.TestCase):
         self.assertEqual(len(PALETTE),7)
         self.assertIn("#182635",PALETTE)
         self.assertNotIn("#FF00FF",PALETTE)
+    def test_minimal_non_anime_direction_is_fixed(self):
+        manifest=json.loads((Path(__file__).resolve().parents[1]/"candidates/visual-pack-v02/manifest.json").read_text())
+        self.assertEqual(manifest["style_id"],"minimal-vector-noir-v1")
+        self.assertGreaterEqual(manifest["character_spec"]["min_head_units"],6.0)
+        self.assertIn("anime",manifest["prohibited_styles"])
+        self.assertIn("chibi",manifest["prohibited_styles"])
     def test_pack_human_review_is_not_approved(self):
         manifest=json.loads((Path(__file__).resolve().parents[1]/"candidates/visual-pack-v02/manifest.json").read_text())
         self.assertEqual(manifest["state"],"awaiting-art-director-approval")
