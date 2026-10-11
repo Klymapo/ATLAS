@@ -1,0 +1,7 @@
+// Cloudflare Workers static-only deployment: never point at the repo root.
+// The Python builder creates dist/ from an allowlist and copies SVG candidates unchanged.
+{
+  "name": "atlas-archivo",
+  "compatibility_date": "2026-10-11",
+  "assets": { "directory": "./dist" }
+}
