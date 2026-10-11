@@ -1,0 +1,26 @@
+{
+  "version": "0.1.1",
+  "palette": [
+    "#182635",
+    "#F0E6D5",
+    "#B99558",
+    "#8F4952",
+    "#508B83",
+    "#000000",
+    "#FFFFFF"
+  ],
+  "ui_language": "es",
+  "pivot_language": "en",
+  "study_languages": [
+    "fr",
+    "de",
+    "ru",
+    "ja"
+  ],
+  "narrative": "endless",
+  "visual_identity_iou_min": 0.94,
+  "visual_palette_min": 0.98,
+  "minimum_visual_score": 96,
+  "allow_paid_apis": false,
+  "publication_rule": "fail_closed"
+}
