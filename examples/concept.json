@@ -1,0 +1,43 @@
+{
+  "id": "key-001",
+  "kind": "concept",
+  "sense_es": "llave que abre una cerradura",
+  "english": {
+    "headword": "key",
+    "usage": "physical object"
+  },
+  "languages": {
+    "fr": {
+      "word": "clé",
+      "reading": "clé",
+      "example": "J'ai une clé.",
+      "sources": [
+        "https://www.larousse.fr/"
+      ]
+    },
+    "de": {
+      "word": "Schlüssel",
+      "reading": "Schlüssel",
+      "example": "Ich habe einen Schlüssel.",
+      "sources": [
+        "https://www.duden.de/"
+      ]
+    },
+    "ru": {
+      "word": "ключ",
+      "reading": "klyuch",
+      "example": "У меня есть ключ.",
+      "sources": [
+        "https://gramota.ru/"
+      ]
+    },
+    "ja": {
+      "word": "鍵",
+      "reading": "かぎ",
+      "example": "鍵があります。",
+      "sources": [
+        "https://www.jisho.org/"
+      ]
+    }
+  }
+}

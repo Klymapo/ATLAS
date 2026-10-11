@@ -1,0 +1,13 @@
+{
+  "id": "case-001",
+  "title": "La habitación equivocada",
+  "premise": "Registro alterado en París",
+  "solution": "Se cambió deliberadamente el número de habitación",
+  "clues": [
+    "Una llave",
+    "Una reserva contradictoria"
+  ],
+  "fairness_test": "La pista aparece antes de la deducción",
+  "continuation_hook": "Llega un nuevo expediente",
+  "ends_game": false
+}

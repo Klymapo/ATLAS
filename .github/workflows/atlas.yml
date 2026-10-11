@@ -1,0 +1,33 @@
+name: ATLAS Quality Gate
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  atlas-quality-gate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - name: Install offline validator dependencies
+        run: python -m pip install -r requirements.txt
+      - name: Rejection unit tests
+        run: python -m unittest discover -s tests -v
+      - name: Audit publication manifest
+        run: python -m atlas.gate --root .
+      - name: Attach evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: atlas-quality-report
+          path: reports/
+          retention-days: 7
+          if-no-files-found: warn
