@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#182635">
+  <meta name="description" content="El Archivo de las Cuatro Voces: aventura detectivesca multilingüe con fichas y retos de memoria. Demo educativa.">
+  <title>El Archivo de las Cuatro Voces · Caso de demostración</title>
+  <link rel="icon" href="./favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./style.css">
+  <script defer src="./data/demo-content.js"></script>
+  <script defer src="./app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Saltar al contenido</a>
+  <div class="shell">
+    <aside class="rail" aria-label="Navegación principal">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">✦</span><div><strong>EL ARCHIVO</strong><small>de las Cuatro Voces</small></div></div>
+      <div class="rail-tag">Unidad especial de investigación lingüística</div>
+      <nav class="navigation" aria-label="Secciones del juego">
+        <button type="button" class="nav-link active" data-route="office"><span aria-hidden="true">⌂</span> Mi oficina</button>
+        <button type="button" class="nav-link" data-route="investigation"><span aria-hidden="true">◇</span> Investigar</button>
+        <button type="button" class="nav-link" data-route="memory"><span aria-hidden="true">▦</span> Memoria</button>
+        <button type="button" class="nav-link" data-route="deck"><span aria-hidden="true">▤</span> Fichas</button>
+        <button type="button" class="nav-link" data-route="progress"><span aria-hidden="true">◷</span> Progreso</button>
+      </nav>
+      <div class="rail-bottom">
+        <label class="sound-control"><input id="sound-toggle" type="checkbox"><span>Sonidos suaves</span></label>
+        <p>Enseñanza en <strong>español</strong><br>Pivote: <strong>English</strong><br>FR · DE · RU · JA</p>
+        <span class="mini-version">PROTOTIPO v0.3 · 100 % WEB</span>
+      </div>
+    </aside>
+    <div class="workspace">
+      <header class="topbar"><div class="breadcrumb">ARCHIVO CENTRAL <span aria-hidden="true">/</span> <span id="breadcrumb-current">MI OFICINA</span></div><div class="header-tools"><span class="build-note">MATERIAL DEMO · SIN CERTIFICAR</span><span class="user-token">INVESTIGADOR 001</span></div></header>
+      <main id="main-content" tabindex="-1"><div class="loading">Abriendo expediente…</div></main>
+      <footer class="site-footer"><span>El Archivo nunca cierra.</span><span>Sin cuentas · Avance guardado en este navegador</span></footer>
+    </div>
+  </div>
+  <nav class="mobile-nav" aria-label="Navegación móvil">
+    <button type="button" data-route="office">⌂ <span>Oficina</span></button>
+    <button type="button" data-route="investigation">◇ <span>Caso</span></button>
+    <button type="button" data-route="memory">▦ <span>Memoria</span></button>
+    <button type="button" data-route="deck">▤ <span>Fichas</span></button>
+    <button type="button" data-route="progress">◷ <span>Datos</span></button>
+  </nav>
+  <div class="toast" role="status" aria-live="polite" id="toast"></div>
+</body>
+</html>
