@@ -1,5 +1,5 @@
 /* ATLAS PWA offline shell. Scope-local: works at workers.dev root and /ATLAS/. */
-const CACHE="atlas-shell-v09-20261011";
+const CACHE="atlas-shell-v09-02";
 const ASSETS=[
  "./","./index.html","./style.css","./app.js","./practice.js","./pwa.js",
  "./manifest.webmanifest","./favicon.svg","./icon-192.png","./icon-512.png",
@@ -26,11 +26,13 @@ self.addEventListener("fetch",event=>{
   }).catch(()=>caches.match("./index.html")));
   return;
  }
- event.respondWith(caches.match(event.request).then(cached=>{
-  if(cached)return cached;
-  return fetch(event.request).then(response=>{
-    if(response.ok){const copy=response.clone();caches.open(CACHE).then(c=>c.put(event.request,copy)).catch(()=>{});}
-    return response;
-  });
+ // Online-first means installed users see new lessons after each verified release.
+ // Cache remains as an offline fallback, never a permanent stale curriculum.
+ event.respondWith(fetch(event.request).then(response=>{
+   if(response.ok){const copy=response.clone();caches.open(CACHE).then(c=>c.put(event.request,copy)).catch(()=>{});}
+   return response;
+ }).catch(async()=>{
+   const cached=await caches.match(event.request);
+   return cached||Response.error();
  }));
 });
