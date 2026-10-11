@@ -413,6 +413,7 @@
     const sound=byId("sound-toggle");if(sound)sound.checked=state.sound;
     if(route==="office")office(); else if(route==="story")story(); else if(route==="intro")introduction(); else if(route==="learn")preparation();
     else if(route==="investigation")investigation();else if(route==="memory")memory();else if(route==="deck")deckView();else if(route==="practice")practice();else progress();
+    window.ATLAS_INSTALL?.refresh?.();
   }
   function navigate(to){if(!routes[to])return;
     if(["investigation","memory","practice"].includes(to)&&!state.introSeen)to="intro";

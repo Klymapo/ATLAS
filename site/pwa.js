@@ -17,6 +17,7 @@
  }
  window.ATLAS_INSTALL={
   isInstalled:installed,
+  refresh:paint,
   async request(){
    if(installed())return {status:"already-installed"};
    if(waitingPrompt){
