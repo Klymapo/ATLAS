@@ -1,12 +1,15 @@
+const fs=require("node:fs");
 const {test,expect}=require("@playwright/test");
-test("Spanish detective home, English pivot, unverified banner",async({page})=>{
+test("Spanish detective home, English pivot, unverified banner",async({page},testInfo)=>{
  await page.goto("/");
  await expect(page.getByRole("heading",{name:/Hay una carta/})).toBeVisible();
  await expect(page.getByText("MATERIAL DEMO · SIN CERTIFICAR")).toBeVisible();
  await expect(page.getByText(/Idioma común: English/)).toBeVisible();
  expect((await page.request.get("/assets/office.svg")).status()).toBe(200);
+ fs.mkdirSync("reports/screenshots",{recursive:true});
+ await page.screenshot({path:"reports/screenshots/office-"+testInfo.project.name+".png",fullPage:true});
 });
-test("case completion and persistent progress after reload",async({page})=>{
+test("case completion and persistent progress after reload",async({page},testInfo)=>{
  await page.goto("/");
  await page.locator(".hero [data-route=investigation]").click();
  for(const x of ["board","desk","shelf"])await page.locator('[data-clue="'+x+'"]').click();
@@ -22,6 +25,8 @@ test("case completion and persistent progress after reload",async({page})=>{
  await page.getByRole("button",{name:/Resolver expediente/}).click();
  await page.locator('[data-answer="a"]').click();
  await expect(page.getByText("Deducción correcta.")).toBeVisible();
+ fs.mkdirSync("reports/screenshots",{recursive:true});
+ await page.screenshot({path:"reports/screenshots/resolved-"+testInfo.project.name+".png",fullPage:true});
  await page.reload();
  await page.locator(".hero [data-route=investigation]").click();
  await expect(page.getByText("Una contradicción resuelta")).toBeVisible();
