@@ -120,13 +120,26 @@ class Atlas:
                 inter = sum(u and v for u,v in zip(alpha_a,alpha_b))
                 union = sum(u or v for u,v in zip(alpha_a,alpha_b))
                 iou = inter/max(1,union)
+                ratio_a = source.width / source.height
+                ratio_b = proposed.width / proposed.height
+                aspect_ok = abs(ratio_a-ratio_b) / ratio_a <= 0.02
+                src_pixels, dst_pixels = list(a.getdata()), list(b.getdata())
+                overlap = [(x,y) for x,y in zip(src_pixels,dst_pixels) if x[3] >= 128 and y[3] >= 128]
+                pixel_similarity = sum(max(abs(x[i]-y[i]) for i in range(3)) <= 30 for x,y in overlap) / max(1,len(overlap))
+                visual_score = 100*(0.30*iou + 0.25*float(aspect_ok) + 0.25*color_rate + 0.20*pixel_similarity)
                 if color_rate < self.policy["visual_palette_min"]:
                     raise ValueError(f"Paleta fuera de estándar: {color_rate:.3f}")
+                if not aspect_ok:
+                    raise ValueError("Relación de aspecto incompatible con el máster")
                 if mode == "identity" and iou < self.policy["visual_identity_iou_min"]:
                     raise ValueError(f"Silueta distinta del máster: {iou:.3f}")
+                if mode == "identity" and pixel_similarity < 0.94:
+                    raise ValueError(f"Detalles internos distintos del máster: {pixel_similarity:.3f}")
+                if mode == "identity" and visual_score < self.policy.get("minimum_visual_score",96):
+                    raise ValueError(f"Puntuación visual insuficiente: {visual_score:.1f}")
                 if mode == "identity" and (a.getchannel("A").getextrema() == (255,255) or b.getchannel("A").getextrema() == (255,255)):
                     raise ValueError("Falta transparencia de personaje/objeto")
-                self.log("visual", "PASS", f"Chequeo técnico {mode}: paleta {color_rate:.3f}, silueta {iou:.3f}. No certifica identidad artística", rel)
+                self.log("visual", "PASS", f"Chequeo técnico {mode}: paleta {color_rate:.3f}, silueta {iou:.3f}, coincidencia {pixel_similarity:.3f}, puntuación {visual_score:.1f}. No certifica identidad artística", rel)
         except (OSError, ValueError, KeyError, TypeError) as ex:
             self.log("visual", "FAIL", str(ex), rel)
         self.approval(item, "visual-human")
