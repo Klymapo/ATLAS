@@ -1,0 +1,57 @@
+{
+  "status": "DESIGN_PLUS_TESTED_STANDALONE_ENGINE_NOT_LIVE",
+  "version": "0.7.0",
+  "world": {
+    "never_ends": true,
+    "chapters_optional": true,
+    "story_feeds_from_skill_progress": true,
+    "fast_learners_release_preapproved_content_immediately": true
+  },
+  "learning": {
+    "interface": "es",
+    "pivot": "en",
+    "languages": [
+      "fr",
+      "de",
+      "ru",
+      "ja"
+    ],
+    "templates": [
+      "memory",
+      "recognition",
+      "guided_recall",
+      "independent_recall",
+      "grammar",
+      "sentence_cloze",
+      "context_transfer",
+      "listening_with_validated_audio"
+    ],
+    "mastery_never_from": [
+      "viewing",
+      "listening_only",
+      "matching_only"
+    ],
+    "separate_article_gender": "de-fr",
+    "delayed_reviews_for_badges": true
+  },
+  "nightly": {
+    "status": "NOT_SCHEDULED_TASK_LIMIT",
+    "estimate_local_hour": 3,
+    "review_progress_only_if_accessible": true,
+    "routine": [
+      "read_progress_if_shared",
+      "choose_review_or_story",
+      "write_candidate",
+      "validate_language_pedagogy_visual_story",
+      "test",
+      "create_pr_never_unreviewed_publish"
+    ]
+  },
+  "privacy": {
+    "progress_now": "localStorage_only",
+    "remote_access": false,
+    "consent_required": true,
+    "no_tokens_in_browser": true,
+    "no_personal_telemetry_in_public_repo": true
+  }
+}

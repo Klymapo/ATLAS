@@ -35,6 +35,8 @@ jobs:
           node-version: '20'
       - name: Check JavaScript syntax
         run: node --check site/app.js && node --check site/data/demo-content.js
+      - name: Validate reusable learning engine
+        run: node --test tests/continuous_learning.test.mjs
       - name: Install browser test runner
         run: npm install --no-audit --no-fund
       - name: Install headless Chromium
