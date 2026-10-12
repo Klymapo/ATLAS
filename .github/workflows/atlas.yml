@@ -6,6 +6,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: atlas-quality-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   atlas-quality-gate:
     runs-on: ubuntu-latest
