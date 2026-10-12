@@ -49,7 +49,8 @@
     }catch(e){return initial();}
   }
   let state=load(),route="office",activeClue=null,answerId=null,flashIndex=0,selectedLang="fr",flipped=false,introStep=0,lessonStep=0,
-      selection=[],locked=false,toastTimer=null,practiceIndex=0,practiceFeedback=null,practiceHintUsed=false;
+      selection=[],locked=false,toastTimer=null,practiceIndex=0,practiceFeedback=null,practiceHintUsed=false,
+      practiceReviewMode=false,practiceReviewCursor=0,practiceReviewId=null;
   const pairs=D.memoryPairs.flatMap((p)=>{
     const c=D.concepts.find((x)=>x.id===p.concept);
     return [{id:p.id+"-en",pair:p.id,face:c.en,tag:"EN · base"},
@@ -132,7 +133,8 @@
   function office(){
   const P=window.ATLAS_PRACTICE;
   const summaries=P?P.summary(state.practiceAttempts):{};
-  const stats=Object.entries(LANG).map(([id,x])=>({id,label:x.name,count:summaries[id]?.correct_independent||0,attempts:summaries[id]?.attempts||0}));
+  const stats=Object.entries(LANG).map(([id,x])=>({id,label:x.name,count:summaries[id]?.correct_independent||0,attempts:summaries[id]?.attempts||0,
+     due:P?P.reviewPlan(state.practiceAttempts,P.questions(D.concepts,id)).due.length:0}));
   const activeCase=!state.solved;
   const alias=state.block1.alias||"Investigador";
   const storyStep=state.block1.complete?"Bloque completado":`Escena ${state.block1.stage+1} de ${B?.scenes.length||6}`;
@@ -185,7 +187,7 @@
       ${stats.map(item=>`<button type="button" class="hub-lang-card" data-hub-language="${item.id}" aria-label="Practicar ${esc(item.label)}">
         <span class="hub-lang-code">${item.id.toUpperCase()}</span>
         <span class="hub-lang-name">${esc(item.label)}</span>
-        <strong>${item.count}</strong><small>aciertos sin ayuda</small>
+        <strong>${item.count}</strong><small>aciertos sin ayuda · ${item.due} repasos pendientes</small>
         <span class="hub-lang-arrow">↗</span>
       </button>`).join("")}
     </div>
@@ -342,11 +344,23 @@
     '<div class="actions"><button class="button outline" data-route="investigation">Volver a examinar</button>'+(state.solved?'<button class="button" data-route="progress">Ver caso cerrado →</button>':'')+'</div></section>'+footnote();
   }
 
+  function activePracticeQuestion(P){
+    const questions=P.questions(D.concepts,selectedLang);
+    if(practiceReviewMode){
+      const pinned=questions.find(q=>q.id===practiceReviewId);
+      if(pinned)return pinned;
+      const due=P.reviewPlan(state.practiceAttempts,questions).due;
+      if(due.length)return due[practiceReviewCursor%due.length].question;
+      practiceReviewMode=false;
+    }
+    return questions[practiceIndex%questions.length];
+  }
   function practice(){
     const P=window.ATLAS_PRACTICE;
     if(!P){root.innerHTML=toolbar("Práctica no disponible","El motor de recuperación no ha cargado.");return;}
     const questions=P.questions(D.concepts,selectedLang);
-    const q=questions[practiceIndex%questions.length];
+    const q=activePracticeQuestion(P);
+    const review=P.reviewPlan(state.practiceAttempts,questions);
     const score=P.summary(state.practiceAttempts)[selectedLang];
     const hint=practiceHintUsed?(q.needsArticle?
       'Pista: el artículo empieza por «'+esc(q.expected.split(" ")[0][0])+'».':
@@ -359,8 +373,13 @@
     root.innerHTML=toolbar("Práctica de recuperación","Escribe sin mirar las tarjetas. ATLAS registra aciertos, errores y ayudas por idioma, sin convertirlos automáticamente en nivel certificado.")+
       '<div class="language-panel" role="group" aria-label="Elegir idioma">'+Object.entries(LANG).map(([l,v])=>
       '<button class="lang-chip '+(l===selectedLang?"active":"")+'" data-practice-lang="'+l+'" aria-pressed="'+(l===selectedLang)+'">'+esc(v.name)+'</button>').join("")+'</div>'+
+      '<div class="practice-review-bar" role="status"><strong>'+review.due.length+' repasos pendientes</strong> en '+esc(LANG[selectedLang].name)+'. '+
+      (review.due.length?'<button type="button" class="button outline small" data-action="practice-due">Practicar pendientes →</button>':
+       review.next_due_at?'Próximo repaso programado: '+esc(new Date(review.next_due_at).toLocaleDateString("es-MX"))+'.':
+       'Todavía no hay repasos programados.')+
+      (practiceReviewMode?'<button type="button" class="button outline small" data-action="practice-all">Volver a todas las palabras</button>':'')+'</div>'+
       '<div class="practice-layout"><section class="card padded">'+
-      '<span class="eyebrow">ENGLISH → '+esc(LANG[selectedLang].name.toUpperCase())+' · PREGUNTA '+(practiceIndex%questions.length+1)+'/'+questions.length+'</span>'+
+      '<span class="eyebrow">ENGLISH → '+esc(LANG[selectedLang].name.toUpperCase())+' · PREGUNTA '+(questions.findIndex(x=>x.id===q.id)+1)+'/'+questions.length+'</span>'+
       '<p>En español: '+esc(q.spanish)+'</p><div class="practice-question">'+esc(q.prompt)+'</div>'+
       '<form id="practice-form" class="practice-form"><label for="practice-answer">Escribe la traducción'+(q.needsArticle?" con su artículo":"")+'</label>'+
       '<input id="practice-answer" name="answer" autocomplete="off" autocapitalize="off" spellcheck="false" required placeholder="'+
@@ -375,6 +394,7 @@
       '<div class="practice-stats"><div class="practice-stat"><b>'+score.attempts+'</b> respuestas registradas</div>'+
       '<div class="practice-stat"><b>'+score.correct_independent+'</b> aciertos sin ayuda</div>'+
       '<div class="practice-stat"><b>'+score.guided+'</b> prácticas con pistas</div>'+
+      '<div class="practice-stat"><b>'+review.due.length+'</b> repasos pendientes</div>'+
       '<div class="practice-stat"><b>0</b> logros lingüísticos certificados</div></div>'+
       '<div class="divider"></div><p class="muted">Una palabra escrita correctamente una vez no demuestra retención a largo plazo. Más adelante ATLAS la preguntará en frases y días diferentes.</p></aside></div>'+footnote();
   }
@@ -384,14 +404,15 @@
     const summary=P.summary(state.practiceAttempts);
     const now=new Date().toDateString();
     const today=state.practiceAttempts.filter(e=>new Date(e.at).toDateString()===now).length;
-    const latest=new Map();
-    state.practiceAttempts.forEach(e=>latest.set(e.id,e));
-    const due=[...latest.values()].filter(e=>e.due_at&&Date.parse(e.due_at)<=Date.now()).length;
+    const review=Object.fromEntries(Object.keys(LANG).map(lang=>
+      [lang,P.reviewPlan(state.practiceAttempts,P.questions(D.concepts,lang))]));
+    const due=Object.values(review).reduce((sum,plan)=>sum+plan.due.length,0);
     return '<section class="card padded" style="margin-top:18px"><span class="eyebrow">REGISTRO DE PRÁCTICA ESCRITA · DEMOSTRACIÓN</span>'+
       '<h2>Progreso diario por idioma</h2><p class="muted">Hoy: '+today+' intentos · '+due+' palabras listas para volver a practicar. Los aciertos son registros, no un porcentaje de fluidez.</p>'+
       '<div class="grid-2">'+Object.entries(LANG).map(([lang,meta])=>
       '<div class="practice-stat"><b>'+esc(meta.name)+'</b><p class="muted">Intentos: '+summary[lang].attempts+
-      ' · Sin ayuda: '+summary[lang].correct_independent+' · Con pistas: '+summary[lang].guided+'</p></div>').join("")+
+      ' · Sin ayuda: '+summary[lang].correct_independent+' · Con pistas: '+summary[lang].guided+
+       ' · Pendientes: '+review[lang].due.length+'</p></div>').join("")+
       '</div><div class="actions"><button class="button outline" data-route="practice">Hacer otro repaso</button></div></section>';
   }
   function progress(){
@@ -495,7 +516,7 @@
     }
     if(b.dataset.card){chooseCard(b.dataset.card);return;}
     if(b.dataset.lang){selectedLang=b.dataset.lang;flipped=false;render();return;}
-    if(b.dataset.practiceLang){selectedLang=b.dataset.practiceLang;practiceIndex=0;practiceFeedback=null;practiceHintUsed=false;render();return;}
+    if(b.dataset.practiceLang){selectedLang=b.dataset.practiceLang;practiceIndex=0;practiceFeedback=null;practiceHintUsed=false;practiceReviewMode=false;practiceReviewCursor=0;practiceReviewId=null;render();return;}
     if(b.dataset.answer && canSolve() && !state.solved){
       answerId=b.dataset.answer;state.attempts++;
       const choice=D.deduction.options.find((o)=>o.id===answerId);
@@ -547,7 +568,9 @@
     }
     if(action==="lesson-prev"){lessonStep=Math.max(0,lessonStep-1);render();return;}
     if(action==="practice-hint"){practiceHintUsed=true;practiceFeedback=null;render();return;}
-    if(action==="practice-next"){practiceIndex++;practiceHintUsed=false;practiceFeedback=null;render();return;}
+    if(action==="practice-due"){practiceReviewMode=true;practiceReviewCursor=0;practiceReviewId=null;practiceFeedback=null;practiceHintUsed=false;render();return;}
+    if(action==="practice-all"){practiceReviewMode=false;practiceReviewId=null;practiceFeedback=null;practiceHintUsed=false;render();return;}
+    if(action==="practice-next"){practiceIndex++;if(practiceReviewMode)practiceReviewCursor++;practiceReviewId=null;practiceHintUsed=false;practiceFeedback=null;render();return;}
     if(action==="show-deduction"){if(canSolve())deduction();else notify("Primero reúne las pistas y completa memoria.");}
     if(action==="flip-card"){flipped=!flipped;chirp();render();}
     if(action==="next-flash"){flashIndex=(flashIndex+1)%D.concepts.length;flipped=false;render();}
@@ -563,7 +586,7 @@
     }
     if(action==="reset-progress"){
       if(window.confirm("¿Borrar pistas, intentos y progreso guardado en este navegador?")){
-        state=initial();deck=shuffled(pairs);selection=[];locked=false;activeClue=null;answerId=null;flashIndex=0;flipped=false;introStep=0;lessonStep=0;practiceIndex=0;practiceFeedback=null;practiceHintUsed=false;persist();navigate("office");notify("Progreso de demostración reiniciado.");
+        state=initial();deck=shuffled(pairs);selection=[];locked=false;activeClue=null;answerId=null;flashIndex=0;flipped=false;introStep=0;lessonStep=0;practiceIndex=0;practiceFeedback=null;practiceHintUsed=false;practiceReviewMode=false;practiceReviewId=null;practiceReviewCursor=0;persist();navigate("office");notify("Progreso de demostración reiniciado.");
       }
     }
   });
@@ -592,7 +615,7 @@
         else localStorage.removeItem(KEY);
         throw e;
       }
-      selection=[];locked=false;practiceFeedback=null;practiceHintUsed=false;
+      selection=[];locked=false;practiceFeedback=null;practiceHintUsed=false;practiceReviewMode=false;practiceReviewId=null;
       navigate("progress");
       notify("Progreso importado y validado. Conserva una copia del JSON.");
     }catch(e){notify("No se pudo importar: "+String(e.message||"archivo inválido").slice(0,140));}
@@ -601,11 +624,15 @@
     if(event.target.id!=="practice-form")return;
     event.preventDefault();
     const P=window.ATLAS_PRACTICE;
-    const q=P.questions(D.concepts,selectedLang)[practiceIndex%D.concepts.length];
+    const q=activePracticeQuestion(P);
     const submitted=byId("practice-answer")?.value||"";
     const result=P.grade(q,submitted);
     if(result.kind==="blank"){notify("Escribe una respuesta antes de comprobar.");return;}
-    state.practiceAttempts=P.record(state.practiceAttempts,q,result,{hintUsed:practiceHintUsed});
+    // Feedback reveals the answer: subsequent corrections are guided, not independent.
+    const assisted=practiceHintUsed||practiceFeedback!==null;
+    if(practiceReviewMode)practiceReviewId=q.id;
+    state.practiceAttempts=P.record(state.practiceAttempts,q,result,{hintUsed:assisted});
+    practiceHintUsed=assisted;
     practiceFeedback=result;
     persist();render();
   });

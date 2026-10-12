@@ -235,3 +235,41 @@ test("Block 1 is playable, branches persist and language lesson gates the final 
  await nav(page,"office");
  await expect(page.getByText("VIAJERO")).toBeVisible();
 });
+
+test("overdue German review is prioritized and preserved across reload",async({page})=>{
+ await page.goto("/");
+ await nav(page,"progress");
+ const archive={schema_version:1,status:"LOCAL_DEMO_PROGRESS",data:{
+   visited:[],matched:[],introSeen:true,lessonCompleted:true,lessonViewed:["key","book","letter","map"],
+   practiceAttempts:[{id:"de:book",language:"de",concept:"book",at:"2020-01-01T10:00:00.000Z",
+     due_at:"2020-01-02T10:00:00.000Z",correct:false,hint_used:false,content_status:"PENDING",certified:false}]
+ }};
+ page.on("dialog",dialog=>dialog.accept());
+ await page.locator("#import-progress-file").setInputFiles({name:"old-progress.json",mimeType:"application/json",
+   buffer:Buffer.from(JSON.stringify(archive))});
+ await nav(page,"practice");
+ await page.locator('[data-practice-lang="de"]').click();
+ await expect(page.locator(".practice-review-bar strong")).toHaveText("1 repasos pendientes");
+ await page.locator('[data-action="practice-due"]').click();
+ await expect(page.locator(".practice-question")).toHaveText("book");
+ await page.locator("#practice-answer").fill("das Buch");
+ await page.locator("#practice-form button[type=submit]").click();
+ await expect(page.locator(".practice-review-bar strong")).toHaveText("0 repasos pendientes");
+ await page.reload();
+ await nav(page,"progress");
+ await expect(page.getByText(/Pendientes: 0/).first()).toBeVisible();
+});
+test("correction after answer reveal is guided rather than independent",async({page})=>{
+ await page.goto("/");
+ await nav(page,"practice");
+ for(let i=0;i<3;i++)await page.locator('[data-action="intro-next"]').click();
+ for(let i=0;i<4;i++)await page.locator('[data-action="lesson-next"]').click();
+ await nav(page,"practice");
+ await page.locator("#practice-answer").fill("clé");
+ await page.locator("#practice-form button[type=submit]").click();
+ await expect(page.getByText("El sustantivo está bien. Falta el artículo correcto.")).toBeVisible();
+ await page.locator("#practice-answer").fill("la clé");
+ await page.locator("#practice-form button[type=submit]").click();
+ await expect(page.getByText("1 prácticas con pistas")).toBeVisible();
+ await expect(page.getByText("0 aciertos sin ayuda")).toBeVisible();
+});
