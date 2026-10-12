@@ -249,7 +249,7 @@ test("overdue German review is prioritized and preserved across reload",async({p
    buffer:Buffer.from(JSON.stringify(archive))});
  await nav(page,"practice");
  await page.locator('[data-practice-lang="de"]').click();
- await expect(page.locator(".practice-review-bar strong")).toHaveText("1 repasos pendientes");
+ await expect(page.locator(".practice-review-bar strong")).toHaveText("1 repaso pendiente");
  await page.locator('[data-action="practice-due"]').click();
  await expect(page.locator(".practice-question")).toHaveText("book");
  await page.locator("#practice-answer").fill("das Buch");

@@ -187,7 +187,7 @@
       ${stats.map(item=>`<button type="button" class="hub-lang-card" data-hub-language="${item.id}" aria-label="Practicar ${esc(item.label)}">
         <span class="hub-lang-code">${item.id.toUpperCase()}</span>
         <span class="hub-lang-name">${esc(item.label)}</span>
-        <strong>${item.count}</strong><small>aciertos sin ayuda · ${item.due} repasos pendientes</small>
+        <strong>${item.count}</strong><small>aciertos sin ayuda · ${item.due} ${item.due===1?"repaso pendiente":"repasos pendientes"}</small>
         <span class="hub-lang-arrow">↗</span>
       </button>`).join("")}
     </div>
@@ -373,7 +373,7 @@
     root.innerHTML=toolbar("Práctica de recuperación","Escribe sin mirar las tarjetas. ATLAS registra aciertos, errores y ayudas por idioma, sin convertirlos automáticamente en nivel certificado.")+
       '<div class="language-panel" role="group" aria-label="Elegir idioma">'+Object.entries(LANG).map(([l,v])=>
       '<button class="lang-chip '+(l===selectedLang?"active":"")+'" data-practice-lang="'+l+'" aria-pressed="'+(l===selectedLang)+'">'+esc(v.name)+'</button>').join("")+'</div>'+
-      '<div class="practice-review-bar" role="status"><strong>'+review.due.length+' repasos pendientes</strong> en '+esc(LANG[selectedLang].name)+'. '+
+      '<div class="practice-review-bar" role="status"><strong>'+review.due.length+' '+(review.due.length===1?'repaso pendiente':'repasos pendientes')+'</strong> en '+esc(LANG[selectedLang].name)+'. '+
       (review.due.length?'<button type="button" class="button outline small" data-action="practice-due">Practicar pendientes →</button>':
        review.next_due_at?'Próximo repaso programado: '+esc(new Date(review.next_due_at).toLocaleDateString("es-MX"))+'.':
        'Todavía no hay repasos programados.')+
