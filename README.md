@@ -7,6 +7,8 @@ Infraestructura de control de calidad **100 % nube, coste de software 0** para u
 - Idiomas estudiados: **francés, alemán, ruso y japonés**
 - Mundo narrativo persistente: los casos se resuelven, el juego no tiene un final global.
 
+[Auditoría de calidad, consumo de Actions y privacidad de progreso](docs/AUDITORIA_REPOS_2026-10-12.md).
+
 ## Estado actual
 ATLAS v0.1 es un conjunto de **validadores automáticos**, no agentes de IA autónomos. El código no inventa aprobaciones ni declara verificados audios, traducciones o personajes sin evidencia. `published/manifest.json` comienza vacío. Los assets maestros todavía **no se han fijado**.
 
