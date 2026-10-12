@@ -1,0 +1,70 @@
+{
+  "date": "2026-10-12",
+  "branches": [
+    {
+      "name": "audit/cleanup-2026-10-12",
+      "sha": "191c7b5b8dcc6d2509694dc18f82e4d7871299a2",
+      "pr": 22
+    },
+    {
+      "name": "design/atlas-world-episode-pedagogy-v06",
+      "sha": "0b2238da38406c2a3c3a684cdab79e64da1ea501",
+      "pr": 12
+    },
+    {
+      "name": "design/continuous-learning-nightly-v07",
+      "sha": "33e4e59c982f960f6b24160363752ea803d1f83a",
+      "pr": 13
+    },
+    {
+      "name": "design/learning-narrative-systems-v05",
+      "sha": "c6e6e0c177d38d89762969af64182e83daa91b56",
+      "pr": 8
+    },
+    {
+      "name": "feat/atlas-quality-gates-v01",
+      "sha": "0e04f173db08384acaac5db6dec2992ad38493e0",
+      "pr": 1
+    },
+    {
+      "name": "feat/atlas-visual-foundations-v02",
+      "sha": "ef01e1583b15c5d1637c1d2acec2680c99129fe8",
+      "pr": 4
+    },
+    {
+      "name": "feat/cloudflare-continuous-study-v08",
+      "sha": "57b1417e4e575efb8ca32097b5a2139113d44879",
+      "pr": 15
+    },
+    {
+      "name": "feat/first-playable-case-v03",
+      "sha": "4b376ff3d5e7f5cd0e60168636edc75c66009f27",
+      "pr": 6
+    },
+    {
+      "name": "feat/onboarding-evidence-audio-v04",
+      "sha": "9a636758976ba5da0d1a69363538217b5924ad75",
+      "pr": 7
+    },
+    {
+      "name": "feat/progress-import-cloudflare-safe",
+      "sha": "35da0a05264fb6ce990d07e55d0ba811da93bfe6",
+      "pr": 16
+    },
+    {
+      "name": "feat/pwa-hub-story-block-one-v09",
+      "sha": "41b8eedede264575d92a0428bec7eed6a9cac6b2",
+      "pr": 19
+    },
+    {
+      "name": "fix/cloudflare-missing-dist-build-command",
+      "sha": "c28977c5aee60ae3f7b70480b4057e236adcc696",
+      "pr": 18
+    },
+    {
+      "name": "organizacion/guia-clara-2026-10-12",
+      "sha": "58874f7db7a02db7b05e9d96cf6b17e348d28fee",
+      "pr": 23
+    }
+  ]
+}
