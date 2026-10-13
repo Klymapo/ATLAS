@@ -1,2 +1,3 @@
-const test = require("node:test");
-test("arithmetic", () => { if (2+2 !== 4) throw new Error("failed"); });
+const test=require("node:test");
+const assert=require("node:assert/strict");
+test("arithmetic",()=>assert.equal(2+2,4));
