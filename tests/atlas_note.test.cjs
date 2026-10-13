@@ -1,3 +1,4 @@
 const test=require("node:test");
 const assert=require("node:assert/strict");
-test("arithmetic",()=>assert.equal(2+2,4));
+const P=require("../site/practice.js");
+test("four languages",()=>assert.equal(P.languages.length,4));
