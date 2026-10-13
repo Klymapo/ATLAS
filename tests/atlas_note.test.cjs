@@ -1,1 +1,2 @@
-// Pending: orthographic feedback regression tests.
+// Node regression placeholder.
+const answer = 42;
