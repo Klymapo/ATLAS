@@ -273,3 +273,23 @@ test("correction after answer reveal is guided rather than independent",async({p
  await expect(page.getByText("1 prácticas con pistas")).toBeVisible();
  await expect(page.getByText("0 aciertos sin ayuda")).toBeVisible();
 });
+
+test("imported far-future review cannot hide overdue practice on mobile or desktop",async({page})=>{
+ await page.goto("/");
+ await nav(page,"progress");
+ const archive={schema_version:1,status:"LOCAL_DEMO_PROGRESS",data:{
+   visited:[],matched:[],introSeen:true,lessonCompleted:true,lessonViewed:["key","book","letter","map"],
+   practiceAttempts:[{id:"de:book",language:"de",concept:"book",at:"2020-01-01T10:00:00.000Z",
+     due_at:"2099-01-01T10:00:00.000Z",correct:true,hint_used:false,content_status:"PENDING",certified:false}]
+ }};
+ page.on("dialog",dialog=>dialog.accept());
+ await page.locator("#import-progress-file").setInputFiles({name:"legacy-review.json",mimeType:"application/json",
+   buffer:Buffer.from(JSON.stringify(archive))});
+ await nav(page,"practice");
+ await page.locator('[data-practice-lang="de"]').click();
+ await expect(page.locator(".practice-review-bar strong")).toHaveText("1 repaso pendiente");
+ await page.locator('[data-action="practice-due"]').click();
+ await expect(page.locator(".practice-question")).toHaveText("book");
+ const widths=await page.evaluate(()=>[innerWidth,document.documentElement.scrollWidth]);
+ expect(widths[1]).toBeLessThanOrEqual(widths[0]+1);
+});

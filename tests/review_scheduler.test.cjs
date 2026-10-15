@@ -68,3 +68,36 @@ test("invalid review dates are rejected without changing saved attempts",()=>{
  assert.throws(()=>P.reviewPlan([],[], "not-a-date"),/Fecha de repaso/);
  assert.throws(()=>P.record([],q(),pass(q()),{at:"not-a-date"}),/Fecha de práctica/);
 });
+
+test("imported far-future due date cannot suppress a review",()=>{
+ const history=[{id:"de:book",language:"de",concept:"book",at:"2026-10-10T10:00:00Z",
+   due_at:"2099-01-01T00:00:00Z",correct:true,hint_used:false}];
+ const plan=P.reviewPlan(history,[q()],"2026-10-15T10:00:00Z");
+ assert.equal(plan.due.length,1);
+ assert.equal(plan.due[0].due_at,"2026-10-11T10:00:00.000Z");
+});
+test("a due date before the attempt is repaired, not trusted",()=>{
+ const history=[{id:"fr:book",language:"fr",concept:"book",at:"2026-10-10T10:00:00Z",
+   due_at:"2000-01-01T00:00:00Z",correct:false,hint_used:true}];
+ const plan=P.reviewPlan(history,[q("fr")],"2026-10-10T12:00:00Z");
+ assert.equal(plan.due.length,1);
+ assert.equal(plan.due[0].due_at,"2026-10-10T11:00:00.000Z");
+});
+test("imported mismatched concept or language cannot contaminate another review",()=>{
+ const history=[
+  {id:"de:book",language:"fr",concept:"book",at:"2026-10-10T10:00:00Z",correct:true},
+  {id:"de:book",language:"de",concept:"key",at:"2026-10-10T10:00:00Z",correct:true}
+ ];
+ assert.equal(P.reviewPlan(history,[q()],"2026-10-15T10:00:00Z").fresh.length,1);
+});
+test("malformed future due date does not promote immediate repeat to day three",()=>{
+ let history=P.record([],q(),pass(q()),{at:T});
+ history[0].due_at="2099-01-01T00:00:00Z";
+ history=P.record(history,q(),pass(q()),{at:"2026-10-11T10:01:00Z"});
+ assert.equal(history[1].streak,1);
+ assert.equal(history[1].due_at,"2026-10-12T10:00:00.000Z");
+});
+test("non-string date inputs are rejected",()=>{
+ assert.throws(()=>P.reviewPlan([],[],12345),/Fecha de repaso/);
+ assert.throws(()=>P.record([],q(),pass(q()),{at:12345}),/Fecha de práctica/);
+});

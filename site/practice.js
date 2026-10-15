@@ -8,7 +8,12 @@
   "use strict";
   const languages=["fr","de","ru","ja"];
   const HOUR=3600000,DAY=24*HOUR,intervals=[1,3,7,14,30];
-  const timestamp=(v)=>{const n=Date.parse(v);return Number.isFinite(n)?n:null;};
+  const timestamp=(v)=>{if(typeof v!=="string")return null;const n=Date.parse(v);return Number.isFinite(n)?n:null;};
+  function safeDue(entry,at){
+    const planned=timestamp(entry.due_at);
+    return planned!==null&&planned>=at&&planned<=at+30*DAY
+      ?planned:at+(entry.correct===true&&entry.hint_used!==true?DAY:HOUR);
+  }
   const normalize=(s)=>String(s??"").normalize("NFKC").toLowerCase().trim()
     .replace(/[\u2019\u2018]/g,"'").replace(/\s+/g," ");
   function questions(concepts,language){
@@ -48,7 +53,9 @@
   function latestAttempts(history,nowMs){
     const latest=new Map();
     for(const e of Array.isArray(history)?history:[]){
-      if(!e||typeof e.id!=="string")continue;
+      if(!e||typeof e.id!=="string"||!languages.includes(e.language)||
+         !e.id.startsWith(e.language+":")||
+         (typeof e.concept==="string"&&e.id!==e.language+":"+e.concept))continue;
       const at=timestamp(e.at);
       if(at===null||at>nowMs)continue;
       const prior=latest.get(e.id);
@@ -66,7 +73,7 @@
     if(result.correct===true&&!hintUsed){
       const priorStreak=Number.isInteger(previous?.streak)&&previous.streak>0
         ?Math.min(previous.streak,intervals.length):1;
-      const priorDue=timestamp(previous?.due_at);
+      const priorDue=previous?safeDue(previous,timestamp(previous.at)):null;
       if(previous?.correct===true&&previous.hint_used!==true&&priorDue!==null&&at<priorDue){
         // A same-session repeat cannot simulate spaced retrieval.
         streak=priorStreak;dueAt=priorDue;
@@ -94,9 +101,9 @@
       if(!q||!languages.includes(q.language)||typeof q.id!=="string")continue;
       const previous=latest.get(q.id);
       if(!previous){fresh.push(q);continue;}
-      const e=previous.entry,planned=timestamp(e.due_at);
-      // Legacy saves without due_at remain usable.
-      const dueMs=planned===null?previous.at+(e.correct&&!e.hint_used?DAY:HOUR):planned;
+      const e=previous.entry;
+      // Legacy, malformed or far-future dates never hide an overdue review.
+      const dueMs=safeDue(e,previous.at);
       const item={id:q.id,question:q,due_at:new Date(dueMs).toISOString()};
       (dueMs<=at?due:upcoming).push(item);
     }
