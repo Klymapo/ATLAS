@@ -7,6 +7,13 @@
 })(function(){
   "use strict";
   const languages=["fr","de","ru","ja"];
+  const HOUR=3600000,DAY=24*HOUR,intervals=[1,3,7,14,30];
+  const timestamp=(v)=>{if(typeof v!=="string")return null;const n=Date.parse(v);return Number.isFinite(n)?n:null;};
+  function safeDue(entry,at){
+    const planned=timestamp(entry.due_at);
+    return planned!==null&&planned>=at&&planned<=at+30*DAY
+      ?planned:at+(entry.correct===true&&entry.hint_used!==true?DAY:HOUR);
+  }
   const normalize=(s)=>String(s??"").normalize("NFKC").toLowerCase().trim()
     .replace(/[\u2019\u2018]/g,"'").replace(/\s+/g," ");
   function questions(concepts,language){
@@ -37,20 +44,72 @@
       if(value===noun)
         return {correct:false,kind:"missing_article",message:"El sustantivo está bien. Falta el artículo correcto."};
       const articles=question.language==="de"?["der","die","das"]:["le","la","l'","les"];
-      if(articles.some(a=>value.startsWith(a+" ")&&value.endsWith(" "+noun)))
+      if(articles.some(a=>value.startsWith(a+" ")&&value.endsWith(" "+noun))||
+         (question.language==="fr"&&value==="l\'"+noun))
         return {correct:false,kind:"wrong_article",message:"Reconoces el sustantivo, pero revisa su género y artículo."};
     }
     return {correct:false,kind:"incorrect",message:"Todavía no coincide. Revisa la ficha y vuelve a practicar."};
   }
+  function latestAttempts(history,nowMs){
+    const latest=new Map();
+    for(const e of Array.isArray(history)?history:[]){
+      if(!e||typeof e.id!=="string"||!languages.includes(e.language)||
+         !e.id.startsWith(e.language+":")||
+         (typeof e.concept==="string"&&e.id!==e.language+":"+e.concept))continue;
+      const at=timestamp(e.at);
+      if(at===null||at>nowMs)continue;
+      const prior=latest.get(e.id);
+      if(!prior||at>=prior.at)latest.set(e.id,{entry:e,at});
+    }
+    return latest;
+  }
   function record(history,question,result,options={}){
-    const when=options.at||new Date().toISOString();
+    const when=options.at||new Date().toISOString(),at=timestamp(when);
+    if(at===null)throw new Error("Fecha de práctica inválida");
+    const entries=Array.isArray(history)?history:[];
+    const previous=latestAttempts(entries,at).get(question.id)?.entry;
+    const hintUsed=options.hintUsed===true;
+    let streak=0,dueAt=at+HOUR;
+    if(result.correct===true&&!hintUsed){
+      const priorStreak=Number.isInteger(previous?.streak)&&previous.streak>0
+        ?Math.min(previous.streak,intervals.length):1;
+      const priorDue=previous?safeDue(previous,timestamp(previous.at)):null;
+      if(previous?.correct===true&&previous.hint_used!==true&&priorDue!==null&&at<priorDue){
+        // A same-session repeat cannot simulate spaced retrieval.
+        streak=priorStreak;dueAt=priorDue;
+      }else{
+        streak=previous?.correct===true&&previous.hint_used!==true
+          ?Math.min(priorStreak+1,intervals.length):1;
+        dueAt=at+intervals[streak-1]*DAY;
+      }
+    }
     const entry={id:question.id,language:question.language,concept:question.concept,
-      at:when,correct:result.correct===true,error_type:result.kind,
-      hint_used:options.hintUsed===true,
-      modality:options.hintUsed?"guided_recall":"independent_recall",
+      at:new Date(at).toISOString(),correct:result.correct===true,error_type:result.kind,
+      hint_used:hintUsed,
+      modality:hintUsed?"guided_recall":"independent_recall",
       content_status:"PENDING",certified:false,
-      due_at:new Date(Date.parse(when)+(result.correct?24:1)*3600000).toISOString()};
-    return [...(Array.isArray(history)?history:[]).slice(-499),entry];
+      streak,scheduler_version:"atlas-interval-v1",due_at:new Date(dueAt).toISOString()};
+    return [...entries.slice(-499),entry];
+  }
+  function reviewPlan(history,items,now=new Date().toISOString()){
+    if(!Array.isArray(items))throw new Error("Se esperan preguntas");
+    const at=timestamp(now);
+    if(at===null)throw new Error("Fecha de repaso inválida");
+    const latest=latestAttempts(history,at);
+    const due=[],upcoming=[],fresh=[];
+    for(const q of items){
+      if(!q||!languages.includes(q.language)||typeof q.id!=="string")continue;
+      const previous=latest.get(q.id);
+      if(!previous){fresh.push(q);continue;}
+      const e=previous.entry;
+      // Legacy, malformed or far-future dates never hide an overdue review.
+      const dueMs=safeDue(e,previous.at);
+      const item={id:q.id,question:q,due_at:new Date(dueMs).toISOString()};
+      (dueMs<=at?due:upcoming).push(item);
+    }
+    due.sort((a,b)=>a.due_at.localeCompare(b.due_at));
+    upcoming.sort((a,b)=>a.due_at.localeCompare(b.due_at));
+    return {due,upcoming,fresh,next_due_at:upcoming[0]?.due_at||null};
   }
   function summary(history){
     const entries=(Array.isArray(history)?history:[]).filter(e=>e&&languages.includes(e.language));
@@ -62,5 +121,5 @@
     }
     return result;
   }
-  return {languages,questions,grade,record,summary,normalize};
+  return {languages,questions,grade,record,reviewPlan,summary,normalize};
 });

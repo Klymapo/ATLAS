@@ -41,7 +41,7 @@ jobs:
       - name: Validate reusable learning engine
         run: node --test tests/continuous_learning.test.mjs
       - name: Validate reusable written-recall practice
-        run: node --test tests/practice_engine.test.cjs
+        run: node --test tests/practice_engine.test.cjs tests/review_scheduler.test.cjs
       - name: Install browser test runner
         run: npm install --no-audit --no-fund
       - name: Install headless Chromium
